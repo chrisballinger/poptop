@@ -1,3 +1,9 @@
+Fri Jan 14 13:38:58 2005  James Cameron  <quozl@us.netrek.org>
+
+	* pptpd.c, pptpctrl.c, bcrelay.c, configure.in, acconfig.h: add
+	configure option --enable-facility to set syslog facility to use
+	in logging.  e.g. LOG_LOCAL0
+
 Mon Jan 10 09:51:05 2005  James Cameron  <quozl@us.netrek.org>
 
 	* config.h.in, configure.in, pptpgre.c (encaps_gre): uses writev()

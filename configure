@@ -847,6 +847,7 @@ Optional Features:
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --disable-dependency-tracking  speeds up one-time build
   --enable-dependency-tracking   do not reject slow dependency extractors
+  --enable-facility=name    Use another syslog facility name
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -5877,6 +5878,30 @@ if test "${with_slirp+set}" = set; then
 _ACEOF
 
 	  SLIRP=yes
+fi;
+
+echo "$as_me:$LINENO: checking which syslog facility to use" >&5
+echo $ECHO_N "checking which syslog facility to use... $ECHO_C" >&6
+# Check whether --enable-facility or --disable-facility was given.
+if test "${enable_facility+set}" = set; then
+  enableval="$enable_facility"
+
+echo "$as_me:$LINENO: result: $enableval" >&5
+echo "${ECHO_T}$enableval" >&6
+cat >>confdefs.h <<_ACEOF
+#define PPTP_FACILITY $enableval
+_ACEOF
+
+
+else
+
+echo "$as_me:$LINENO: result: LOG_DAEMON (the default)" >&5
+echo "${ECHO_T}LOG_DAEMON (the default)" >&6
+cat >>confdefs.h <<_ACEOF
+#define PPTP_FACILITY LOG_DAEMON
+_ACEOF
+
+
 fi;
 
 

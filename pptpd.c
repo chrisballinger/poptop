@@ -4,7 +4,7 @@
  * Grabs any command line argument and processes any further options in
  * the pptpd config file, before throwing over to pptpmanager.c.
  *
- * $Id: pptpd.c,v 1.13 2005/01/05 11:01:51 quozl Exp $
+ * $Id: pptpd.c,v 1.14 2005/01/14 02:58:11 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -148,7 +148,7 @@ int main(int argc, char **argv)
 	char tmp[MAX_CONFIG_STRING_SIZE], *tmpstr;
 
 	/* open a connection to the syslog daemon */
-	openlog("pptpd", LOG_PID, LOG_DAEMON);
+	openlog("pptpd", LOG_PID, PPTP_FACILITY);
 
 	/* process command line options */
 	while (1) {
@@ -379,7 +379,7 @@ int main(int argc, char **argv)
 		daemon(0, 0);
 		/* returns to child only */
 		/* pid will have changed */
-		openlog("pptpd", LOG_PID, LOG_DAEMON);
+		openlog("pptpd", LOG_PID, PPTP_FACILITY);
 #else	/* !HAVE_DAEMON */
 		my_daemon(argc, argv);
 		/* returns to child if !HAVE_FORK
@@ -489,7 +489,7 @@ static void my_daemon(int argc, char **argv)
 	chdir("/");
 	umask(0);
 	/* pid will have changed */
-	openlog("pptpd", LOG_PID, LOG_DAEMON);
+	openlog("pptpd", LOG_PID, PPTP_FACILITY);
 #endif
 }
 #endif

@@ -3,7 +3,7 @@
  *
  * PPTP control connection between PAC-PNS pair
  *
- * $Id: pptpctrl.c,v 1.15 2005/01/05 11:01:51 quozl Exp $
+ * $Id: pptpctrl.c,v 1.16 2005/01/14 02:58:10 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -118,7 +118,7 @@ int main(int argc, char **argv)
 	}
 
 	/* open a connection to the syslog daemon */
-	openlog("pptpd", LOG_PID, LOG_DAEMON);
+	openlog("pptpd", LOG_PID, PPTP_FACILITY);
 
 	/* autoreap if supported */
 	signal(SIGCHLD, SIG_IGN);

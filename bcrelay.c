@@ -321,7 +321,7 @@ int main(int argc, char **argv) {
 #endif
 
         /* open a connection to the syslog daemon */
-        openlog("bcrelay", LOG_PID, LOG_DAEMON);
+        openlog("bcrelay", LOG_PID, PPTP_FACILITY);
 
   while (1) {
                 int option_index = 0;
@@ -403,7 +403,7 @@ int main(int argc, char **argv) {
     daemon(0, 1);
     /* returns to child only */
     /* pid will have changed */
-    openlog("bcrelay", LOG_PID, LOG_DAEMON);
+    openlog("bcrelay", LOG_PID, PPTP_FACILITY);
 #else   /* !HAVE_DAEMON */
     my_daemon(argc, argv);
     /* returns to child if !HAVE_FORK

@@ -135,6 +135,18 @@ AC_ARG_WITH(slirp,
 	[ AC_DEFINE(SLIRP)
 	  SLIRP=yes ])
 
+AC_MSG_CHECKING(which syslog facility to use)
+AC_ARG_ENABLE(facility,
+[  --enable-facility=name    Use another syslog facility name ],
+[
+AC_MSG_RESULT($enableval)
+AC_DEFINE_UNQUOTED(PPTP_FACILITY, $enableval)
+],
+[
+AC_MSG_RESULT(LOG_DAEMON (the default))
+AC_DEFINE_UNQUOTED(PPTP_FACILITY, LOG_DAEMON)
+])
+
 AC_ARG_WITH(pppd-ip-alloc,
 	[  --with-pppd-ip-alloc    Let pppd allocate IP addresses ],
 	[ AC_DEFINE(PPPD_IP_ALLOC)

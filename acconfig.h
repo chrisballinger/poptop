@@ -3,7 +3,7 @@
  *
  * Additional autoconf defines for this program.
  *
- * $Id: acconfig.h,v 1.4 2004/04/22 10:48:16 quozl Exp $
+ * $Id: acconfig.h,v 1.5 2005/01/14 02:58:10 quozl Exp $
  */
 
 /* Use BSD User land PPP? */
@@ -26,6 +26,9 @@
 
 /* Where is my pppd? */
 #undef PPP_BINARY
+
+/* Syslog Facility to use?  See openlog(3). */
+#undef PPTP_FACILITY
 
 /* Have libwrap? */
 #undef HAVE_LIBWRAP
