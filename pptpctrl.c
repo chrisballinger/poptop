@@ -3,7 +3,7 @@
  *
  * PPTP control connection between PAC-PNS pair
  *
- * $Id: pptpctrl.c,v 1.1 2002/06/21 08:52:01 fenix_nl Exp $
+ * $Id: pptpctrl.c,v 1.2 2002/08/22 16:14:18 fenix_nl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -472,7 +472,8 @@ static void bail(int sigraised)
 				break;
 			}
 		}
-skip:
+
+	skip:
 		close(clientSocket);
 	}
 

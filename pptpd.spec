@@ -120,11 +120,12 @@ TEMP=$(cat /etc/modules.conf | grep "alias tty-ldisc-14 ppp_synctty")
 if [ -z "$TEMP" ]; then echo "alias tty-ldisc-14 ppp_synctty" >> /etc/modules.conf; fi
 depmod -a
 OUTD="" ; for i in d manager ctrl ; do
-    test -x /usr/sbin/pptp$i && OUTD="$OUTD /usr/sbin/pptp$i" ;
+    test -x /sbin/pptp$i && OUTD="$OUTD /sbin/pptp$i" ;
 done
 test -z "$OUTD" || \
 { echo "possible outdated executable detected; you should do run the following command:"; echo "rm -i $OUTD" ;}
 /sbin/chkconfig --add pptpd
+/sbin/chkconfig pptpd on
 rm -f /usr/src/redhat/SOURCES/%{name}-%{ver}.tar.gz
 
 %preun
@@ -146,6 +147,9 @@ rm -f /usr/src/redhat/SOURCES/%{name}-%{ver}.tar.gz
 %config(noreplace) /etc/ppp/options.pptpd
 
 %changelog
+* Tue Aug 20 2002 Richard de Vroede <richard@linvision.com>
+- removed debug commandline option from pptpd.init
+
 * Thu Aug  1 2002 Richard de Vroede <richard@linvision.com>
 - added config(noreplace) so old configs don't get replaced
 - fixed postscriptlet

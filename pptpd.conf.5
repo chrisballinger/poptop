@@ -33,6 +33,17 @@ or
 .B --option
 command line option.
 .TP
+.BI stimeout seconds
+Poptop has some DOS protection built in. One of the protections is that
+it takes a peek at the first packet of a connection and performs some
+checks on it before Poptop continues the connection. The stimeout option
+defines how long Poptop is allowed to keep that packet. Normally the default
+of 10 seconds is reasonable. This is equivalent to the
+.B -s
+or
+.B --stimeout
+command line option.
+.TP
 .B debug
 turns on debugging mode, sending debugging information to the system log.
 This is equivalent to the
