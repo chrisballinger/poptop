@@ -3,7 +3,7 @@
  *
  * PPTP Control Message packet reading, formatting and writing.
  *
- * $Id: ctrlpacket.c,v 1.4 2004/04/22 10:48:16 quozl Exp $
+ * $Id: ctrlpacket.c,v 1.5 2004/04/29 06:58:45 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -446,7 +446,7 @@ void deal_out_call(unsigned char *packet, unsigned char *rply_packet, ssize_t * 
 	out_call_rply.pckt_recv_size = out_call_rqst->pckt_recv_size;
 	if(pptpctrl_debug)
 		syslog(LOG_DEBUG, "CTRL: Set parameters to %d maxbps, %d window size",
-			ntohs(out_call_rply.speed), ntohs(out_call_rply.pckt_recv_size));
+			ntohl(out_call_rply.speed), ntohs(out_call_rply.pckt_recv_size));
 	out_call_rply.pckt_delay = htons(PCKT_PROCESS_DELAY);
 	out_call_rply.channel_id = htonl(CHANNEL_ID);
 	COPY_CTRL_PACKET(out_call_rply, rply_packet, rply_size);

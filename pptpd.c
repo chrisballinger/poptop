@@ -4,7 +4,7 @@
  * Grabs any command line argument and processes any further options in
  * the pptpd config file, before throwing over to pptpmanager.c.
  *
- * $Id: pptpd.c,v 1.8 2004/04/28 11:36:07 quozl Exp $
+ * $Id: pptpd.c,v 1.9 2004/04/29 06:58:45 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -390,7 +390,7 @@ int main(int argc, char **argv)
 	}
 
 #ifdef BCRELAY
-      if (*bcrelay) {
+      if (bcrelay) {
              syslog(LOG_DEBUG, "CTRL: BCrelay incoming interface is %s", bcrelay);
              /* Launch BCrelay  */
 #ifndef HAVE_FORK
