@@ -3,7 +3,7 @@
  *
  * PPTP control connection between PAC-PNS pair
  *
- * $Id: pptpctrl.c,v 1.5 2003/04/23 10:16:02 fenix_nl Exp $
+ * $Id: pptpctrl.c,v 1.6 2003/12/09 21:59:16 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -560,7 +560,7 @@ static int startCall(char **pppaddrs)
 		close(clientSocket);
 #endif
 		launch_pppd(pppaddrs);
-		syslog(LOG_ERR, "CTRL: PPPD launch failed!");
+		syslog(LOG_ERR, "CTRL: PPPD launch failed! (launch_pppd did not fork)");
 		exit(1);
 	}
 	close(tty_fd);
@@ -684,5 +684,7 @@ static void launch_pppd(char **pppaddrs)
 	pppd_argv[an] = NULL;
 	execvp(pppd_argv[0], pppd_argv);
 	/* execvp() failed */
-	syslog(LOG_ERR, "CTRL (PPPD Launcher): Failed to launch PPP daemon.");
+	syslog(LOG_ERR,
+	       "CTRL (PPPD Launcher): Failed to launch PPP daemon. %s",
+	       strerror(errno));
 }

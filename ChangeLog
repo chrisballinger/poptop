@@ -1,3 +1,8 @@
+Tue Dec  9 10:22:01 2003  James Cameron  <quozl@us.netrek.org>
+
+	* pptpctrl.c (launch_pppd): report cause of failed execvp().
+	* pptpctrl.c (startCall): better explain launch failure.
+
 Poptop ChangeLog
 ---------------------------------------------------------------------------
 v1.1.3
