@@ -28,8 +28,8 @@ f) "make uninstall"
 Packaging
 
 fakeroot rpmbuild -ta pptpd-1.2.3.tar.gz
-# /usr/src/rpm/SRPMS/pptpd-1.2.3-0.src.rpm
-# /usr/src/rpm/RPMS/i386/pptpd-1.2.3-0.i386.rpm
+mv /usr/src/rpm/SRPMS/pptpd-1.2.3-1.src.rpm .
+mv /usr/src/rpm/RPMS/i386/pptpd-1.2.3-1.i386.rpm .
 
 Source Forge
 
@@ -43,9 +43,11 @@ ftp upload.sourceforge.net
 anonymous
 qz@hp.com
 cd incoming
+hash
+passive
+put pptpd-1.2.3-1.src.rpm
+put pptpd-1.2.3-1.i386.rpm
 put pptpd-1.2.3.tar.gz
-put pptpd-1.2.3-0.src.rpm
-put pptpd-1.2.3-0.i386.rpm
 
 Announcement
 

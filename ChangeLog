@@ -1,3 +1,7 @@
+Thu Feb 24 11:48:08 2005  James Cameron  <quozl@us.netrek.org>
+
+	* pptpd.8: add section on debugging, contributed by Peter Mueller.
+
 Thu Feb 17 13:05:31 2005  James Cameron  <quozl@us.netrek.org>
 
 	* pptpd-1.2.3.tar.gz: released.

@@ -1,3 +1,7 @@
+1.x.x: unreleased
+
+- add section on debugging to pptpd.8 [Mueller]
+
 1.2.3: released 2005-02-17
 
 - error check critical dup2 calls [Cameron]
