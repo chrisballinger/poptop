@@ -133,8 +133,12 @@ test -z "$OUTD" || \
 /sbin/chkconfig --add pptpd
 /sbin/chkconfig --level 345 pptpd on
 rm -f $RPM_SOURCE_DIR/%{name}-%{ver}.tar.gz
+
 %preun
 /sbin/chkconfig --del pptpd
+
+%clean
+rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root)
