@@ -1,9 +1,11 @@
-.TH PPTPD 8 "16 August 1999"
+.TH PPTPD 8 "26 February 2003"
 .SH NAME
 pptpd - PPTP VPN daemon
 .SH SYNOPSIS
 .PP
 .B pptpd
+.RB [ -b
+.IR internal-interface ]
 .RB [ -c
 .IR conf-file ]
 .RB [ -d ]
@@ -17,9 +19,13 @@ pptpd - PPTP VPN daemon
 .IR pid-file ]
 .RB [ -s
 .IR baud ]
+.RB [ -t
+.IR seconds ]
 .RB [ -v ]
 .PP
 .B pptpd
+.RB [ --bcrelay
+.IR internal-interface ]
 .RB [ --conf
 .IR conf-file ]
 .RB [ --debug ]
@@ -33,14 +39,20 @@ pptpd - PPTP VPN daemon
 .IR pid-file ]
 .RB [ --speed
 .IR baud ]
+.RB [ --stimeout
+.IR seconds ]
 .RB [ --version ]
 .SH DESCRIPTION
 .B pptpd
-is the PoPToP PPTP daemon, which manages tunneled PPP connections
+is the Poptop PPTP daemon, which manages tunneled PPP connections
 encapsulated in GRE using the PPTP VPN protocol.  It may contain
 features like IP address management and support TCP wrappers if
 this support has been compiled in.
 .SH OPTIONS
+.TP
+\fB-b\fR|\fB--bcrelay \fIinternal-interface
+specifies that all broadcasts received on the server's internal 
+interface should be relayed to the clients.
 .TP
 \fB-c\fR|\fB--conf \fIconf-file
 specifies the configuration file for
@@ -76,14 +88,19 @@ specifies an alternate location to store the process ID file (default
 specifies that the speed
 .I baud
 should be passed to the ppp daemon as the tty speed to use (in some
-cases this is ignored by the ppp daemon, e.g. on Linux).
+cases this is ignored by the ppp daemon).
+.TP
+\fB-t\fR|\fB--stimeout \fIseconds
+specifies that the timeout value for the first packet should be 
+.I seconds
+before dropping it. This is a DOS protection feature.
 .TP
 .BR -v | --version
 displays the current version of the pptp daemon.
 .SH EXAMPLES
 .PP
 .B pptpd
-will start the PoPToP PPTP VPN daemon (which will detach from the
+will start the Poptop PPTP VPN daemon (which will detach from the
 terminal and return immediately), using default options such as
 reading the configuration from
 .I /etc/pptpd.conf
@@ -91,7 +108,7 @@ and noting the process ID in
 .IR /var/run/pptpd.pid .
 .PP
 .B "pptpd --debug -l 192.168.0.1 -fg -c /etc/pptpd.conf.test -p /etc/pptpd.pid"
-will start the PoPToP PPTP VPN daemon, with debugging increased,
+will start the Poptop PPTP VPN daemon, with debugging increased,
 listening on local interface 192.168.0.1, running in the foreground
 and using the config file
 .I /etc/pptpd.conf.test
@@ -102,31 +119,35 @@ and recording the process ID in
 .br
 /var/run/pptpd.pid
 .SH AUTHORS
-PoPToP is written by Matthew Ramsay <matthewr@moreton.com.au>, David Luyer
+Poptop is written by Matthew Ramsay <matthewr@moreton.com.au>, David Luyer
 <luyer@ucs.uwa.edu.au>, Kevin Thayer <tmk@netmagic.net>, Peter Galbavy
-<Peter.Galbavy@knowledge.com> and others.
+<Peter.Galbavy@knowledge.com> and others. Development has been moved to 
+SourceForge and worked on by Richard de Vroede <r.devroede@linvision.com> 
+since June 26, 2002.
 .SH COPYRIGHT
 Copyright \(co 1999 Matthew Ramsay and others.
 .LP
-PoPToP is free software; you can redistribute it and/or modify it under
+Poptop is free software; you can redistribute it and/or modify it under
 the terms of the GNU General Public License as published by the Free
 Software Foundation; either version 2, or (at your option) any later
 version.
 .LP
-PoPToP is distributed in the hope that it will be useful, but WITHOUT ANY
+Poptop is distributed in the hope that it will be useful, but WITHOUT ANY
 WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
 for more details.
 .LP
 You should have received a copy of the GNU General Public License along
-with PoPToP; see the file COPYING.  If not, write to the Free Software
+with Poptop; see the file COPYING.  If not, write to the Free Software
 Foundation, 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 .SH AVAILABILITY
-The most recent version of PoPToP is available for download from
-Moreton Bay at
-.IR http://www.moretonbay.com/vpn/pptp.html .
+The most recent version of Poptop is available for download from
+SourceForge at
+.IR http://sourceforge.net/projects/poptop .
 .SH "SEE ALSO"
+.BR inetd (8),
+.BR inetd.conf (5),
 .BR pppd (8),
-.BR pptpctrl (8),
+.BR pptpd (8),
 .BR pptpd.conf (5),
 .BR tcpd (8).

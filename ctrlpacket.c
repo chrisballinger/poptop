@@ -3,7 +3,7 @@
  *
  * PPTP Control Message packet reading, formatting and writing.
  *
- * $Id: ctrlpacket.c,v 1.3 2003/04/23 10:16:01 fenix_nl Exp $
+ * $Id: ctrlpacket.c,v 1.4 2004/04/22 10:48:16 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -20,12 +20,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
-#include <sys/time.h>
 #include <time.h>
+#include <sys/time.h>
 #include <netinet/in.h>
 #include <unistd.h>
 #include <string.h>
-#include <strings.h>
 #include <errno.h>
 
 #include "pptpdefs.h"
@@ -259,7 +258,7 @@ ssize_t read_pptp_header(int clientFd, unsigned char *packet, int *pptp_ctrl_typ
 			}
 		}
 	}
-        /* OK, we have (at least) the first 2 bytes, and there is data waiting
+	/* OK, we have (at least) the first 2 bytes, and there is data waiting
 	 *
 	 * length includes the header,  so a length less than 2 is someone
 	 * trying to hack into us or a badly corrupted packet.
@@ -267,11 +266,11 @@ ssize_t read_pptp_header(int clientFd, unsigned char *packet, int *pptp_ctrl_typ
 	 * packet to struct pptp_header and use at least the 10 first bytes..
 	 * Thanks to Timo Sirainen for mentioning this.
 	 */
-	 length = htons(*(u_int16_t *) packet);
-	 if (length <= 10 || length > PPTP_MAX_CTRL_PCKT_SIZE) {
-	        syslog(LOG_ERR, "CTRL: 11 < Control packet (length=%d) < "
-	                        "PPTP_MAX_CTRL_PCKT_SIZE (%d)",
-	                        length, PPTP_MAX_CTRL_PCKT_SIZE);
+	length = htons(*(u_int16_t *) packet);
+	if (length <= 10 || length > PPTP_MAX_CTRL_PCKT_SIZE) {
+		syslog(LOG_ERR, "CTRL: 11 < Control packet (length=%d) < "
+				"PPTP_MAX_CTRL_PCKT_SIZE (%d)",
+				length, PPTP_MAX_CTRL_PCKT_SIZE);
 		/* we loose sync (unless we malloc something big, which isn't a good
 		 * idea - potential DoS) so we must close connection (draft states that
 		 * if you loose sync you must close the control connection immediately)
@@ -649,6 +648,25 @@ static u_int16_t _pac_init = 0;
 u_int16_t getcall()
 {
 	static u_int16_t i = 0;
+	extern u_int16_t unique_call_id;
+
+	/* Start with a random Call ID.  This is to allocate unique
+	 * Call ID's across multiple TCP PPTP connections.  In this
+	 * way remote clients masqueraded by a firewall will put
+	 * unique peer call ID's into GRE packets that will have the
+	 * same source IP address of the firewall. */
+
+	if (!i) {
+		if (unique_call_id == 0xFFFF) {
+			struct timeval tv;
+			if (gettimeofday(&tv, NULL) == 0) {
+				i = ((tv.tv_sec & 0x0FFF) << 4) + 
+				    (tv.tv_usec >> 16);
+			}
+		} else {
+			i = unique_call_id;
+		}
+	}
 
 	if(!_pac_init) {
 		_pac_call_id = htons(-1);
@@ -656,8 +674,9 @@ u_int16_t getcall()
 	}
 	if(_pac_call_id != htons(-1))
 		syslog(LOG_ERR, "CTRL: Asked to allocate call id when call open, not handled well");
-	_pac_call_id = i;
-	return i++;
+	_pac_call_id = htons(i);
+	i++;
+	return _pac_call_id;
 }
 
 /*

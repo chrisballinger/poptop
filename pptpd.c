@@ -4,7 +4,7 @@
  * Grabs any command line argument and procecesses any further options in
  * the pptpd config file, before throwing over to pptpmanager.c.
  *
- * $Id: pptpd.c,v 1.5 2003/02/06 16:42:03 fenix_nl Exp $
+ * $Id: pptpd.c,v 1.6 2004/04/22 10:48:16 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -24,6 +24,7 @@
 #endif
 
 #include "our_syslog.h"
+#include "our_getopt.h"
 
 #include <fcntl.h>
 #include <netdb.h>
@@ -38,7 +39,6 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <getopt.h>
 
 #include "configfile.h"
 #include "defaults.h"
@@ -53,7 +53,11 @@
 char *pppdoptstr = NULL;
 char *speedstr = NULL;
 char *bindaddr = NULL;
+#ifdef BCRELAY
+char *bcrelay = NULL;
+#endif
 int pptp_debug = 0;
+int pptp_noipparam = 0;
 
 #if defined(PPPD_IP_ALLOC)
 int pptp_stimeout = STIMEOUT_DEFAULT;
@@ -73,19 +77,31 @@ static void processIPStr(int type, char *ipstr);
 static void my_daemon(int argc, char **argv);
 #endif
 
-static void log_pid();
+static void log_pid(char *pid_file);
 static char *lookup(char *);
+
+#ifdef BCRELAY
+static void launch_bcrelay();
+static void killbcrelay(int sigraised);
+static pid_t bcrelayfork;
+#endif
 
 static void showusage(char *prog)
 {
-	printf("\nPoPToP v%s\n", VERSION);
+	printf("\nPoptop v%s\n", VERSION);
 	printf("The PPTP Server for Linux\n");
 	printf("Usage: pptpd [options], where options are:\n\n");
+#ifdef BCRELAY
+	printf(" [-b] [--bcrelay if]       Use broadcast relay for broadcasts comming from.\n");
+	printf("                           the specified interface (default is eth1).\n");
+#endif
 	printf(" [-c] [--conf file]        Specifies the config file to read default\n");
 	printf("                           settings from (default is /etc/pptpd.conf).\n");
 	printf(" [-d] [--debug]            Turns on debugging (to syslog).\n");
 	printf(" [-f] [--fg]               Run in foreground.\n");
 	printf(" [-h] [--help]             Displays this help message.\n");
+	printf(" [-i] [--noipparam]        Suppress the passing of the client's IP address\n");
+	printf("                           to PPP, which is done by default otherwise.\n");
 	printf(" [-l] [--listen x.x.x.x]   Specifies IP of local interface to listen to.\n");
 #if !defined(BSDUSER_PPP)
 	printf(" [-o] [--option file]      Specifies the PPP options file to use\n");
@@ -97,6 +113,8 @@ static void showusage(char *prog)
 	printf(" [-s] [--speed baud]       Specifies the baud speed for the PPP daemon\n");
 	printf("                           (default is 115200).\n");
 #endif
+	printf(" [-t] [--stimeout seconds] Specifies the timeout for the first packet. This is a DOS protection\n");
+	printf("                           (default is 10).\n");
 	printf(" [-v] [--version]          Displays the PoPToP version number.\n");
 
 	printf("\n\nLogs and debugging go to syslog as DAEMON.");
@@ -108,7 +126,7 @@ static void showusage(char *prog)
 
 static void showversion()
 {
-	printf("PoPToP v%s\n", VERSION);
+	printf("Poptop v%s\n", VERSION);
 }
 
 int main(int argc, char **argv)
@@ -131,28 +149,51 @@ int main(int argc, char **argv)
 
 	while (1) {
 		int option_index = 0;
+#ifdef BCRELAY
+		char *optstring = "b:c:dfhil:o:p:s:t:v";
+#else
+		char *optstring = "c:dfhil:o:p:s:t:v";
+#endif
 
 		static struct option long_options[] =
 		{
+#ifdef BCRELAY
+			{"bcrelay", 1, 0, 0},
+#endif
 			{"conf", 1, 0, 0},
 			{"debug", 0, 0, 0},
 			{"fg", 0, 0, 0},
 			{"help", 0, 0, 0},
+			{"noipparam", 0, 0, 0},
 			{"listen", 1, 0, 0},
 			{"option", 1, 0, 0},
 			{"pidfile", 1, 0, 0},
 			{"speed", 1, 0, 0},
+			{"stimeout", 1, 0, 0},
 			{"version", 0, 0, 0},
 			{0, 0, 0, 0}
 		};
 
-		c = getopt_long(argc, argv, "c:dfhl:o:p:s:v", long_options, &option_index);
+		c = getopt_long(argc, argv, optstring, long_options, &option_index);
 		if (c == -1)
 			break;
 		/* convert long options to short form */
 		if (c == 0)
-			c = "cdfhlopsv"[option_index];
+#ifdef BCRELAY
+			c = "bcdfhilopstv"[option_index];
+#else
+			c = "cdfhilopstv"[option_index];
+#endif
 		switch (c) {
+#ifdef BCRELAY
+		case 'b':
+			/* Have to build in some checking -rdv */
+			if(bcrelay)
+				free(bcrelay);
+			bcrelay = strdup(optarg);
+			break;
+#endif
+
 		case 'l':
 			tmpstr = lookup(optarg);
 			if(!tmpstr) {
@@ -166,6 +207,10 @@ int main(int argc, char **argv)
 
 		case 'h':
 			showusage(argv[0]);
+			return 0;
+
+		case 'i':
+			pptp_noipparam = TRUE;
 			return 0;
 
 		case 'd':
@@ -206,6 +251,10 @@ int main(int argc, char **argv)
 			speedstr = strdup(optarg);
 			break;
 
+		case 't':
+			(int *)pptp_stimeout = strdup(optarg);
+			break;
+
 		case 'c':
 			{
 				FILE *f;
@@ -237,10 +286,19 @@ int main(int argc, char **argv)
 	if (!pptp_debug && read_config_file(configFile, DEBUG_KEYWORD, tmp) > 0)
 		pptp_debug = TRUE;
 
-	if (read_config_file(configFile, STIMEOUT_KEYWORD, tmp) > 0) {
+#ifdef BCRELAY
+	if (!bcrelay && read_config_file(configFile, BCRELAY_KEYWORD, tmp) > 0) 
+		bcrelay = strdup(tmp);
+#endif
+
+	if (!pptp_stimeout && read_config_file(configFile, STIMEOUT_KEYWORD, tmp) > 0) {
 		pptp_stimeout = atoi(tmp);
 		if (pptp_stimeout <= 0)
 			pptp_stimeout = STIMEOUT_DEFAULT;
+	}
+
+	if (!pptp_noipparam && read_config_file(configFile, NOIPPARAM_KEYWORD, tmp) > 0) {
+		pptp_noipparam = TRUE;
 	}
 
 	if (!bindaddr && read_config_file(configFile, LISTEN_KEYWORD, tmp) > 0) {
@@ -290,8 +348,7 @@ int main(int argc, char **argv)
 #if HAVE_DAEMON
 		closelog();
 		freopen("/dev/null", "r", stdin);
-		/* set noclose, we want stdout/stderr still attached if we can */
-		daemon(0, 1);
+		daemon(0, 0);
 		/* returns to child only */
 		/* pid will have changed */
 		openlog("pptpd", LOG_PID, LOG_DAEMON);
@@ -303,37 +360,69 @@ int main(int argc, char **argv)
 #endif
 	}
 
+#ifdef BCRELAY
+      if (*bcrelay) {
+             syslog(LOG_DEBUG, "CTRL: BCrelay incoming interface is %s", bcrelay);
+             /* Launch BCrelay  */
+#ifndef HAVE_FORK
+             switch(bcrelayfork = vfork()){
+#else
+             switch(bcrelayfork = fork()){
+#endif
+             case -1:        /* fork() error */
+                   syslog(LOG_ERR, "CTRL: Error forking to exec bcrelay");
+                   _exit(1);
+
+             case 0:         /* child */
+                   syslog(LOG_DEBUG, "CTRL (BCrelay Launcher): Launching BCrelay with pid %i", bcrelayfork);
+                   launch_bcrelay();
+                   syslog(LOG_ERR, "CTRL (BCrelay Launcher): Failed to launch BCrelay.");
+                   _exit(1);
+             }
+       } /* End bcrelay */
+#endif
+
 #ifdef CONFIG_NETtel
 	/* turn the NETtel VPN LED on */
 	ledman_cmd(LEDMAN_CMD_ON, LEDMAN_VPN);
 #endif
 	/* after we have our final pid... */
-	log_pid();
+	log_pid(pid_file);
+
+#ifdef BCRELAY
+        /* be ready for a grisly death */
+        signal(SIGTERM, &killbcrelay);
+#endif
 
 	pptp_manager(argc, argv);
-	return 1;
+
+        return 1;
+
 }
 
-static void log_pid() {
+#ifdef BCRELAY
+static void killbcrelay(int sigraised) {
+        if (sigraised) {
+                syslog(LOG_DEBUG, "CTRL: Closing child BCrelay with pid %i", bcrelayfork);
+                if (bcrelayfork > 0)
+                kill(bcrelayfork, SIGQUIT);
+        }
+}
+#endif
+
+static void log_pid(char *pid_file) {
         FILE    *f;
         pid_t   pid;
-        char    *pidfile = "/var/run/pptpd.pid";
 
         pid = getpid();
-        if ((f = fopen(pidfile, "w")) == NULL) {
+        if ((f = fopen(pid_file, "w")) == NULL) {
                 syslog(LOG_ERR, "PPTPD: failed to open(%s), errno=%d\n",
-                        pidfile, errno);
+                        pid_file, errno);
                 return;
         }
         fprintf(f, "%d\n", pid);
         fclose(f);
 }
-
-#if HAVE_SETSID
-#define SETSIDPGRP setsid
-#else
-#define SETSIDPGRP setpgrp
-#endif
 
 #ifndef HAVE_DAEMON
 static void my_daemon(int argc, char **argv)
@@ -358,7 +447,6 @@ static void my_daemon(int argc, char **argv)
 		new_argv[0] = PPTPD_BIN;
 		new_argv[1] = "-f";
 		execve(PPTPD_BIN, new_argv, environ);
-		//syslog_perror("execvp");
 		_exit(1);
 	} else if (pid > 0) {
 		exit(0);
@@ -641,5 +729,33 @@ static void processIPStr(int type, char *ipstr)
 			strcpy(localIP[n], localIP[0]);
 	} else if (maxConnections > num)
 		maxConnections = num;
+}
+#endif
+
+#ifdef BCRELAY
+/* launch_bcrelay
+ * Launches broadcast relay. Broadcast relay is responsible for relaying broadcasts to the clients
+ * retn: 0 on success, -1 on failure.
+ */
+static void launch_bcrelay() {
+  char *bcrelay_argv[6];
+  int an = 0;
+
+      if (bcrelay) {
+           syslog(LOG_DEBUG, "MGR: BCrelay incoming interface is %s", bcrelay);
+           syslog(LOG_DEBUG, "MGR: BCrelay outgoing interface is regexp ppp[0-9].*");
+
+	   bcrelay_argv[an++] = BCRELAY_BIN;
+	   bcrelay_argv[an++] = "-i";
+	   bcrelay_argv[an++] = bcrelay;
+	   bcrelay_argv[an++] = "-o";
+	   bcrelay_argv[an++] = "ppp[0-9].*";
+           if (!pptp_debug) {
+	         bcrelay_argv[an++] = "-n";
+           }
+	   bcrelay_argv[an++] = NULL;
+
+           execvp(bcrelay_argv[0], bcrelay_argv);
+      }
 }
 #endif

@@ -3,15 +3,16 @@
  *
  * Compatibility functions for different OSes
  *
- * $Id: compat.c,v 1.3 2003/02/06 16:39:45 fenix_nl Exp $
+ * $Id: compat.c,v 1.4 2004/04/22 10:48:16 quozl Exp $
  */
 
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#ifndef HAVE_STRLCPY
 #include "compat.h"
+
+#ifndef HAVE_STRLCPY
 #include <string.h>
 #include <stdio.h>
 
@@ -101,3 +102,25 @@ char *strerror(int errnum) {
 	return buf;
 }
 #endif
+
+#ifndef HAVE_SETPROCTITLE
+#include "inststr.h"
+#endif
+
+#define __USE_BSD 1
+#include <stdarg.h>
+#include <stdio.h>
+
+void my_setproctitle(int argc, char **argv, const char *format, ...) {
+       char proctitle[64];
+       va_list parms;
+       va_start(parms, format);
+       vsnprintf(proctitle, sizeof(proctitle), format, parms);
+
+#ifndef HAVE_SETPROCTITLE
+       inststr(argc, argv, proctitle);
+#else
+       setproctitle(proctitle);
+#endif
+       va_end(parms);
+}

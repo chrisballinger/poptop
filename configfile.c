@@ -4,7 +4,7 @@
  * Methods for accessing the PPTPD config file and searching for
  * PPTPD keywords.
  *
- * $Id: configfile.c,v 1.1 2002/06/21 08:51:55 fenix_nl Exp $
+ * $Id: configfile.c,v 1.2 2004/04/22 10:48:16 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -13,6 +13,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "defaults.h"
 #include "configfile.h"
@@ -38,9 +39,15 @@ static void close_config_file(FILE * file);
 int read_config_file(char *filename, char *keyword, char *value)
 {
 	FILE *in;
-	int len;
-	char buffer[MAX_CONFIG_STRING_SIZE], w[MAX_CONFIG_STRING_SIZE],
-		v[MAX_CONFIG_STRING_SIZE];
+	int len = 0, keyword_len = 0;
+	int foundit = 0;
+
+	char *buff_ptr;
+	char buffer[MAX_CONFIG_STRING_SIZE];
+
+	*value = '\0';
+	buff_ptr = buffer;
+	keyword_len = strlen(keyword);
 
 	in = open_config_file(filename);
 	if (in == NULL) {
@@ -56,24 +63,63 @@ int read_config_file(char *filename, char *keyword, char *value)
 			while (buffer[strlen(buffer) - 1] != '\n');
 			continue;
 		}
-		buffer[len - 1] = '\0';
 
-		/* short-circuit comments */
-		if (buffer[0] == '#')
+		len--;			/* For the NL at the end */
+		while (--len >= 0)
+			if (buffer[len] != ' ' && buffer[len] != '\t')
+				break;
+
+		len++;
+		buffer[len] = '\0';
+
+		buff_ptr = buffer;
+
+		/* Short-circuit blank lines and comments */
+		if (!len || *buff_ptr == '#')
 			continue;
 
-		/* check if it's what we want */
-		if (sscanf(buffer, "%s %s", w, v) > 0 && !strcmp(w, keyword)) {
-			/* found it :-) */
-			strcpy(value, v);
-			close_config_file(in);
-			/* tell them we got it */
-			return 1;
+		/* Non-blank lines starting with a space are an error */
+
+		if (*buff_ptr == ' ' || *buff_ptr == '\t') {
+			syslog(LOG_ERR, "Config file line starts with a space: %s", buff_ptr);
+			continue;
+		}
+
+		/* At this point we have a line trimmed for trailing spaces. */
+		/* Now we need to check if the keyword matches, and if so */
+		/* then get the value (if any). */
+
+		/* Check if it's the right keyword */
+
+		do {
+			if (*buff_ptr == ' ' || *buff_ptr == '\t')
+				break;
+		} while (*++buff_ptr);
+
+		len = buff_ptr - buffer;
+		if (len == keyword_len && !strncmp(buffer, keyword, len)) {
+			foundit++;
+			break;
 		}
 	}
+
 	close_config_file(in);
-	/* didn't find it - better luck next time */
-	return 0;
+
+	if (foundit) {
+		/* Right keyword, now get the value (if any) */
+
+		do {
+			if (*buff_ptr != ' ' && *buff_ptr != '\t')
+				break;
+			
+		} while (*++buff_ptr);
+
+		strcpy(value, buff_ptr);
+		return 1;
+	} else {
+		/* didn't find it - better luck next time */
+		return 0;
+	}
 }
 
 /*

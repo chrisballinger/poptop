@@ -5,7 +5,7 @@
  *
  * Originally from C. S. Ananian's pptpclient
  *
- * $Id: inststr.c,v 1.1 2002/06/21 08:52:00 fenix_nl Exp $
+ * $Id: inststr.c,v 1.2 2004/04/22 10:48:16 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -35,8 +35,10 @@ void inststr(int argc, char **argv, char *src)
 
 		ptr = argv[0] + strlen(argv[0]);
 		for (count = 1; count < argc; count++) {
-			if (argv[count] == ptr + 1)
-				ptr += strlen(++ptr);
+			if (argv[count] == ptr + 1) {
+				ptr++;
+				ptr += strlen(ptr);
+			}
 		}
 		count = 0;
 		for (ptr2 = argv[0]; ptr2 <= ptr; ptr2++) {

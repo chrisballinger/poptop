@@ -1,4 +1,4 @@
-.TH PPTPD.CONF 5 "17 August 1999"
+.TH PPTPD.CONF 5 "26 February 2003"
 .SH NAME
 .B pptpd.conf
 - PPTP VPN daemon configuration
@@ -8,7 +8,7 @@ Upon initial execution,
 reads its configuration from a configuration file which, by default, is
 .IR /etc/pptpd.conf .
 This allows the system administrator to set specific options which control
-the behaviour of the PoPToP PPTP VPN daemon.  These settings can be overridden
+the behaviour of the Poptop PPTP VPN daemon.  These settings can be overridden
 by command line flags (except for the local and remote IP addresses, which
 cannot be set on the command line).
 .SH OPTIONS
@@ -16,8 +16,7 @@ cannot be set on the command line).
 .BI "speed " speed
 specifies a speed (in bytes per second) to pass to the PPP daemon as the
 interface speed for the tty/pty pair.  This may be ignored by some PPP
-daemons, or be ineffective; e.g. on Linux it has no effect.
-This is equivalent to the
+daemons.  This is equivalent to the
 .B -s
 or
 .B --speed
@@ -40,7 +39,7 @@ it takes a peek at the first packet of a connection and performs some
 checks on it before Poptop continues the connection. The stimeout option
 defines how long Poptop is allowed to keep that packet. Normally the default
 of 10 seconds is reasonable. This is equivalent to the
-.B -s
+.B -t
 or
 .B --stimeout
 command line option.
@@ -51,6 +50,15 @@ This is equivalent to the
 .B -d
 or
 .B --debug
+command line option.
+.TP
+.BI "bcrelay " internal-interface
+turns on broadcast relay mode, sending all broadcasts received on the server's
+internal interface to the clients.
+This is equivalent to the
+.B -b
+or
+.B --bcrelay
 command line option.
 .TP
 .BI "localip " ip-specification
@@ -96,12 +104,17 @@ a range (for example 192.168.0.1-254 or 192.168.0-255.2) or some combination
 .P
 .BI "localip " 192.168.0.1
 .br
-.BI "remoteip " 192.168.0.2-255
+.BI "remoteip " 192.168.0.2-254
 .P
 or
 .P
-.BI "localip " 192.168.0-255.1
+.BI "localip " 192.168.1.2-254
 .br
-.BI "remoteip " 192.168.0-255.2
+.BI "remoteip " 192.168.0.2-254
 .SH "SEE ALSO"
-.BR pptpd (8).
+.BR inetd (8),
+.BR inetd.conf (5),
+.BR pppd (8),
+.BR pptpd (8),
+.BR pptpd.conf (5),
+.BR tcpd (8).

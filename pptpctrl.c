@@ -3,7 +3,7 @@
  *
  * PPTP control connection between PAC-PNS pair
  *
- * $Id: pptpctrl.c,v 1.8 2004/02/27 00:45:54 quozl Exp $
+ * $Id: pptpctrl.c,v 1.9 2004/04/22 10:48:16 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -23,8 +23,9 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/time.h>
 #include <time.h>
+#include <sys/time.h>
+#include <dirent.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -42,19 +43,20 @@
 #define socklen_t int
 #endif
 
-#ifndef HAVE_SETPROCTITLE
-#include "inststr.h"
-#endif
 #include "compat.h"
 #include "pptpctrl.h"
 #include "pptpgre.h"
 #include "pptpdefs.h"
 #include "ctrlpacket.h"
 #include "defaults.h"
+// placing net/if.h here fixes build on Solaris
+#include <net/if.h>
 
 /* Globals because i'm lazy -tmk */
+static int noipparam;			/* if true, don't send ipparam to ppp */
 static char speed[32];
 static char pppdxfig[256];
+static pid_t pppfork;                   /* so we can kill it after disconnect */
 
 /*
  * Global to handle dying
@@ -67,12 +69,17 @@ static u_int32_t call_id_pair;	/* call id (to terminate call) */
 
 /* Needed by this and ctrlpacket.c */
 int pptpctrl_debug = 0;		/* specifies if debugging is on or off */
+uint16_t unique_call_id;	/* Start value for our call IDs on this TCP link */
+
+int gargc;                     /* Command line argument count */
+char **gargv;                  /* Command line argument vector */
 
 /* Local function prototypes */
 static void bail(int sigraised);
 static void pptp_handle_ctrl_connection(char **pppaddrs, struct in_addr *inetaddrs);
-static int startCall(char **pppaddrs);
-static void launch_pppd(char **pppaddrs);
+
+static int startCall(char **pppaddrs, struct in_addr *inetaddrs);
+static void launch_pppd(char **pppaddrs, struct in_addr *inetaddrs);
 
 /* Oh the horror.. lets hope this covers all the ones we have to handle */
 #if defined(O_NONBLOCK) && !defined(__sun__) && !defined(__sun)
@@ -95,12 +102,12 @@ int main(int argc, char **argv)
 	struct sockaddr_in addr;	/* client address */
 	socklen_t addrlen;
 	int arg = 1;
-#ifndef HAVE_SETPROCTITLE
-	char proctitle[32];
-#endif
 	int flags;
 	struct in_addr inetaddrs[2];
 	char *pppaddrs[2] = { pppLocal, pppRemote };
+
+        gargc = argc;
+        gargv = argv;
 
 	/* open a connection to the syslog daemon */
 	openlog("pptpd", LOG_PID, LOG_DAEMON);
@@ -109,12 +116,19 @@ int main(int argc, char **argv)
 	signal(SIGCHLD, SIG_IGN);
 
 	pptpctrl_debug = atoi(argv[arg++]);
+	noipparam = atoi(argv[arg++]);
 
 	GETARG(pppdxfig);
 	GETARG(speed);
 	GETARG(pppLocal);
 	GETARG(pppRemote);
 
+	if (argv[arg] != NULL) {
+		unique_call_id = atoi(argv[arg++]);
+	} else {
+		unique_call_id = 0xFFFF;
+	}
+	
 	if (pptpctrl_debug) {
 		if (*pppLocal)
 			syslog(LOG_DEBUG, "CTRL: local address = %s", pppLocal);
@@ -155,12 +169,8 @@ int main(int argc, char **argv)
 
 	
 	/* Fiddle with argv */
-#if HAVE_SETPROCTITLE
-	setproctitle("pptpd [%s]", inet_ntoa(addr.sin_addr));
-#else
-	sprintf(proctitle, "pptpd [%s]", inet_ntoa(addr.sin_addr));
-	inststr(argc, argv, proctitle);
-#endif
+        my_setproctitle(gargc, gargv, "pptpd [%s]%20c",
+            inet_ntoa(addr.sin_addr), ' ');
 
 	/* be ready for a grisly death */
 	signal(SIGTERM, &bail);
@@ -169,6 +179,9 @@ int main(int argc, char **argv)
 
 	syslog(LOG_INFO, "CTRL: Client %s control connection started", inet_ntoa(addr.sin_addr));
 	pptp_handle_ctrl_connection(pppaddrs, inetaddrs);
+	syslog(LOG_DEBUG, "CTRL: Closing child ppp with pid %i", pppfork);
+	if (pppfork > 0)
+		kill(pppfork, SIGINT);
 	syslog(LOG_INFO, "CTRL: Client %s control connection finished", inet_ntoa(addr.sin_addr));
 
 	bail(0);		/* NORETURN */
@@ -197,7 +210,7 @@ static void pptp_handle_ctrl_connection(char **pppaddrs, struct in_addr *inetadd
 	/* For echo requests used to check link is alive */
 	int echo_wait = FALSE;		/* Waiting for echo? */
 	u_int32_t echo_count = 0;	/* Sequence # of echo */
-	time_t echo_time;		/* Time last echo req sent */
+	time_t echo_time = 0;		/* Time last echo req sent */
 	struct timeval idleTime;	/* How long to select() */
 
 	/* General local variables */
@@ -282,7 +295,11 @@ static void pptp_handle_ctrl_connection(char **pppaddrs, struct in_addr *inetadd
 		}
 		/* send from GRE off to pty */
 		if (gre_fd != -1 && FD_ISSET(gre_fd, &fds) && decaps_gre(gre_fd, encaps_hdlc, pty_fd) < 0) {
-			syslog(LOG_ERR, "CTRL: GRE read or PTY write failed (gre,pty)=(%d,%d)", gre_fd, pty_fd);
+			if (gre_fd == 6 && pty_fd == 5) {
+				syslog(LOG_ERR, "CTRL: GRE-tunnel has collapsed (GRE read or PTY write failed (gre,pty)=(%d,%d))", gre_fd, pty_fd);
+			} else {
+				syslog(LOG_ERR, "CTRL: GRE read or PTY write failed (gre,pty)=(%d,%d)", gre_fd, pty_fd);
+			}
 			break;
 		}
 		/* handle control messages */
@@ -321,7 +338,7 @@ static void pptp_handle_ctrl_connection(char **pppaddrs, struct in_addr *inetadd
 					close(pty_fd);
 					pty_fd = -1;
 				}
-				goto leave_drop_call;
+                                goto leave_drop_call;
 
 			case OUT_CALL_RQST:
 				/* for killing off the link later (ugly) */
@@ -342,7 +359,15 @@ static void pptp_handle_ctrl_connection(char **pppaddrs, struct in_addr *inetadd
 				}
 				/* Start the call */
 				syslog(LOG_INFO, "CTRL: Starting call (launching pppd, opening GRE)");
-				if ((pty_fd = startCall(pppaddrs)) > maxfd)
+
+                                /* Fiddle with argv */
+                                my_setproctitle(gargc, gargv,
+                                      "pptpd [%s:%04X - %04X]",
+                                      inet_ntoa(inetaddrs[1]),
+                                      ntohs(((struct pptp_out_call_rply *) (rply_packet))->call_id_peer),
+                                      ntohs(((struct pptp_out_call_rply *) (rply_packet))->call_id));
+
+				if ((pty_fd = startCall(pppaddrs, inetaddrs)) > maxfd)
 					maxfd = pty_fd;
 				if ((gre_fd = pptp_gre_init(call_id_pair, pty_fd, inetaddrs)) > maxfd)
 					maxfd = gre_fd;
@@ -357,6 +382,12 @@ static void pptp_handle_ctrl_connection(char **pppaddrs, struct in_addr *inetadd
 			case SET_LINK_INFO:
 				send_packet = FALSE;
 				break;
+
+#ifdef PNS_MODE
+			case IN_CALL_RQST:
+			case IN_CALL_RPLY:
+			case IN_CALL_CONN:
+#endif
 
 			case CALL_DISCONN_NTFY:
 			case STOP_CTRL_CONN_RPLY:
@@ -478,8 +509,6 @@ static void bail(int sigraised)
 
 	if (pptpctrl_debug)
 		syslog(LOG_DEBUG, "CTRL: Exiting now");
-
-	exit((GET_VALUE(PAC, call_id_pair)==htons(-1)) ? 0 : 1);
 }
 
 /*
@@ -491,10 +520,11 @@ static void bail(int sigraised)
  * retn:        pty file descriptor
  *
  */
-static int startCall(char **pppaddrs)
+static int startCall(char **pppaddrs, struct in_addr *inetaddrs)
 {
 	/* PTY/TTY pair for talking to PPPd */
 	int pty_fd, tty_fd;
+	/* register pids of children */
 #if BSDUSER_PPP || SLIRP
 	int sockfd[2];
 
@@ -528,13 +558,13 @@ static int startCall(char **pppaddrs)
 	}
 	/* Launch the PPPD  */
 #ifndef HAVE_FORK
-	switch (vfork()) {
+        switch(pppfork=vfork()){
 #else
-	switch (fork()) {
+        switch(pppfork=fork()){
 #endif
 	case -1:	/* fork() error */
 		syslog(LOG_ERR, "CTRL: Error forking to exec pppd");
-		break;
+		_exit(1);
 
 	case 0:		/* child */
 		dup2(tty_fd, 0);
@@ -557,35 +587,39 @@ static int startCall(char **pppaddrs)
 #elif clientSocket > 1
 		close(clientSocket);
 #endif
-		launch_pppd(pppaddrs);
+		launch_pppd(pppaddrs, inetaddrs);
 		syslog(LOG_ERR, "CTRL: PPPD launch failed! (launch_pppd did not fork)");
-		exit(1);
+		_exit(1);
 	}
+	
 	close(tty_fd);
 	return pty_fd;
 }
 
-
 /*
- * lanuch_pppd
+ * launch_pppd
  *
  * Launches the PPP daemon. The PPP daemon is responsible for assigning the
  * PPTP client its IP address.. These values are assigned via the command
  * line.
  *
+ * Add return of connected ppp interface
+ *
  * retn: 0 on success, -1 on failure.
  *
  */
-static void launch_pppd(char **pppaddrs)
+static void launch_pppd(char **pppaddrs, struct in_addr *inetaddrs)
 {
-	char *pppd_argv[16];
+	char *pppd_argv[10];
 	int an = 0;
 	sigset_t sigs;
 
 	pppd_argv[an++] = PPP_BINARY;
 
 	if (pptpctrl_debug) {
-		syslog(LOG_DEBUG, "CTRL (PPPD Launcher): program binary = %s", pppd_argv[an - 1]);
+		syslog(LOG_DEBUG, 
+		       "CTRL (PPPD Launcher): program binary = %s", 
+		       pppd_argv[an - 1]);
 	}
 
 #if BSDUSER_PPP
@@ -651,6 +685,7 @@ static void launch_pppd(char **pppaddrs)
 #else
 
 	/* options for 'normal' pppd */
+
 	pppd_argv[an++] = "local";
 
 	/* If a pppd option file is specified, use it
@@ -660,6 +695,7 @@ static void launch_pppd(char **pppaddrs)
 		pppd_argv[an++] = "file";
 		pppd_argv[an++] = pppdxfig;
 	}
+	
 	/* If a speed has been specified, use it
 	 * if not, use "smart" default (defaults.h)
 	 */
@@ -670,12 +706,12 @@ static void launch_pppd(char **pppaddrs)
 	}
 
 	if (pptpctrl_debug) {
-		syslog(LOG_DEBUG, "CTRL (PPPD Launcher): Connection speed = %s", pppd_argv[an - 1]);
 		if (*pppaddrs[0])
 			syslog(LOG_DEBUG, "CTRL (PPPD Launcher): local address = %s", pppaddrs[0]);
 		if (*pppaddrs[1])
 			syslog(LOG_DEBUG, "CTRL (PPPD Launcher): remote address = %s", pppaddrs[1]);
 	}
+	
 	if (*pppaddrs[0] || *pppaddrs[1]) {
 		char pppInterfaceIPs[33];
 		sprintf(pppInterfaceIPs, "%s:%s", pppaddrs[0], pppaddrs[1]);
@@ -683,15 +719,21 @@ static void launch_pppd(char **pppaddrs)
 	}
 #endif
 
+        if (!noipparam) {
+                 pppd_argv[an++] = "ipparam";
+                 pppd_argv[an++] = inet_ntoa(inetaddrs[1]);
+        }
+
 	/* argv arrays must always be NULL terminated */
-	pppd_argv[an] = NULL;
+	pppd_argv[an++] = NULL;
 	/* make sure SIGCHLD is unblocked, pppd does not expect it */
 	sigfillset(&sigs);
 	sigprocmask(SIG_UNBLOCK, &sigs, NULL);
 	/* run pppd now */
 	execvp(pppd_argv[0], pppd_argv);
 	/* execvp() failed */
-	syslog(LOG_ERR,
+	syslog(LOG_ERR, 
 	       "CTRL (PPPD Launcher): Failed to launch PPP daemon. %s",
 	       strerror(errno));
 }
+

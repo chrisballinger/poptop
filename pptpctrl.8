@@ -1,9 +1,11 @@
-.TH PPTPCTRL 8 "13 August 1999"
+.TH PPTPCTRL 8 "26 February 2003"
 .SH NAME
 pptpctrl - PPTP VPN control connection manager
 .SH SYNOPSIS
 .B pptpctrl
 .RB [ 0 | 1 ]
+.RB [ 0 | 1
+.IR bcrelay ]
 .RB [ 0 | 1
 .IR options ]
 .RB [ 0 | 1
@@ -14,7 +16,7 @@ pptpctrl - PPTP VPN control connection manager
 .IR remote-ip ]
 .SH DESCRIPTION
 .B pptpctrl
-is a program usually run by the PoPToP PPTP daemon,
+is a program usually run by the Poptop PPTP daemon,
 .BR pptpd (8),
 which can also be run from
 .BR inetd (8)
@@ -30,7 +32,16 @@ to indicate no debugging or
 to indicate debugging messages should be generated (and sent to
 syslog).
 .TP
-Second option - ppp options file:
+Second option - broadcast relay interface:
+.B 0
+to indicate that bcrelay shouldn't be used or
+.BI "1 " bcrelay
+to indicate the internal-interface from which broadcasts
+must be relayed.
+.I options
+should be used as the ppp options file.
+.TP
+Third option - ppp options file:
 .B 0
 to indicate the default ppp options file (normally
 .IR /etc/ppp/options )
@@ -40,7 +51,7 @@ to indicate the file
 .I options
 should be used as the ppp options file.
 .TP
-Third option - tty speed:
+Fourth option - tty speed:
 .B 0
 to indicate the default speed (normally
 .IR 115200 )
@@ -49,7 +60,7 @@ or
 to indicate that the speed passed to the ppp daemon should be
 .IR speed .
 .TP
-Fourth option - local IP address:
+Fifth option - local IP address:
 .B 0
 to indicate default (pppd-determined) local IP address (normally
 the first ethernet interface's address) should be used or
@@ -57,7 +68,7 @@ the first ethernet interface's address) should be used or
 to indicate the local IP address should be set to
 .IR local-ip .
 .TP
-Fifth option - remote IP address:
+Sixth option - remote IP address:
 .B 0
 to indicate that pppd should determine the remote IP address or
 .BI "1 " remote-ip
@@ -65,28 +76,28 @@ to indicate the remote IP address should be set to
 .IR remote-ip .
 .SH EXAMPLES
 .PP
-.B pptpctrl stream tcp nowait root /usr/sbin/tcpd /usr/local/sbin/pptpctrl 0 0 0 0 0 --buffer--
+.B pptpctrl stream tcp nowait root /usr/sbin/tcpd /usr/local/sbin/pptpctrl 0 0 0 0 0 0 --buffer--
 in
 .I inetd.conf
 to run
 .B pptpctrl
 to service incoming pptp connections using the tcp wrapper
 .IR /usr/sbin/tcpd .
-The options here are no debugging, default pppd options file,
+The options here are no debugging, broadcast relay, default pppd options file,
 default speed and default IP addresses.  The
 .I --buffer--
 string is ignored and is there to extend the process name
 so that the process can change its name to include the client
 IP address.
 .PP
-.B pptpctrl stream tcp nowait root /usr/sbin/tcpd /usr/local/sbin/pptpctrl 1 1 /etc/ppp/options.PPTP 1 115200 1 192.168.0.1 0
+.B pptpctrl stream tcp nowait root /usr/sbin/tcpd /usr/local/sbin/pptpctrl 1 1 eth0 1 /etc/ppp/options.PPTP 1 115200 1 192.168.0.1 0
 in
 .I inetd.conf
 will run
 .B pptpctrl
 to service incoming pptp connections using the tcp wrapper
 .IR /usr/sbin/tcpd ,
-as before, however with debugging enabled, an alternate
+as before, however with debugging enabled, broadcast relay on eth0, an alternate
 config file of
 .IR /etc/ppp/options.PPTP ,
 the speed set to
@@ -103,32 +114,35 @@ to
 .SH FILES
 /etc/inetd.conf
 .SH AUTHORS
-PoPToP is written by Matthew Ramsay <matthewr@moreton.com.au>, David Luyer
+Poptop is written by Matthew Ramsay <matthewr@moreton.com.au>, David Luyer
 <luyer@ucs.uwa.edu.au>, Kevin Thayer <tmk@netmagic.net>, Peter Galbavy
-<Peter.Galbavy@knowledge.com> and others.
+<Peter.Galbavy@knowledge.com> and others. Development has been moved to
+SourceForge and worked on by Richard de Vroede <r.devroede@linvision.com>
+since June 26, 2002.
 .SH COPYRIGHT
 Copyright \(co 1999 Matthew Ramsay and others.
 .LP
-PoPToP is free software; you can redistribute it and/or modify it under
+Poptop is free software; you can redistribute it and/or modify it under
 the terms of the GNU General Public License as published by the Free
 Software Foundation; either version 2, or (at your option) any later
 version.
 .LP
-PoPToP is distributed in the hope that it will be useful, but WITHOUT ANY
+Poptop is distributed in the hope that it will be useful, but WITHOUT ANY
 WARRANTY; without even the implied warranty of MERCHANTABILITY or
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
 for more details.
 .LP
 You should have received a copy of the GNU General Public License along
-with PoPToP; see the file COPYING.  If not, write to the Free Software
+with Poptop; see the file COPYING.  If not, write to the Free Software
 Foundation, 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 .SH AVAILABILITY
-The most recent version of PoPToP is available for download from
-Moreton Bay at
-.IR http://www.moretonbay.com/vpn/pptp.html .
+The most recent version of Poptop is available for download from
+SourceForge at
+.IR http://sourceforge.net/projects/poptop . 
 .SH "SEE ALSO"
 .BR inetd (8),
 .BR inetd.conf (5),
 .BR pppd (8),
 .BR pptpd (8),
+.BR pptpd.conf (5),
 .BR tcpd (8).

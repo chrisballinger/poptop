@@ -1,0 +1,41 @@
+pptpd (1.2.0-b1-0) unstable; urgency=low
+
+  * change to new version
+
+ -- James Cameron <james.cameron@hp.com>  Thu, 22 Apr 2004 13:22:24 +1000
+
+poptop (1.1.4-b5) unstable; urgency=low
+
+  * Added code to pass ipparam to pppd - By Sergio M. Ammirata
+  * Added Debian packaging information
+  * Added bcrelay_v1 - By Norbert van Bolhuis
+  
+ -- R. de Vroede <richard@oip.tudelft.nl>  Fri, 18 Jul 2003 11:34:05 +0200
+
+poptop (1.1.4-b4) unstable; urgency=low
+
+  * Bugfix: First GRE packet always discarded - By: fghdgh (gcc111)
+  * Bugfix: Console fds left open, ssh hangs - By: fghdgh (gcc111)
+  * Bugfix: Pidfile option doesn't work - By: Visarion Mandzgaladze
+  
+ -- R. de Vroede <richard@oip.tudelft.nl>  Fri, Jun 20 2003 11:34:05 +0200
+
+poptop (1.1.4-b3) unstable; urgency=low
+
+  * Bugfix: Two buffer overflows in pptpctrl.c - By: Hernan Otero
+  
+ -- R. de Vroede <richard@oip.tudelft.nl>  Tue, May 13 2003 11:34:05 +0200
+
+poptop (1.1.4-b2) unstable; urgency=low
+
+  * Bugfix: Potential buffer-overflow in ctrlpacket.c
+  * Callid enhancements
+  
+ -- R. de Vroede <richard@oip.tudelft.nl>  Wed, Apr  9 2003 11:34:05 +0200
+
+poptop (1.1.4-b1) unstable; urgency=low
+
+  * Added BCrelay (Broadcast relay)
+  
+ -- R. de Vroede <richard@oip.tudelft.nl>  Fri, Oct 11 2002 11:34:05 +0200
+

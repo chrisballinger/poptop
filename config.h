@@ -1,5 +1,5 @@
 /* config.h.  Generated automatically by configure.  */
-/* config.h.in.  Generated automatically from configure.in by autoheader.  */
+/* config.h.in.  Generated automatically from configure.in by autoheader 2.13.  */
 
 /* Define to empty if the keyword does not work.  */
 /* #undef const */
@@ -22,6 +22,9 @@
 /* Let PPPD choose the IP addresses? */
 /* #undef PPPD_IP_ALLOC */
 
+/* Enable Broadcast Relay? */
+/* #undef BCRELAY */
+
 /* Work as a PNS rather than a PAC? */
 /* #undef PNS_MODE */
 
@@ -29,7 +32,7 @@
 #define PPP_BINARY "/usr/sbin/pppd"
 
 /* Have libwrap? */
-#define HAVE_LIBWRAP 1
+/* #undef HAVE_LIBWRAP */
 
 /* Just #define to int if it's not defined */
 /* #undef socklen_t */

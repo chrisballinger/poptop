@@ -3,7 +3,7 @@
  *
  * Manages the PoPToP sessions.
  *
- * $Id: pptpmanager.c,v 1.4 2003/02/06 16:39:46 fenix_nl Exp $
+ * $Id: pptpmanager.c,v 1.5 2004/04/22 10:48:16 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -29,6 +29,7 @@
 #include <sys/un.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <time.h>
 #include <sys/time.h>
 #include <fcntl.h>
 
@@ -57,6 +58,7 @@ extern char *pppdoptstr;
 extern char *speedstr;
 extern char *bindaddr;
 extern int pptp_debug;
+extern int pptp_noipparam;
 
 #if !defined(PPPD_IP_ALLOC)
 extern char localIP[MAX_CONNECTIONS][16];
@@ -85,6 +87,9 @@ extern int maxConnections;
 /* local function prototypes */
 static void connectCall(int clientSocket, int clientNumber);
 static int createHostSocket(int *hostSocket);
+
+/* this end's call identifier */
+uint16_t unique_call_id = 0;
 
 static void pptp_reap_child(int sig)
 {
@@ -137,6 +142,8 @@ int pptp_manager(int argc, char **argv)
 	syslog(LOG_INFO, "MGR: Manager process started");
 
 #if !defined(PPPD_IP_ALLOC)
+	syslog(LOG_INFO, "MGR: Maximum of %d connections available", maxConnections);
+
 	for (loop = 0; loop < maxConnections; loop++) {
 		clientArray[loop].pid = 0;
 	}
@@ -298,6 +305,7 @@ int pptp_manager(int argc, char **argv)
 					/* NORETURN */
 				default:	/* parent */
 					close(clientSocket);
+					unique_call_id += MAX_CALLS_PER_TCP_LINK;
 #if !defined(PPPD_IP_ALLOC)
 					clientArray[firstOpen].pid = ctrl_pid;
 #endif
@@ -377,15 +385,20 @@ static int createHostSocket(int *hostSocket)
 static void connectCall(int clientSocket, int clientNumber)
 {
 
+#define NUM2ARRAY(array, num) snprintf(array, sizeof(array), "%d", num)
+	
 	char *ctrl_argv[16];	/* arguments for launching 'pptpctrl' binary */
 
 	int pptpctrl_argc = 0;	/* count the number of arguments sent to pptpctrl */
 
 	/* lame strings to hold passed args. */
 	char ctrl_debug[2];
+	char ctrl_noipparam[2];
 	char pppdoptfile_argv[2];
 	char speedgiven_argv[2];
 	extern char **environ;
+
+	char callid_argv[16];
 
 	/*
 	 * Launch the CTRL manager binary; we send it some information such as
@@ -401,12 +414,16 @@ static void connectCall(int clientSocket, int clientNumber)
 	}
 
 	/* get argv set up */
-	ctrl_debug[0] = pptp_debug ? '1' : '0';
+	NUM2ARRAY(ctrl_debug, pptp_debug ? 1 : 0);
 	ctrl_debug[1] = '\0';
 	ctrl_argv[pptpctrl_argc++] = ctrl_debug;
 
+	NUM2ARRAY(ctrl_noipparam, pptp_noipparam ? 1 : 0);
+	ctrl_noipparam[1] = '\0';
+	ctrl_argv[pptpctrl_argc++] = ctrl_noipparam;
+
 	/* optionfile = TRUE or FALSE; so the CTRL manager knows whether to load a non-standard options file */
-	pppdoptfile_argv[0] = pppdoptstr ? '1' : '0';
+	NUM2ARRAY(pppdoptfile_argv, pppdoptstr ? 1 : 0);
 	pppdoptfile_argv[1] = '\0';
 	ctrl_argv[pptpctrl_argc++] = pppdoptfile_argv;
 	if (pppdoptstr) {
@@ -414,7 +431,7 @@ static void connectCall(int clientSocket, int clientNumber)
 		ctrl_argv[pptpctrl_argc++] = pppdoptstr;
 	}
 	/* tell the ctrl manager whether we were given a speed */
-	speedgiven_argv[0] = speedstr ? '1' : '0';
+	NUM2ARRAY(speedgiven_argv, speedstr ? 1 : 0);
 	speedgiven_argv[1] = '\0';
 	ctrl_argv[pptpctrl_argc++] = speedgiven_argv;
 	if (speedstr) {
@@ -432,6 +449,12 @@ static void connectCall(int clientSocket, int clientNumber)
 	ctrl_argv[pptpctrl_argc++] = "1";
 	ctrl_argv[pptpctrl_argc++] = remoteIP[clientNumber];
 #endif
+
+	/* our call id to be included in GRE packets the client
+	 * will send to us */
+	NUM2ARRAY(callid_argv, unique_call_id);
+	ctrl_argv[pptpctrl_argc++] = callid_argv;
+
 	/* terminate argv array with a NULL */
 	ctrl_argv[pptpctrl_argc] = NULL;
 	pptpctrl_argc++;

@@ -4,7 +4,7 @@
  * originally by C. S. Ananian
  * Modified for PoPToP
  *
- * $Id: pptpgre.c,v 1.1 2002/06/21 08:52:01 fenix_nl Exp $
+ * $Id: pptpgre.c,v 1.2 2004/04/22 10:48:16 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -24,6 +24,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <sys/stat.h>
+#include <time.h>
 #include <sys/time.h>
 #include <unistd.h>
 #include <string.h>
@@ -73,8 +74,13 @@ int pptp_gre_init(u_int32_t call_id_pair, int pty_fd, struct in_addr *inetaddrs)
 		return -1;
 	}
 
-	gre.ack_sent = gre.ack_recv = gre.seq_sent = gre.seq_recv = 0;
-	gre.call_id_pair = call_id_pair;		/* network byte order */
+	gre.ack_sent = gre.ack_recv = gre.seq_sent = 0;
+	gre.seq_recv = 0xFFFFFFFF;
+	/* seq_recv is -1, therefore next packet expected is seq 0,
+	   to comply with RFC 2637: 'The sequence number for each
+	   user session is set to zero at session startup.' */
+				      
+	gre.call_id_pair = call_id_pair;	       /* network byte order */
 	return gre_fd;
 }
 
@@ -296,8 +302,13 @@ int decaps_gre(int fd, int (*cb) (int cl, void *pack, unsigned len), int cl)
 		return 0;
 	}
 	if (header->call_id != GET_VALUE(PAC, gre.call_id_pair)) {
-		/* bad call ID: discard */
-		syslog(LOG_ERR, "GRE: Discarding for incorrect call");
+                /*
+                 * Discard silently to allow more than one GRE tunnel from
+                 * the same IP address in case clients are behind the
+                 * firewall.
+                 *
+                 * syslog(LOG_ERR, "GRE: Discarding for incorrect call");
+                 */
 		return 0;
 	}
 	if (PPTP_GRE_IS_A(ntoh8(header->ver))) {	/* acknowledgement present */
@@ -377,7 +388,7 @@ int encaps_gre(int fd, void *pack, unsigned len)
 		header_len = sizeof(u.header) - sizeof(u.header.ack);
 	}
 	if (len > PACKET_MAX) {
-		syslog(LOG_ERR, "GRE: packet is to large %d", len);
+		syslog(LOG_ERR, "GRE: packet is too large %d", len);
 		return 0;	/* drop this, it's too big */
 	}
 	/* copy payload into buffer */

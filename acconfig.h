@@ -3,7 +3,7 @@
  *
  * Additional autoconf defines for this program.
  *
- * $Id: acconfig.h,v 1.3 2003/02/06 16:39:45 fenix_nl Exp $
+ * $Id: acconfig.h,v 1.4 2004/04/22 10:48:16 quozl Exp $
  */
 
 /* Use BSD User land PPP? */
@@ -14,6 +14,9 @@
 
 /* Let PPPD choose the IP addresses? */
 #undef PPPD_IP_ALLOC
+
+/* Enable Broadcast Relay? */
+#undef BCRELAY
 
 /* Work as a PNS rather than a PAC? */
 #undef PNS_MODE

@@ -1,7 +1,10 @@
 Poptop -- The PPTP Server
 -------------------------
 
-Current Author:
+Current Maintainer:
+James Cameron <james.cameron@hp.com>
+
+Previous Maintainer:
 Richard de Vroede <r.devroede@linvision.com>
 
 Original Authors:
@@ -15,8 +18,8 @@ Ron O'Hara <rono@sentuny.com.au>
 Allan Clark <allanc@sco.com>
 Harald Vogt <vogt@serc.nl>
 
-The Linux PPTP Server takes advantage of some Linux PPTP client code written by
-C. Scott Ananian <cananian@alumni.princeton.edu>
+The Linux PPTP Server takes advantage of some Linux PPTP client code
+written by C. Scott Ananian <cananian@alumni.princeton.edu>
 
 Other Credits:
 Moreton Bay <http://www.moretonbay.com>
@@ -24,7 +27,13 @@ Lineo       <http://www.lineo.com>
 Snapgear    <http://www.snapgear.com>
 Linvision   <http://www.linvision.com>
 
-Christopher Schulte <christopher@schulte.org> - Host for the PPTP Mailing List
-Peter Galbavy <Peter.Galbavy@knowledge.com> - Previous host for the PPTP CVS server
-SourceForge <http://sourceforge.net> - Our new home
-Luc Richards <theycallmeluc@yahoo.com.au> - The author of bcrelay
+SourceForge <http://sourceforge.net> - Current host for the mailing
+list and CVS repository.
+
+Christopher Schulte <christopher@schulte.org> - Previous host for the
+PPTP Mailing List (sadly missed, in James' opinion).
+
+Peter Galbavy <Peter.Galbavy@knowledge.com> - Previous host for the
+PPTP CVS server.
+
+Luc Richards <theycallmeluc@yahoo.com.au> - The author of bcrelay.

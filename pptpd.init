@@ -18,8 +18,6 @@ case "$1" in
                 echo
                 exit 1
         fi
-        modprobe ip_conntrack_pptp 1> /dev/null 2>&1
-        modprobe ip_nat_pptp 1> /dev/null 2>&1
         daemon /usr/sbin/pptpd
         echo
         touch /var/lock/subsys/pptpd

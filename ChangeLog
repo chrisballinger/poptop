@@ -1,3 +1,38 @@
+Thu Apr 22 16:38:01 2004  James Cameron  <quozl@us.netrek.org>
+
+	* pptpctrl.c: remove report of connection speed for Linux pppd.
+
+Thu Apr 22 13:41:11 2004  James Cameron  <quozl@us.netrek.org>
+
+	* pptpd-1.2.0-b1.tar.gz: released to test team.
+	
+	* AUTHORS: adjust to reflect new maintainer.
+
+	* bcrelay.c: when compiling without --with-bcrelay, fail
+	immediately with an error message suggesting a rebuild.
+
+	* bcrelay.c: adopt VERSION from main package, cause my_daemon() to
+	be conditional on not HAVE_DAEMON.
+
+	* pptpd.c (killbcrelay): avoid code when BCRELAY is not defined.
+	Fixes compiler error when pptpd is configured using defaults.
+
+	* Makefile.am (dist-hook, EXTRA_DIST): remove CVS from final
+	source distribution.
+
+	* samples/pptpd.conf: remove some whitespace and wrap.
+
+	* Makefile.am: remove CVS from dist target.
+
+	* RELEASING: new file of release instructions, for 1.2.0 release
+	candidate.
+
+	* configure.in: change version.
+
+	* pptpd.spec: change version.
+
+	* ChangeLog: adopt GNU format.
+	
 Fri Feb 27 09:53:19 2004  James Cameron  <quozl@us.netrek.org>
 
 	* pptpctrl.c (pptp_handle_ctrl_connection): on any CALL_CLR_RQST,
@@ -28,6 +63,41 @@ Tue Dec  9 10:22:01 2003  James Cameron  <quozl@us.netrek.org>
 
 	* pptpctrl.c (launch_pppd): report cause of failed execvp().
 	* pptpctrl.c (startCall): better explain launch failure.
+
+poptop (1.1.4-b5) unstable; urgency=low
+
+  * Added code to pass ipparam to pppd - By Sergio M. Ammirata
+  * Added Debian packaging information
+  * Added bcrelay_v1 - By Norbert van Bolhuis
+  
+ -- R. de Vroede <richard@oip.tudelft.nl>  Fri, 18 Jul 2003 11:34:05 +0200
+
+poptop (1.1.4-b4) unstable; urgency=low
+
+  * Bugfix: First GRE packet always discarded - By: fghdgh (gcc111)
+  * Bugfix: Console fds left open, ssh hangs - By: fghdgh (gcc111)
+  * Bugfix: Pidfile option doesn't work - By: Visarion Mandzgaladze
+  
+ -- R. de Vroede <richard@oip.tudelft.nl>  Fri, Jun 20 2003 11:34:05 +0200
+
+poptop (1.1.4-b3) unstable; urgency=low
+
+  * Bugfix: Two buffer overflows in pptpctrl.c - By: Hernan Otero
+  
+ -- R. de Vroede <richard@oip.tudelft.nl>  Tue, May 13 2003 11:34:05 +0200
+
+poptop (1.1.4-b2) unstable; urgency=low
+
+  * Bugfix: Potential buffer-overflow in ctrlpacket.c
+  * Callid enhancements
+  
+ -- R. de Vroede <richard@oip.tudelft.nl>  Wed, Apr  9 2003 11:34:05 +0200
+
+poptop (1.1.4-b1) unstable; urgency=low
+
+  * Added BCrelay (Broadcast relay)
+  
+ -- R. de Vroede <richard@oip.tudelft.nl>  Fri, Oct 11 2002 11:34:05 +0200
 
 Poptop ChangeLog
 ---------------------------------------------------------------------------

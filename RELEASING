@@ -1,0 +1,17 @@
+Files to update version number in
+
+	pptpd.spec
+	configure.in
+
+Run ./reconf to propogate version, which also runs automake, autoconf
+
+make dist
+
+scp .tar.gz to test machine
+unpack
+./configure with defaults and various options
+make
+
+Tags
+
+cvs tag -F poptop-1_1_3-a
