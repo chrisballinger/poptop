@@ -6,11 +6,17 @@ use strict;
 #
 # usage: vpnstats /var/log/messages
 #
-# version 1.2
+# version 1.4 09-09-2003
+# - thanks to Masaya Miyamoto (miyamo@po.ntts.co.jp)
+#   and David Fuzishima (david_f@zipmail.com.br) for fixing the
+#   date/time regexes to catch single-digit days (9 instead of 09).
+#
+# version 1.3
 # - thanks to Andy Behrens <andy.behrens@coat.com> for
 #   fixing up the regex to catch extraneous whitespace, and
 #   domain names that inlucde numbers and underscores.
 # - I modified the output to report when a user is still connected
+# - thanks to Wolfgang Powisch for fixing hostnames included a "-"
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -44,7 +50,7 @@ my %vpnstats = ();
 # for each line of input
 foreach my $x (@messages) {
 	if ($x =~ /^(\w+\s+\d+\s\d+:\d+:\d+)\s        # $1 = date+time
-		[\-\w.]+\spppd\[(\d+)\]:\s		     # $2 = PID
+                \S+\spppd\[(\d+)\]:\s                # $2 = PID
 		MSCHAP-v2\speer\sauthentication\ssucceeded\sfor\s
 		# I don't want the DOMAIN\\ prefix
 		(.+\\)*(\w+)$			     # $4 = username
@@ -52,16 +58,16 @@ foreach my $x (@messages) {
 		$PID_USER{$2} = $4;
 		$PID_DATETIME{$2} = $1;
 		$USER_TOTAL_CONNECT{$4}++;
-	} elsif ($x =~ /^(\w+\s\d+\s\d+:\d+:\d+)\s   # $1 = date+time
-		\w+\spppd\[(\d+)\]:\s		     # $2 = PID
+	} elsif ($x =~ /^(\w+\s+\d+\s\d+:\d+:\d+)\s   # $1 = date+time
+		\S+\spppd\[(\d+)\]:\s		     # $2 = PID
 		Connect\stime\s
 		(\d*\.\d*)			     # $3 = minutes
 		\sminutes\.$
 		/x) {
 		$PID_LENGTH{$2} = $3;
 		$USER_TOTAL_TIME{$PID_USER{$2}} += $3;
-	} elsif ($x =~ /^(\w+\s\d+\s\d+:\d+:\d+)\s   # $1 = date+time
-		\w+\spppd\[(\d+)\]:\s	     	     # $2 = PID
+	} elsif ($x =~ /^(\w+\s+\d+\s\d+:\d+:\d+)\s   # $1 = date+time
+		\S+\spppd\[(\d+)\]:\s	     	     # $2 = PID
 		Sent\s(\d+)\sbytes,\s		     # $3 = bytes sent
 		received\s(\d+)\s		     # $4 = bytes received
 		/x) {			
@@ -69,8 +75,8 @@ foreach my $x (@messages) {
 		$PID_RECEIVED{$2} = $4;
 		$USER_TOTAL_SENT{$PID_USER{$2}} += $3;
 		$USER_TOTAL_RECEIVED{$PID_USER{$2}} += $4;
-	} elsif ($x =~ /^(\w+\s\d+\s\d+:\d+:\d+)\s   # $1 = date+time
-		\w+\spptpd\[(\d+)\]:\s		     # $2 = PID
+	} elsif ($x =~ /^(\w+\s+\d+\s\d+:\d+:\d+)\s   # $1 = date+time
+		\S+\spptpd\[(\d+)\]:\s		     # $2 = PID
 		CTRL:\sClient\s
 		(\d+\.\d+\.\d+\.\d+)\s		     # $3 = IP
 		control\sconnection\sfinished$
@@ -116,3 +122,4 @@ if (defined $USER_TOTAL_CONNECT{"FAILED"}) {
 		}
 	}
 }
+
