@@ -1,6 +1,13 @@
-bug: configfile.c opens, reads and closes /etc/pptpd.conf as many
-times as there are possible option values, and only returns the first
-match for a keyword, not the last.
+feature: include debian packaging in upstream, use cvs-buildpackage.
+
+bug: terminating immediately on CALL_CLR_RQST from client (1.2.0-b3)
+may violate the RFC, but was done to fix some problem.
+
+minor bug: pptpctrl.c:302 (1.11) test for absolute file descriptor numbers.
+
+bug: 1.2.0-b3 configfile.c opens, reads and closes /etc/pptpd.conf as
+many times as there are possible option values, and only returns the
+first match for a keyword, not the last.
 
 PPTP Server TODO
 ----------------

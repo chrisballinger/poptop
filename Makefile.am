@@ -17,9 +17,9 @@ CFLAGS = -O2 -fno-builtin -Wall -DSBINDIR='"$(sbindir)"'
 
 man_MANS = pptpctrl.8 pptpd.8 pptpd.conf.5
 
-EXTRA_DIST = README.inetd README.slirp ChangeLog-0.8 version reconf \
-Makefile.uClinux config.embed.h html samples $(man_MANS) \
-README.bcrelay ChangeLog-0.9 ChangeLog-1.1.3 tools pptpd.spec makepackage
+EXTRA_DIST = README* ChangeLog* NEWS* TODO html samples $(man_MANS) \
+version reconf tools Makefile.uClinux config.embed.h pptpd.spec \
+makepackage
 
 EXTRA_PROGRAMS = 
 sbin_PROGRAMS = pptpd pptpctrl bcrelay

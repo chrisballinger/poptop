@@ -1,3 +1,9 @@
+Tue Apr 27 09:11:32 2004  James Cameron  <quozl@us.netrek.org>
+
+	* NEWS: change attribution on request from author.
+
+	* Makefile.am (EXTRA_DIST): include README.portslave, re-order list.
+
 Sat Apr 24 20:51:54 2004  James Cameron  <quozl@us.netrek.org>
 
 	* pptpgre.c (decaps_hdlc): add hint for EIO on read() of PTY,

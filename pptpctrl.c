@@ -3,7 +3,7 @@
  *
  * PPTP control connection between PAC-PNS pair
  *
- * $Id: pptpctrl.c,v 1.11 2004/04/24 12:55:08 quozl Exp $
+ * $Id: pptpctrl.c,v 1.12 2004/04/27 07:24:36 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -342,6 +342,7 @@ static void pptp_handle_ctrl_connection(char **pppaddrs, struct in_addr *inetadd
 					close(pty_fd);
 					pty_fd = -1;
 				}
+				/* violating RFC */
                                 goto leave_drop_call;
 
 			case OUT_CALL_RQST:

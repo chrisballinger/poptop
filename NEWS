@@ -1,3 +1,7 @@
+1.2.0-b4:
+
+- include README.portslave in distribution [Cameron]
+
 1.2.0-b3: released 2004-04-25 (ANZAC day)
 
 - add hint for EIO to suggest pppd option syntax [Cameron]
@@ -8,7 +12,7 @@
 - fix unanticipated exit() when --noipparam option used [Cameron]
 - fix segfault on pptpctrl called with no arguments [Cameron]
   {closes: Bug#140709}
-- include vpnwho.pl in package [Cabral]
+- include vpnwho.pl in package [!3runo]
 - note that speed is ineffective on Linux [Cameron]
 - rework comments in sample configuration files [Cameron]
 - update references to web sites [Cameron]
@@ -27,7 +31,7 @@
 
 1.1.4-b4: 
 
-- terminate call on any CALL_CLR_RQST [Cabral]
+- terminate call on any CALL_CLR_RQST [!3runo]
 - unblock SIGCHLD [Stamfest]
 - report pppd path in debug mode [Cameron]
 - report cause of failed execvp() [Cameron]
