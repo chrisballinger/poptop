@@ -1,3 +1,9 @@
+Mon May 17 16:28:49 2004  James Cameron  <quozl@us.netrek.org>
+
+	* pptpd.c: bug fix, only check PPP options file readability if an
+	options file has been given in the configuration file or command
+	line.  Reported by: Andrew Alexandrov
+
 Mon May 17 12:31:34 2004  James Cameron  <quozl@us.netrek.org>
 
 	* Makefile.am (EXTRA_DIST): remove html, as the documentation is

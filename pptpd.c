@@ -4,7 +4,7 @@
  * Grabs any command line argument and processes any further options in
  * the pptpd config file, before throwing over to pptpmanager.c.
  *
- * $Id: pptpd.c,v 1.10 2004/05/14 05:54:58 quozl Exp $
+ * $Id: pptpd.c,v 1.11 2004/05/17 06:32:00 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -359,7 +359,7 @@ int main(int argc, char **argv)
 		return 1;
 	}
 	/* check that the PPP options file is readable */
-	if (access(pppdoptstr, R_OK) < 0) {
+	if (pppdoptstr && access(pppdoptstr, R_OK) < 0) {
 		syslog(LOG_ERR, "MGR: PPP options file %s not readable",
 		       pppdoptstr);
 		return 1;

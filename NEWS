@@ -1,5 +1,6 @@
 1.2.0-b4: unreleased
 
+- fix for options file check when no options file wanted [Cameron]
 - fix for SIGTERM handling [Guraj]
 - minor manual page edits [Wilson]
 - fix printing of connection speed [Dubiec]
