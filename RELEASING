@@ -3,6 +3,7 @@ Releasing pptpd
 update version number in the following files
 	pptpd.spec
 	configure.in
+	debian/changelog
 run ./reconf
 update NEWS, ChangeLog
 commit changes
@@ -32,11 +33,50 @@ fakeroot rpmbuild -ta pptpd-1.2.3.tar.gz
 
 Source Forge
 
-http://poptop.sourceforge.net/
-SourceForge Project
+http://sourceforge.net/
 Login
 Poptop
 Admin
 File Releases
 Add Release "pptpd-1.2.3" to package "Poptop"
-pptpd-1.2.3.tar.gz
+ftp upload.sourceforge.net
+anonymous
+qz@hp.com
+cd incoming
+put pptpd-1.2.3.tar.gz
+put pptpd-1.2.3-0.src.rpm
+put pptpd-1.2.3-0.i386.rpm
+
+Announcement
+
+To: poptop-server@lists.sourceforge.net
+Subject: pptpd-1.2.3 released
+
+G'day,
+
+pptpd 1.2.3 has been released.  This version contains a writev()
+performance enhancement, --enable-facility configure syslog
+customisation, additional error checking on file descriptor
+duplication, and a compilation fix.  Please reply to the list with
+your test results.
+
+See:
+        http://sourceforge.net/projects/poptop (click on Files)
+        https://sourceforge.net/project/showfiles.php?group_id=44827
+
+Checksums:
+	a7b946976c12b74be369678c920f2dac  pptpd-1.2.3-0.i386.rpm
+	6165867b5560956f53be5e0714599127  pptpd-1.2.3-0.src.rpm
+	a521e40ca304b0c125cc25f9b9d03324  pptpd-1.2.3.tar.gz
+
+Changes to pptpd since 1.2.2 are:
+- error check critical dup2 calls [Cameron]
+- add --enable-facility configure feature for syslog customisation [Cameron]
+- performance, use writev() if available, avoiding memcpy() [Sundberg]
+- compilation fix for gcc old versions [Cameron]
+
+See the detailed ChangeLog.
+
+--
+
+Cryptographically sign the mail.

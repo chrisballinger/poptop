@@ -1,3 +1,10 @@
+pptpd (1.2.3-0) unstable; urgency=low
+
+  * Package built from upstream sources, not a Debian project package
+    (Debian Developer expected to adjust this entry)
+
+ -- James Cameron <quozl@us.netrek.org>  Thu, 17 Feb 2005 13:28:06 +1100
+
 pptpd (1.2.0-0) unstable; urgency=low
 
   * Package built from upstream sources, not a Debian project package
