@@ -1,3 +1,7 @@
+package most recent vpnwho.pl, per bruno's mail.
+
+accept chris wilson's man page edits, per mail.
+
 feature: include debian packaging in upstream, use cvs-buildpackage.
 
 bug: terminating immediately on CALL_CLR_RQST from client (1.2.0-b3)

@@ -28,3 +28,10 @@ e) set configuration files for a tunnel, establish two tunnels, ping,
    ssh, scp 10Mb random data, close tunnel, re-establish, ping, close
    tunnels.
 f) "make uninstall"
+
+Source Forge
+
+Admin
+File Release System
+Add Release "pptpd-1.2.0" to package "Poptop"
+pptpd-1.2.0-b3.tar.gz
