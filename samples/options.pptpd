@@ -8,11 +8,11 @@ lock
 name pptpd
 
 proxyarp
+bsdcomp 0
 
 # This option applies if you use ppp with chapms-strip-domain patch
 #chapms-strip-domain
 
-+chap
 # These options apply if you use ppp with mppe patch
 # NB! You should also apply the ChapMS-V2 patch
 #-chap
