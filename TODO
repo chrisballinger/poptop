@@ -16,6 +16,9 @@ REMAINING ITEMS
 | date      | type& | version  | version | comment                                                    |
 |           | bug#  | affected | fixed   |                                                            |
 +-----------+-------+----------+---------+------------------------------------------------------------+
+|20030214   | -     | all      |         | ignore EPERM on GRE write for a short time in case         |
+|           |       |          |         | netfilter is being adjusted by ip-up scripts, Bug #181005  |
++-----------+-------+----------+---------+------------------------------------------------------------+
 |20030801   | *     | <= 1.1.3 |         | XP seems to need mtu negotiation 4 lower than serverside.  |
 |           |       |          |         | MS PPTP-server handles this correctly.                     |
 +-----------+-------+----------+---------+------------------------------------------------------------+

@@ -1,5 +1,7 @@
 1.2.0-b3: in preparation
 
+- fix segfault on pptpctrl called with no arguments [Cameron]
+  {closes: Bug#140709}
 - include vpnwho.pl in package [Cabral]
 - note that speed is ineffective on Linux [Cameron]
 - rework comments in sample configuration files [Cameron]
@@ -31,7 +33,7 @@
 - fix pidfile option [Mandzgaladze]
 - fix two buffer overflows [Otero]
 - fix potential buffer overflow [Vroede]
-- enhance callid [Vroede]
+- enhance callid [Latypov] {does not close Bug#171831}
 
 1.1.3: 
 
