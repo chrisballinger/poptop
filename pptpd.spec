@@ -1,6 +1,6 @@
 %define name pptpd
 %define ver 1.1.3
-%define rel 2
+%define rel 3
 %define prefix /usr
 %define buildlibwrap 1
 %define buildbsdppp 0
@@ -43,19 +43,8 @@ similar to other C/S protocols.
 %{?_with_pnsmode: %{expand: %%define buildpnsmode 1}}
 
 %prep
-topdir=`env | grep OLDPWD | cut -d "=" -f2`
-RPM_BUILD_DIR=%{_tmppath}
-RPM_SOURCE_DIR=%{_tmppath}
-RPM_RPM_DIR=$topdir/../
-RPM_SRPM_DIR=$topdir/../
-mkdir -p $RPM_BUILD_DIR
-rm -rf $RPM_BUILD_DIR/%{name}-%{ver}
-mkdir -p $RPM_BUILD_DIR/%{name}-%{ver}
-cp -a $topdir/* $RPM_BUILD_DIR/%{name}-%{ver}
-cd $topdir
-tar -czf $RPM_SOURCE_DIR/%{name}-%{ver}.tar.gz .
 
-%setup -D -T -n $RPM_BUILD_DIR/%{name}-%{ver}
+%setup -c
 
 %build
 buildopts=""
@@ -89,56 +78,25 @@ install -m 0644 samples/options.pptpd $RPM_BUILD_ROOT/etc/ppp/options.pptpd
 install -m 0755 tools/vpnuser $RPM_BUILD_ROOT/usr/bin/vpnuser
 install -m 0755 tools/vpnstats $RPM_BUILD_ROOT/usr/bin/vpnstats
 install -m 0755 tools/vpnstats.pl $RPM_BUILD_ROOT/usr/bin/vpnstats.pl
+install -m 0755 tools/confmod.sh $RPM_BUILD_ROOT/usr/bin/confmod.sh
 mkdir -p $RPM_BUILD_ROOT/usr/man/man5
 mkdir -p $RPM_BUILD_ROOT/usr/man/man8
 install -m 0644 pptpd.conf.5 $RPM_BUILD_ROOT/usr/man/man5/pptpd.conf.5
 install -m 0644 pptpd.8 $RPM_BUILD_ROOT/usr/man/man8/pptpd.8
 install -m 0644 pptpctrl.8 $RPM_BUILD_ROOT/usr/man/man8/pptpctrl.8
 strip $RPM_BUILD_ROOT/%{prefix}/sbin/* || :
-make maintainer-clean
 
 %post
-TEMP=$(locate /etc/modules.conf)
-if [ -z "$TEMP" ]; then ln -s /etc/conf.modules /etc/modules.conf; fi
-TEMP=$(cat /etc/modules.conf | grep "alias ppp ppp_generic")
-if [ -z "$TEMP" ]; then
-        grep -v "alias ppp ppp_generic" /etc/modules.conf > /etc/modules.conf1;
-        mv -f /etc/modules.conf1 /etc/modules.conf
-fi
-TEMP=$(cat /etc/modules.conf | grep "alias char-major-108 off")
-if [ -n "$TEMP" ]; then
-        grep -v "alias char-major-108 off" /etc/modules.conf > /etc/modules.conf1;
-        mv -f /etc/modules.conf1 /etc/modules.conf
-fi
-TEMP=$(cat /etc/modules.conf | grep "alias char-major-108 ppp_generic")
-if [ -z "$TEMP" ]; then echo "alias char-major-108 ppp_generic" >> /etc/modules.conf; fi
-TEMP=$(cat /etc/modules.conf | grep "alias ppp-compress-18 ppp_mppe")
-if [ -z "$TEMP" ]; then echo "alias ppp-compress-18 ppp_mppe" >> /etc/modules.conf; fi
-TEMP=$(cat /etc/modules.conf | grep "alias ppp-compress-21 bsd_comp")
-if [ -z "$TEMP" ]; then echo "alias ppp-compress-21 bsd_comp" >> /etc/modules.conf; fi
-TEMP=$(cat /etc/modules.conf | grep "alias ppp-compress-24 ppp_deflate")
-if [ -z "$TEMP" ]; then echo "alias ppp-compress-24 ppp_deflate" >> /etc/modules.conf; fi
-TEMP=$(cat /etc/modules.conf | grep "alias ppp-compress-26 ppp_deflate")
-if [ -z "$TEMP" ]; then echo "alias ppp-compress-26 ppp_deflate" >> /etc/modules.conf; fi
-TEMP=$(cat /etc/modules.conf | grep "alias tty-ldisc-3 ppp_async")
-if [ "$TEMP" = "" ]; then echo "alias tty-ldisc-3 ppp_async" >> /etc/modules.conf; fi
-TEMP=$(cat /etc/modules.conf | grep "alias tty-ldisc-14 ppp_synctty")
-if [ -z "$TEMP" ]; then echo "alias tty-ldisc-14 ppp_synctty" >> /etc/modules.conf; fi
-depmod -a
 OUTD="" ; for i in d manager ctrl ; do
     test -x /sbin/pptp$i && OUTD="$OUTD /sbin/pptp$i" ;
 done
 test -z "$OUTD" || \
 { echo "possible outdated executable detected; you should do run the following command:"; echo "rm -i $OUTD" ;}
 /sbin/chkconfig --add pptpd
-/sbin/chkconfig --level 345 pptpd on
-rm -f $RPM_SOURCE_DIR/%{name}-%{ver}.tar.gz
+/sbin/chkconfig pptpd on
 
 %preun
 /sbin/chkconfig --del pptpd
-
-%clean
-rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root)
@@ -148,6 +106,7 @@ rm -rf $RPM_BUILD_ROOT
 /usr/bin/vpnuser
 /usr/bin/vpnstats
 /usr/bin/vpnstats.pl
+/usr/bin/confmod.sh
 /usr/man/man5/pptpd.conf.5*
 /usr/man/man8/pptpd.8*
 /usr/man/man8/pptpctrl.8*
@@ -156,6 +115,13 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) /etc/ppp/options.pptpd
 
 %changelog
+* Mon Nov 25 2002 Richard de Vroede <richard@linvision.com>
+- Took out the module conf stuff. This belongs in the kernel section.
+
+* Sun Nov 24 2002 Nico Kadel-Garcia <nkadel@verizon.net>
+- Pull out customizations of SPEC file, use RPM standard locations
+- for compatibility with RedHat 7.3
+
 * Thu Aug 22 2002 Richard de Vroede <richard@linvision.com>
 - added stimeout option to pptpd.conf manpage
 - updated the Changelog file ;-)
@@ -210,3 +176,4 @@ rm -rf $RPM_BUILD_ROOT
 - updated source to 0.9.10
 - built to be included into Powertools
 - spec based heavily on spec by "Allan's Package-O-Matic Blenderfier"
+
