@@ -25,9 +25,11 @@ distributions).  [JJ]
 but is 65, MAX_ECHO_WAIT should be 60 but is 5, in pptpdefs.h, make these
 configurable, requested by Tobias Brox.  [JJ]
 
-20040623-0, 1.2.1, "Plugin /usr/lib/pptpd/pptpd-logwtmp.so is for pppd
-version 2.4.2, this is 2.4.3" happens if pppd 2.4.3 is installed, or
-vice versa if 2.4.2 is installed.  [JJ]
+20040623-0, 1.2.1, "Plugin /usr/lib/pptpd/pptpd-logwtmp.so is for pppd version
+2.4.2, this is 2.4.3" happens if pppd 2.4.3 is installed, or vice versa if
+2.4.2 is installed.  [JJ]  Workaround on common distributions is to use
+makepackage instead of "make install".  pptpd.init is also affected, as it has
+a hardcoded path to pptpd.
 
 20040525-0, 1.2.0-b4, "configure: WARNING: `missing' script is too
 old or missing"
