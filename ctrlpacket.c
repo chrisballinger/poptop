@@ -3,7 +3,7 @@
  *
  * PPTP Control Message packet reading, formatting and writing.
  *
- * $Id: ctrlpacket.c,v 1.1 2002/06/21 08:51:58 fenix_nl Exp $
+ * $Id: ctrlpacket.c,v 1.2 2003/04/09 15:09:49 fenix_nl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -257,12 +257,19 @@ ssize_t read_pptp_header(int clientFd, unsigned char *packet, int *pptp_ctrl_typ
 			}
 		}
 	}
-	/* OK, we have (at least) the first 2 bytes, and there is data waiting */
-	length = htons(*(u_int16_t *) packet);
-	if (length <= 0 || length > PPTP_MAX_CTRL_PCKT_SIZE) {
-		syslog(LOG_ERR, "CTRL: 0 < Control packet (length=%d) < "
-				"PPTP_MAX_CTRL_PCKT_SIZE (%d)",
-				length, PPTP_MAX_CTRL_PCKT_SIZE);
+        /* OK, we have (at least) the first 2 bytes, and there is data waiting
+	 *
+	 * length includes the header,  so a length less than 2 is someone
+	 * trying to hack into us or a badly corrupted packet.
+	 * Why not require length to be at least 10? Since we later cast
+	 * packet to struct pptp_header and use at least the 10 first bytes..
+	 * Thanks to Timo Sirainen for mentioning this.
+	 */
+	 length = htons(*(u_int16_t *) packet);
+	 if (length <= 10 || length > PPTP_MAX_CTRL_PCKT_SIZE) {
+	        syslog(LOG_ERR, "CTRL: 11 < Control packet (length=%d) < "
+	                        "PPTP_MAX_CTRL_PCKT_SIZE (%d)",
+	                        length, PPTP_MAX_CTRL_PCKT_SIZE);
 		/* we loose sync (unless we malloc something big, which isn't a good
 		 * idea - potential DoS) so we must close connection (draft states that
 		 * if you loose sync you must close the control connection immediately)
