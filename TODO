@@ -1,3 +1,13 @@
+20040429-0, important, bug, Michael St. Laurent, doing a "rpmbuild -ta
+pptpd-1.2.0-b3.tar.gz" gave the following error:
++ cd poptop-1.2.0
+/var/tmp/rpm-tmp.38859: line 33: cd: poptop-1.2.0: No such file or directory
+error: Bad exit status from /var/tmp/rpm-tmp.38859 (%prep)
+
+feature: nuke prior login by user, using pppd plugin.
+
+feature: prevent login by user if prior login still in progress, using pppd plugin that captures old hook and re-uses it, during chap auth.
+
 minor bug: plugins/Makefile installs to /usr/lib/pptpd instead of $(DESTDIR)
 
 review debian bug reports for pptpd package
