@@ -1,3 +1,11 @@
+Fri Apr 23 20:34:28 2004  James Cameron  <quozl@us.netrek.org>
+
+	* pptpctrl.c (main): fail if arguments insufficient, closes Debian
+	bug #107933.
+
+	* .cvsignore: include config.h and stamp-h, to assist with CVS
+	updates.
+
 Fri Apr 23 20:13:43 2004  James Cameron  <quozl@us.netrek.org>
 
 	* AUTHORS: hide author e-mails, add contributors since last release.

@@ -3,7 +3,7 @@
  *
  * PPTP control connection between PAC-PNS pair
  *
- * $Id: pptpctrl.c,v 1.9 2004/04/22 10:48:16 quozl Exp $
+ * $Id: pptpctrl.c,v 1.10 2004/04/23 10:36:48 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -108,6 +108,12 @@ int main(int argc, char **argv)
 
         gargc = argc;
         gargv = argv;
+
+	/* fail if argument count invalid */
+	if (argc < 7) {
+		fprintf(stderr, "pptpctrl: insufficient arguments, see man pptpctrl\n");
+		exit(2);
+	}
 
 	/* open a connection to the syslog daemon */
 	openlog("pptpd", LOG_PID, LOG_DAEMON);
