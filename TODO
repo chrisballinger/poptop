@@ -1,4 +1,8 @@
-20040525-0, 1.2.0-b4,, "configure: WARNING: `missing' script is too
+20040623-0, 1.2.1, "Plugin /usr/lib/pptpd/pptpd-logwtmp.so is for pppd
+version 2.4.2, this is 2.4.3" happens if pppd 2.4.3 is installed, or
+vice versa if 2.4.2 is installed.
+
+20040525-0, 1.2.0-b4, "configure: WARNING: `missing' script is too
 old or missing"
 
 20040521-4, 1.2.0-b3, running on Fedora Core 1, kernel ? , when a
@@ -31,7 +35,8 @@ pppd plugin that captures old hook and re-uses it, during chap auth.
 
 20040428-7, CVS HEAD, minor, pptpctrl.c refers to hard coded path
 /usr/lib/pptpd/pptpd-logwtmp.so instead of path derived from prefix
-given to configure script.
+given to configure script.  also, the rpm build fails if not run in a
+fakeroot.
 
 review debian bug reports for pptpd package
 http://bugs.debian.org/pptpd

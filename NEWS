@@ -1,5 +1,6 @@
 1.2.1: released 2004-06-23
 
+- depend on ppp 2.4.3 CVS packages for plugin [Cameron]
 - init.d script, warn that restart may cause problems [Mueller]
 
 1.2.0-b4: released 2004-05-25

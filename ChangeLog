@@ -1,6 +1,9 @@
-Wed Jun 23 17:45:24 2004  James Cameron  <quozl@us.netrek.org>
+Wed Jun 23 19:42:33 2004  James Cameron  <quozl@us.netrek.org>
 
 	* pptpd-1.2.1.tar.gz: released.
+	
+	* plugins/patchlevel.h: update pppd version requirement, so that
+	pptpd works with Paul Howarth's pppd 2.4.3 CVS packages.
 
 Fri Jun  4 13:56:20 2004  James Cameron  <quozl@us.netrek.org>
 

@@ -11,14 +11,14 @@
 
 Summary: PoPToP Point to Point Tunneling Server
 Name: %{name}
-Requires: ppp >= 2.4.2
+Requires: ppp >= 2.4.3
 Version: %{ver}
 Release: %{rel}
 Copyright: GPL
 Group: Networking/Daemons
 Vendor: Hewlett-Packard
 Packager: James Cameron <james.cameron@hp.com>
-Source0: %{name}-%{ver}-%{rel}.tar.gz
+Source0: %{name}-%{ver}.tar.gz
 URL: http://poptop.sourceforge.net/
 Buildroot: %{_tmppath}/%{name}-root
 
@@ -45,7 +45,7 @@ connect to an internal firewalled network using their dialup.
 
 %prep
 
-%setup -q -n pptpd-%{ver}-%{rel}
+%setup -q -n pptpd-%{ver}
 aclocal
 
 %build

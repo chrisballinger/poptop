@@ -688,8 +688,13 @@ clean-local:
 uninstall-local:
 	for d in $(subdirs); do $(MAKE) $(MFLAGS) -C $$d prefix=$(prefix) DESTDIR=$(DESTDIR) uninstall; done
 
-package:
+package: deb rpm
+
+deb:
 	fakeroot dpkg-buildpackage -us -uc
+
+rpm:
+	fakeroot rpmbuild -ba pptpd.spec
 
 bcrelay.o: bcrelay.c config.h defaults.h our_syslog.h our_getopt.h
 

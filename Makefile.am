@@ -65,8 +65,13 @@ clean-local:
 uninstall-local:
 	for d in $(subdirs); do $(MAKE) $(MFLAGS) -C $$d prefix=$(prefix) DESTDIR=$(DESTDIR) uninstall; done
 
-package:
+package: deb rpm
+
+deb:
 	fakeroot dpkg-buildpackage -us -uc
+
+rpm:
+	fakeroot rpmbuild -ta pptpd-$(VERSION).tar.gz
 
 ##CLEANFILES = 
 
