@@ -1,0 +1,45 @@
+#!/bin/sh
+#
+# Startup script for pptpd
+#
+# chkconfig: 345 85 15
+# description: PPTP server
+# processname: pptpd
+# config: /etc/pptpd.conf
+
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+# See how we were called.
+case "$1" in
+  start)
+        echo -n "Starting pptpd: "
+        if [ -f /var/lock/subsys/pptpd ] ; then
+                echo
+                exit 1
+        fi
+        modprobe ip_conntrack_pptp 1> /dev/null 2>&1
+        modprobe ip_nat_pptp 1> /dev/null 2>&1
+        daemon /usr/sbin/pptpd -d
+        echo
+        touch /var/lock/subsys/pptpd
+        ;;
+  stop)
+        echo -n "Shutting down pptpd: "
+        killproc pptpd
+        echo
+        rm -f /var/lock/subsys/pptpd
+        ;;
+  status)
+        status pptpd
+        ;;
+  restart)
+        $0 stop
+        $0 start
+        ;;
+  *)
+        echo "Usage: $0 {start|stop|restart|status}"
+        exit 1
+esac
+
+exit 0
