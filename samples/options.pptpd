@@ -22,6 +22,6 @@ bsdcomp 0
 #mppe-stateless
 
 # These options will tell ppp to pass on these to your clients
-# To use ms-dns or ms-dns in options.pptpd it must exist in /etc/resolv.conf
+# To use ms-wins or ms-dns in options.pptpd it must exist in /etc/resolv.conf
 #ms-wins your.server.here
 #ms-dns your.server.here

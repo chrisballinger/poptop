@@ -44,7 +44,8 @@ similar to other C/S protocols.
 
 %prep
 
-%setup -c
+%setup -q
+aclocal
 
 %build
 buildopts=""
@@ -115,6 +116,9 @@ test -z "$OUTD" || \
 %config(noreplace) /etc/ppp/options.pptpd
 
 %changelog
+* Thu Dec 26 2002 Arnt Karlsen <arnt@c2i.net>
+- Put in "aclocal" to get this built on Red Hat 8.0
+
 * Mon Nov 25 2002 Richard de Vroede <richard@linvision.com>
 - Took out the module conf stuff. This belongs in the kernel section.
 
