@@ -1,6 +1,6 @@
 %define name pptpd
 %define ver 1.1.3
-%define rel 3
+%define rel 4
 %define prefix /usr
 %define buildlibwrap 1
 %define buildbsdppp 0
