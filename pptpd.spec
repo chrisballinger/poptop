@@ -147,6 +147,10 @@ rm -f /usr/src/redhat/SOURCES/%{name}-%{ver}.tar.gz
 %config(noreplace) /etc/ppp/options.pptpd
 
 %changelog
+* Thu Aug 22 2002 Richard de Vroede <richard@linvision.com>
+- added stimeout option to pptpd.conf manpage
+- updated the Changelog file ;-)
+
 * Tue Aug 20 2002 Richard de Vroede <richard@linvision.com>
 - removed debug commandline option from pptpd.init
 
