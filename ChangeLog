@@ -1,7 +1,12 @@
+Fri Apr 23 21:01:31 2004  James Cameron  <quozl@us.netrek.org>
+
+	* tools/pptp-portslave: add contribution from Russell Coker, on
+	Debian Bug#126486.
+
 Fri Apr 23 20:34:28 2004  James Cameron  <quozl@us.netrek.org>
 
 	* pptpctrl.c (main): fail if arguments insufficient, closes Debian
-	bug #107933.
+	Bug#107933.
 
 	* .cvsignore: include config.h and stamp-h, to assist with CVS
 	updates.
@@ -159,7 +164,7 @@ poptop (1.1.4-b3) unstable; urgency=low
 poptop (1.1.4-b2) unstable; urgency=low
 
   * Bugfix: Potential buffer-overflow in ctrlpacket.c
-  * Callid enhancements
+  * Callid enhancements.  From: Ilguiz Latypov, Debian Bug#171831
   
  -- R. de Vroede <richard@oip.tudelft.nl>  Wed, Apr  9 2003 11:34:05 +0200
 
