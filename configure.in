@@ -15,13 +15,14 @@ AC_EXEEXT
 AC_OBJEXT
 AC_SYS_INTERPRETER
 
-AC_CHECK_FUNCS(setsid daemon setproctitle getservbyname strlcpy fork memmove strerror)
+AC_CHECK_FUNCS(setsid daemon setproctitle getservbyname strlcpy fork memmove strerror writev)
 
 AC_CHECK_HEADERS(pty.h)
 AC_CHECK_HEADERS(string.h)
 AC_CHECK_HEADERS(syslog.h)
 AC_CHECK_HEADERS(libintl.h)
 AC_CHECK_HEADERS(libutil.h)
+AC_CHECK_HEADERS(sys/uio.h)
 
 AC_CHECK_TYPE(size_t, unsigned int)
 AC_CHECK_TYPE(ssize_t, int)

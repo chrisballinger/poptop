@@ -4,7 +4,7 @@
  *
  * Additional autoconf defines for this program.
  *
- * $Id: config.h.in,v 1.10 2005/01/05 11:12:52 quozl Exp $
+ * $Id: config.h.in,v 1.11 2005/01/09 23:10:06 quozl Exp $
  */
 
 /* Use BSD User land PPP? */
@@ -127,8 +127,14 @@
 /* Define to 1 if you have the <sys/types.h> header file. */
 #undef HAVE_SYS_TYPES_H
 
+/* Define to 1 if you have the <sys/uio.h> header file. */
+#undef HAVE_SYS_UIO_H
+
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
+
+/* Define to 1 if you have the `writev' function. */
+#undef HAVE_WRITEV
 
 /* Name of package */
 #undef PACKAGE

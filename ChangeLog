@@ -1,3 +1,9 @@
+Mon Jan 10 09:51:05 2005  James Cameron  <quozl@us.netrek.org>
+
+	* config.h.in, configure.in, pptpgre.c (encaps_gre): uses writev()
+	if available, to avoid a memcpy() of the GRE payload when sending
+	off the packet.  From: Marcus Sundberg.
+
 Thu Jan  6 10:07:39 2005  James Cameron  <quozl@us.netrek.org>
 
 	* pptpmanager.c (pptp_manager): compilation fix for gcc < 3, a

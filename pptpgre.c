@@ -4,7 +4,7 @@
  * originally by C. S. Ananian
  * Modified for PoPToP
  *
- * $Id: pptpgre.c,v 1.3 2004/04/24 12:55:08 quozl Exp $
+ * $Id: pptpgre.c,v 1.4 2005/01/09 23:10:07 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -30,6 +30,9 @@
 #include <string.h>
 #include <errno.h>
 #include <fcntl.h>
+#ifdef HAVE_SYS_UIO_H
+#include <sys/uio.h>
+#endif
 
 #include "ppphdlc.h"
 #include "pptpgre.h"
@@ -359,6 +362,9 @@ int encaps_gre(int fd, void *pack, unsigned len)
 		unsigned char buffer[PACKET_MAX + sizeof(struct pptp_gre_header)];
 	} u;
 	unsigned header_len;
+#ifdef HAVE_WRITEV
+	struct iovec iovec[2];
+#endif
 
 	if(fd == -1)
 		/* peek mode */
@@ -399,9 +405,18 @@ int encaps_gre(int fd, void *pack, unsigned len)
 		syslog(LOG_ERR, "GRE: packet is too large %d", len);
 		return 0;	/* drop this, it's too big */
 	}
+#ifdef HAVE_WRITEV
+	/* write header and buffer without copying. */
+	iovec[0].iov_base = u.buffer;
+	iovec[0].iov_len = header_len;
+	iovec[1].iov_base = pack;
+	iovec[1].iov_len = len;
+	return writev(fd, iovec, 2);
+#else
 	/* copy payload into buffer */
 	memcpy(u.buffer + header_len, pack, len);
 	/* record and increment sequence numbers */
 	/* write this baby out to the net */
 	return write(fd, u.buffer, header_len + len);
+#endif
 }
