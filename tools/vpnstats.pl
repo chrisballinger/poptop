@@ -5,7 +5,13 @@ use strict;
 # copyright (C) 2002 Scott Merrill (skippy@skippy.net)
 #
 # usage: vpnstats /var/log/messages
-# 
+#
+# version 1.2
+# - thanks to Andy Behrens <andy.behrens@coat.com> for
+#   fixing up the regex to catch extraneous whitespace, and
+#   domain names that inlucde numbers and underscores.
+# - I modified the output to report when a user is still connected
+#
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
@@ -37,8 +43,8 @@ my %vpnstats = ();
 
 # for each line of input
 foreach my $x (@messages) {
-	if ($x =~ /^(\w+\s\d+\s\d+:\d+:\d+)\s        # $1 = date+time
-		\w+\spppd\[(\d+)\]:\s		     # $2 = PID
+	if ($x =~ /^(\w+\s+\d+\s\d+:\d+:\d+)\s        # $1 = date+time
+		[\-\w.]+\spppd\[(\d+)\]:\s		     # $2 = PID
 		MSCHAP-v2\speer\sauthentication\ssucceeded\sfor\s
 		# I don't want the DOMAIN\\ prefix
 		(.+\\)*(\w+)$			     # $4 = username
@@ -67,7 +73,7 @@ foreach my $x (@messages) {
 		\w+\spptpd\[(\d+)\]:\s		     # $2 = PID
 		CTRL:\sClient\s
 		(\d+\.\d+\.\d+\.\d+)\s		     # $3 = IP
-		control\sconnection\sfinished
+		control\sconnection\sfinished$
 		/x) {
 		$PID_IP{($2+1)} = $3;
 		if (!defined ($PID_USER{($2+1)})) {
@@ -87,9 +93,13 @@ foreach my $user (sort keys %USER_TOTAL_CONNECT) {
 	foreach my $pid (sort keys %PID_DATETIME) {
 		if ($user eq $PID_USER{$pid}) {
 			print "     ";
-			print $PID_DATETIME{$pid}, ": connect from ";
-			print $PID_IP{$pid}, " for ";
-			print $PID_LENGTH{$pid}, " minutes.\n";
+			print $PID_DATETIME{$pid}, ": connected ";
+			if ($PID_IP{$pid}) {
+				print "from $PID_IP{$pid} ";
+				print "for $PID_LENGTH{$pid} minutes.\n";
+			} else {
+				print "<still connected>\n";
+			}
 		}
 	}
 	}
