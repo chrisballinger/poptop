@@ -1,0 +1,27 @@
+## CHANGE TO SUIT YOUR SYSTEM
+lock
+
+## turn pppd syslog debugging on
+#debug
+
+## change 'pptpd' to whatever you specify as your server name in chap-secrets
+name pptpd
+
+proxyarp
+
+# This option applies if you use ppp with chapms-strip-domain patch
+#chapms-strip-domain
+
++chap
+# These options apply if you use ppp with mppe patch
+# NB! You should also apply the ChapMS-V2 patch
+#-chap
+#-chapms
+#+chapms-v2
+#mppe-128
+#mppe-stateless
+
+# These options will tell ppp to pass on these to your clients
+# To use ms-dns or ms-dns in options.pptpd it must exist in /etc/resolv.conf
+#ms-wins your.server.here
+#ms-dns your.server.here
