@@ -47,20 +47,6 @@ configure:1923: checking for u_int8_t
 configure:1956: checking for u_int16_t
 configure:1989: checking for u_int32_t
 configure:2023: checking for socklen_t
-configure:2065: checking for libwrap alone
-configure:2075: gcc -o conftest -g -O2   conftest.c  -lwrap 1>&5
-/usr/lib/gcc-lib/i386-redhat-linux/2.96/../../../libwrap.a(hosts_access.o): In function `host_match':
-hosts_access.o(.text+0x606): undefined reference to `yp_get_default_domain'
-collect2: ld returned 1 exit status
-configure: failed program was:
-#line 2068 "configure"
-#include "confdefs.h"
- int allow_severity, deny_severity; 
-int main() {
- hosts_access(); 
-; return 0; }
-configure:2091: checking for libwrap with libnsl
-configure:2100: gcc -o conftest -g -O2   conftest.c  -lwrap -lnsl 1>&5
 configure:2126: checking for accept in -lc
 configure:2173: checking for gethostbyname in -lc
 configure:2220: checking for openpty in -lc

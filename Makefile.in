@@ -1,6 +1,6 @@
-# Makefile.in generated automatically by automake 1.4 from Makefile.am
+# Makefile.in generated automatically by automake 1.4-p5 from Makefile.am
 
-# Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
+# Copyright (C) 1994, 1995-8, 1999, 2001 Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
 # with or without modifications, as long as this notice is preserved.
@@ -79,7 +79,9 @@ CFLAGS = -O2 -fno-builtin -Wall -ansi -DSBINDIR='"$(sbindir)"'
 
 man_MANS = pptpctrl.8 pptpd.8 pptpd.conf.5
 
-EXTRA_DIST = README.inetd README.slirp ChangeLog-0.8 	version reconf Makefile.uClinux config.embed.h 	CVS html samples $(man_MANS)
+EXTRA_DIST = README.inetd README.slirp ChangeLog-0.8 \
+	version reconf Makefile.uClinux config.embed.h \
+	CVS html samples $(man_MANS)
 
 
 sbin_PROGRAMS = pptpd pptpctrl
@@ -87,10 +89,14 @@ sbin_PROGRAMS = pptpd pptpctrl
 # Header files are only used to determine what to put in a distribution, not
 # for dependencies, so just attribute them all to pptpd.
 
-pptpd_SOURCES =  	pptpd.c configfile.c pptpmanager.c compat.c getopt.c getopt1.c 	compat.h configfile.h ctrlpacket.h defaults.h inststr.h our_getopt.h 	our_syslog.h ppphdlc.h pptpctrl.h pptpdefs.h pptpgre.h pptpmanager.h
+pptpd_SOURCES = \
+	pptpd.c configfile.c pptpmanager.c compat.c getopt.c getopt1.c \
+	compat.h configfile.h ctrlpacket.h defaults.h inststr.h our_getopt.h \
+	our_syslog.h ppphdlc.h pptpctrl.h pptpdefs.h pptpgre.h pptpmanager.h
 
 
-pptpctrl_SOURCES =  	pptpctrl.c ctrlpacket.c inststr.c compat.c pptpgre.c ppphdlc.c
+pptpctrl_SOURCES = \
+	pptpctrl.c ctrlpacket.c inststr.c compat.c pptpgre.c ppphdlc.c
 
 
 pptpd_LDADD = $(XTRALIBS_MGR)
@@ -383,7 +389,7 @@ distdir: $(DISTFILES)
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
-	    cp -pr $$/$$file $(distdir)/$$file; \
+	    cp -pr $$d/$$file $(distdir)/$$file; \
 	  else \
 	    test -f $(distdir)/$$file \
 	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \

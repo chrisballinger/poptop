@@ -29,7 +29,7 @@
 #define PPP_BINARY "/usr/sbin/pppd"
 
 /* Have libwrap? */
-#define HAVE_LIBWRAP 1
+/* #undef HAVE_LIBWRAP */
 
 /* Just #define to int if it's not defined */
 /* #undef socklen_t */
