@@ -1,5 +1,6 @@
 not yet released
 
+- error check critical dup2 calls [Cameron]
 - add --enable-facility configure feature for syslog customisation [Cameron]
 - performance, use writev() if available, avoiding memcpy() [Sundberg]
 - compilation fix for gcc old versions [Cameron]

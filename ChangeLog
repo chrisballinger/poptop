@@ -1,3 +1,8 @@
+Tue Jan 25 09:01:49 2005  James Cameron  <quozl@us.netrek.org>
+
+	* pptpctrl.c: perform error checking on dup2 calls, as on Linux
+	they can fail under certain circumstances.
+
 Fri Jan 14 13:38:58 2005  James Cameron  <quozl@us.netrek.org>
 
 	* pptpd.c, pptpctrl.c, bcrelay.c, configure.in, acconfig.h: add

@@ -3,7 +3,7 @@
  *
  * PPTP control connection between PAC-PNS pair
  *
- * $Id: pptpctrl.c,v 1.16 2005/01/14 02:58:10 quozl Exp $
+ * $Id: pptpctrl.c,v 1.17 2005/01/24 22:04:13 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -584,8 +584,16 @@ static int startCall(char **pppaddrs, struct in_addr *inetaddrs)
 		_exit(1);
 
 	case 0:		/* child */
-		dup2(tty_fd, 0);
-		dup2(tty_fd, 1);
+		if (dup2(tty_fd, 0) == -1) {
+		  syslog(LOG_ERR, "CTRL: child tty_fd dup2 to stdin, %s",
+			 strerror(errno));
+		  exit(1);
+		}
+		if (dup2(tty_fd, 1) == -1) {
+		  syslog(LOG_ERR, "CTRL: child tty_fd dup2 to stdout, %s",
+			 strerror(errno));
+		  exit(1);
+		}
 #if 0
 		/* This must never be used if !HAVE_SYSLOG since that logs to stderr.
 		 * Trying just never using it to see if it causes anyone else problems.
