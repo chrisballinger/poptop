@@ -1607,7 +1607,7 @@ fi
 
 # Define the identity of the package.
  PACKAGE=pptpd
- VERSION=1.2.0-b4
+ VERSION=1.2.1
 
 
 cat >>confdefs.h <<_ACEOF

@@ -4,7 +4,7 @@ Update version number in the following files
 	pptpd.spec
 	configure.in
 Run ./reconf
-tag (See README.cvs, e.g. cvs tag -F pptpd-1_2_0-b4)
+tag (See README.cvs, e.g. cvs tag -F pptpd-1_2_1)
 make dist
 md5sum
 gpg --detach-sign --armor
