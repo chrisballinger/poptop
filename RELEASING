@@ -26,11 +26,13 @@ f) "make uninstall"
 
 Packaging
 
-fakeroot rpmbuild -ta pptpd-1.2.1.tar.gz
+fakeroot rpmbuild -ta pptpd-1.2.2.tar.gz
+# /usr/src/rpm/SRPMS/pptpd-1.2.2-0.src.rpm
+# /usr/src/rpm/RPMS/i386/pptpd-1.2.2-0.i386.rpm
 
 Source Forge
 
 Admin
-File Release System
-Add Release "pptpd-1.2.0" to package "Poptop"
-pptpd-1.2.0-b3.tar.gz
+File Releases
+Add Release "pptpd-1.2.2" to package "Poptop"
+pptpd-1.2.2.tar.gz

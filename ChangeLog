@@ -1,3 +1,8 @@
+Thu Jan  6 10:07:39 2005  James Cameron  <quozl@us.netrek.org>
+
+	* pptpmanager.c (pptp_manager): compilation fix for gcc < 3, a
+	regression introduced in pptpd-1.2.2.  Reported by: Peter Mueller.
+
 Wed Jan  5 22:12:38 2005  James Cameron  <quozl@us.netrek.org>
 
 	* pptpd-1.2.2.tar.gz: released.

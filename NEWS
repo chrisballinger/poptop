@@ -1,3 +1,7 @@
+not yet released
+
+- compilation fix for gcc old versions [Cameron]
+
 1.2.2: released 2005-01-05
 
 - fix deadlock hang due to syslog(3) called by signal handler [Cameron]

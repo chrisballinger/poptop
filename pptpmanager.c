@@ -3,7 +3,7 @@
  *
  * Manages the PoPToP sessions.
  *
- * $Id: pptpmanager.c,v 1.9 2005/01/05 11:01:51 quozl Exp $
+ * $Id: pptpmanager.c,v 1.10 2005/01/05 23:07:09 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -162,7 +162,6 @@ int pptp_manager(int argc, char **argv)
 
 	while (1) {
 		int max_fd;
-		FD_ZERO(&connSet);
 #if !defined(PPPD_IP_ALLOC)
 		int firstOpen = -1;
 
@@ -172,6 +171,7 @@ int pptp_manager(int argc, char **argv)
 				break;
 			}
 
+		FD_ZERO(&connSet);
 		if (firstOpen == -1) {
 			syslog(LOG_ERR, "MGR: No free connection slots or IPs - no more clients can connect!");
 			FD_CLR(hostSocket, &connSet);
@@ -179,6 +179,7 @@ int pptp_manager(int argc, char **argv)
 			FD_SET(hostSocket, &connSet);
 		}
 #else
+		FD_ZERO(&connSet);
 		FD_SET(hostSocket, &connSet);
 #endif
 		max_fd = hostSocket;
