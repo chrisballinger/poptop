@@ -1,0 +1,8 @@
+#!/bin/bash
+curdir=`pwd`
+mkdir -p /tmp/pptpd-1.1.4
+cp -ar * /tmp/pptpd-1.1.4/
+cd /tmp
+tar -czf /usr/src/redhat/SOURCES/pptpd-1.1.4-1b2.tar.gz pptpd-1.1.4
+cd $curdir
+rpmbuild -bb pptpd.spec
