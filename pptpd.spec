@@ -88,16 +88,20 @@ install -m 0644 pptpctrl.8 $RPM_BUILD_ROOT/usr/man/man8/pptpctrl.8
 strip $RPM_BUILD_ROOT/%{prefix}/sbin/* || :
 
 %post
+/usr/bin/confmod.sh
+/sbin/chkconfig --add pptpd
 OUTD="" ; for i in d manager ctrl ; do
     test -x /sbin/pptp$i && OUTD="$OUTD /sbin/pptp$i" ;
 done
 test -z "$OUTD" || \
 { echo "possible outdated executable detected; you should do run the following command:"; echo "rm -i $OUTD" ;}
-/sbin/chkconfig --add pptpd
-/sbin/chkconfig pptpd on
 
 %preun
 /sbin/chkconfig --del pptpd
+if [ "$1" -lt 1 ]; then
+    /etc/init.d/pptpd stop > /dev/null 2>&1
+    /sbin/chkconfig --del pptpd
+fi
 
 %files
 %defattr(-,root,root)
