@@ -1,10 +1,7 @@
 PoPToP -- The PPTP Server
 -------------------------
 
-Current Author:
-Richard de Vroede <r.devroede@linvision.com>
-
-Original Authors:
+Authors:
 Matthew Ramsay <matthewr@lineo.com>
 Kevin Thayer <tmk@netmagic.net>
 David Luyer <luyer@ucs.uwa.edu.au>
@@ -21,10 +18,6 @@ C. Scott Ananian <cananian@alumni.princeton.edu>
 Other Credits:
 Moreton Bay <http://www.moretonbay.com>
 Lineo       <http://www.lineo.com>
-Snapgear    <http://www.snapgear.com>
-Linvision   <http://www.linvision.com>
 
 Christopher Schulte <christopher@schulte.org> - Host for the PPTP Mailing List
-Peter Galbavy <Peter.Galbavy@knowledge.com> - Previous host for the PPTP CVS server
-SourceForge <http://sourceforge.net> - Our new home
-Luc Richards <theycallmeluc@yahoo.com.au> - The author of bcrelay
+Peter Galbavy <Peter.Galbavy@knowledge.com> - Host for the PPTP CVS server
