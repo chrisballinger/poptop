@@ -1,4 +1,4 @@
-.TH PPTPD 8 "28 April 2004"
+.TH PPTPD 8 "29 April 2004"
 .SH NAME
 pptpd - PPTP VPN daemon
 .SH SYNOPSIS
@@ -78,9 +78,9 @@ cases this is ignored by the ppp daemon).
 
 .TP
 \fB-t\fR|\fB--stimeout \fIseconds
-specifies that the timeout value for the first packet should be 
-.I seconds
-before dropping it. This is a denial of service protection feature.
+specifies the number of seconds to wait for the first packet before
+dropping the connection. This is a denial of service protection
+feature.
 
 .TP
 .BR -w | --logwtmp

@@ -1,8 +1,9 @@
 1.2.0-b4: unreleased
 
+- minor manual page edits [Wilson]
 - fix printing of connection speed [Dubiec]
 - fix segfault if built --with-bcrelay but no option used [Cameron]
-- add --logwtmp option to track users online [Cameron]
+- add --logwtmp option to track users online [Cameron/Guraj]
 - include README.portslave in distribution [Cameron]
 
 1.2.0-b3: released 2004-04-25 (ANZAC day)

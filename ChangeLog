@@ -1,3 +1,8 @@
+Thu Apr 29 20:18:19 2004  James Cameron  <quozl@us.netrek.org>
+
+	* pptpd.8, pptpd.conf.5: adopt man page review suggestions.
+	From: Chris Wilson.
+
 Thu Apr 29 19:49:59 2004  James Cameron  <quozl@us.netrek.org>
 
 	* plugins/pptpd-logwtmp.c (ip_up): use the username that was

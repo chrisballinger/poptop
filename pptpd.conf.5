@@ -1,4 +1,4 @@
-.TH PPTPD.CONF 5 "24 April 2004"
+.TH PPTPD.CONF 5 "29 April 2004"
 .SH NAME
 .B pptpd.conf
 - PPTP VPN daemon configuration
@@ -56,43 +56,47 @@ is given, this address is used for all clients.  Otherwise, one address
 per client must be given, and if there are no free addresses then any new
 clients will be refused.
 .B localip
-is ignored if
+will be ignored if
 .BR pptpd (8)
 was compiled with 
 .B --with-pppd-ip-alloc.
 .TP
 .BI "remoteip " ip-specification
-a list of remote IP addresses to be used on the tunnelled
-PPP links between the server and the client.  There must be at least one
-IP address per client permitted to connect simultaneously, and preferably
-some spare addresses.  A warning will be sent to 
+a list of IP addresses to assign to remote PPTP clients. Each
+connected client must have a different address, so there must be
+at least as many addresses as you have simultaneous clients,
+and preferably some spare, since you cannot change this list
+without restarting pptpd. A warning will be sent to
 .BR syslog (3)
 when the IP address pool is exhausted.
 .B remoteip
-was ignored if
+will be ignored if
 .BR pptpd (8)
-is compiled with 
+was compiled with
 .B --with-pppd-ip-alloc.
 .TP
 .B noipparam
-if present, the original client IP address is not to be sent to
+by default, the original client IP address is given to
 ip-up scripts using the 
 .BR pppd (8) 
 option
-.B noipparam.
+.B ipparam.
+The
+.B noipparam
+option prevents this.
 Equivalent to the command line
 .B --noipparam
 option.
 .TP
 .BI "listen " ip-address
-the local interface IP address to listen to.  Equivalent to the
-command line
+the local interface IP address to listen on for incoming PPTP
+connections (TCP port 1723). Equivalent to the command line
 .B --listen
 option.
 .TP
 .BI "pidfile " pid-file
-the filename to store the process ID number in.  Equivalent to the
-command line
+specifies an alternate location to store the process ID file
+(default /var/run/pptpd.pid).  Equivalent to the command line
 .B --pidfile
 option.
 .TP
