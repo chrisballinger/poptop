@@ -1,6 +1,6 @@
 %define name pptpd
 %define ver 1.2.0
-%define rel b3
+%define rel b4
 %define prefix /usr
 %define buildlibwrap 1
 %define buildbsdppp 0
@@ -9,24 +9,23 @@
 %define buildbcrelay 1
 %define buildpnsmode 0
 
-Summary: A PPTP server daemon started from init (/etc/rc.d/init.d/).
+Summary: PoPToP Point to Point Tunneling Server
 Name: %{name}
+Requires: ppp >= 2.4.2
 Version: %{ver}
 Release: %{rel}
 Copyright: GPL
 Group: Networking/Daemons
+Vendor: Hewlett-Packard
 Packager: James Cameron <james.cameron@hp.com>
 Source0: %{name}-%{ver}-%{rel}.tar.gz
 URL: http://poptop.sourceforge.net/
 Buildroot: %{_tmppath}/%{name}-root
 
 %description
-Point-to-Point Tunnelling Protocol Daemon (pptpd), offers out
-connections to PPTP clients to become virtual members of the IP pool
-owned by the PPTP server.  These clients become virtual members of the
-local subnet, regardless of what their real IP address is.  A tunnel
-is built between the PPTP server and client, and packets from the
-subnet are wrapped and passed between server and client.
+This implements a Virtual Private Networking Server (VPN) that is
+compatible with Microsoft VPN clients. It allows windows users to
+connect to an internal firewalled network using their dialup.
 
 # allow --with[out] <feature> at rpm command line build
 # e.g. --with ipalloc --without libwrap
@@ -46,7 +45,7 @@ subnet are wrapped and passed between server and client.
 
 %prep
 
-%setup -q -n poptop-%{ver}
+%setup -q -n pptpd-%{ver}-%{rel}
 aclocal
 
 %build
@@ -84,24 +83,22 @@ install -m 0644 samples/options.pptpd $RPM_BUILD_ROOT/etc/ppp/options.pptpd
 install -m 0755 tools/vpnuser $RPM_BUILD_ROOT/usr/bin/vpnuser
 install -m 0755 tools/vpnstats $RPM_BUILD_ROOT/usr/bin/vpnstats
 install -m 0755 tools/vpnstats.pl $RPM_BUILD_ROOT/usr/bin/vpnstats.pl
-install -m 0755 tools/vpnwho.pl $RPM_BUILD_ROOT/usr/bin/vpnwho.pl
-install -m 0755 tools/confmod.sh $RPM_BUILD_ROOT/usr/bin/confmod.sh
+install -m 0755 tools/pptp-portslave $RPM_BUILD_ROOT/usr/sbin/pptp-portslave
 mkdir -p $RPM_BUILD_ROOT/usr/man/man5
 mkdir -p $RPM_BUILD_ROOT/usr/man/man8
 install -m 0644 pptpd.conf.5 $RPM_BUILD_ROOT/usr/man/man5/pptpd.conf.5
 install -m 0644 pptpd.8 $RPM_BUILD_ROOT/usr/man/man8/pptpd.8
 install -m 0644 pptpctrl.8 $RPM_BUILD_ROOT/usr/man/man8/pptpctrl.8
-## Commented out for beta testing
+# disabled to ease upstream support load, final packagers may choose otherwise
 #strip $RPM_BUILD_ROOT/%{prefix}/sbin/* || :
 
 %post
-/usr/bin/confmod.sh
 /sbin/chkconfig --add pptpd
 OUTD="" ; for i in d manager ctrl ; do
     test -x /sbin/pptp$i && OUTD="$OUTD /sbin/pptp$i" ;
 done
 test -z "$OUTD" || \
-{ echo "possible outdated executable detected; you should do run the following command:"; echo "rm -i $OUTD" ;}
+{ echo "possible outdated executable detected; we now use /usr/sbin/pptp*, perhaps you should do run the following command:"; echo "rm -i $OUTD" ;}
 
 %preun
 /sbin/chkconfig --del pptpd
@@ -116,17 +113,16 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root)
-%doc AUTHORS COPYING INSTALL README* TODO ChangeLog* html samples
+%doc AUTHORS COPYING INSTALL README* TODO ChangeLog* samples
 /usr/sbin/pptpd
 /usr/sbin/pptpctrl
 %if %{buildbcrelay}
 /usr/sbin/bcrelay
 %endif
-/usr/bin/confmod.sh
+/usr/lib/pptpd/pptpd-logwtmp.so
 /usr/bin/vpnuser
 /usr/bin/vpnstats
 /usr/bin/vpnstats.pl
-/usr/bin/vpnwho.pl
 /usr/man/man5/pptpd.conf.5*
 /usr/man/man8/pptpd.8*
 /usr/man/man8/pptpctrl.8*
@@ -135,6 +131,8 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) /etc/ppp/options.pptpd
 
 %changelog
+* Fri May 21 2004 James Cameron <james.cameron@hp.com>
+- adjust for packaging naming and test
 * Fri Apr 23 2004 James Cameron <james.cameron@hp.com>
 - include vpnwho.pl
 * Thu Apr 22 2004 James Cameron <james.cameron@hp.com>

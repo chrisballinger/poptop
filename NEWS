@@ -1,11 +1,14 @@
 1.2.0-b4: unreleased
 
+- fix rpmbuild [Cameron]
+- include Debian downstream packaging patches [Mayrhofer]
 - fix for options file check when no options file wanted [Cameron]
 - fix for SIGTERM handling [Guraj]
 - minor manual page edits [Wilson]
 - fix printing of connection speed [Dubiec]
 - fix segfault if built --with-bcrelay but no option used [Cameron]
 - add --logwtmp option to track users online [Cameron/Guraj]
+- remove vpnwho.pl from package (due to --logwtmp) [Cameron]
 - include README.portslave in distribution [Cameron]
 
 1.2.0-b3: released 2004-04-25 (ANZAC day)
@@ -39,6 +42,7 @@
 
 - terminate call on any CALL_CLR_RQST [!3runo]
 - unblock SIGCHLD [Stamfest]
+  {closes: Bug#248123}
 - report pppd path in debug mode [Cameron]
 - report cause of failed execvp() [Cameron]
 - explain pppd launch failure [Cameron]

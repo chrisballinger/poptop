@@ -1,3 +1,17 @@
+Fri May 21 20:43:55 2004  James Cameron  <quozl@us.netrek.org>
+
+	* pptpd.spec: rework to build under rpm 4.0.4, depend on ppp >=
+	2.4.2, change description to match Debian package, add vendor,
+	propogate changes since 1.1.4-b3 involving obsolete scripts and
+	new plugin.
+
+	* Makefile.am, plugins/Makefile: add missing pptpd.init, add
+	debian packaging from downstream, propogate DESTDIR and prefix to
+	plugins install target.
+
+	* debian/changelog: change the version to -0 to avoid clobbering
+	the later Debian package.
+
 Mon May 17 16:28:49 2004  James Cameron  <quozl@us.netrek.org>
 
 	* pptpd.c: bug fix, only check PPP options file readability if an

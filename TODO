@@ -1,28 +1,39 @@
+20040521-4, 1.2.0-b3, running on Fedora Core 1, kernel ? , when a
+connection arrives a warning is issued by the kernel "application bug:
+pptpctrl($PID) has SIGCHLD set to SIG_IGN but calls wait().  (see the
+NOTES section of 'man 2 wait').  Workaround activated."
 
-20050511-0, 1.2.0-?, merge debian upstream provided by Rene.
+20040521-3, 1.2.0-b3, possible related to 20040521-1, connection to a
+busy pptpd host shows many packets from the client being echoed back
+unprocessed, until the first packet emitted by pppd.
 
-20040429-0, 1.2.0-b3, important, bug, Michael St. Laurent, doing a
-"rpmbuild -ta pptpd-1.2.0-b3.tar.gz" gave the following error: + cd
-poptop-1.2.0 /var/tmp/rpm-tmp.38859: line 33: cd: poptop-1.2.0: No
-such file or directory error: Bad exit status from
-/var/tmp/rpm-tmp.38859 (%prep)
+20040521-2, 1.2.0-b3, with ppp 2.4.2, pptpd reports "GRE: Bad checksum
+from pppd" once or twice.
+
+20040521-1, 1.2.0-b3, on particularly slow pptpd systems (such as the
+maintainer's lab hosts) some race-like situation occurs after
+openpty(), pppd fails with "Failed to open /dev/pts/0: No such file or
+directory", and the remote client receives every packet back, quickly
+detecting "Serial line is looped back."  Subsequent connection
+attempts work fine.  Can be reproduced on a 266MHz Pentium II if
+memory is first purged with "dd < /dev/zero > tmp".
+
+20040521-0, 1.2.0-b3, write bcrelay man page.
 
 feature: nuke prior login by user, using pppd plugin.
 
 feature: prevent login by user if prior login still in progress, using
 pppd plugin that captures old hook and re-uses it, during chap auth.
 
-20040428-7, CVS HEAD, minor, standards compliance, plugins/Makefile
-installs to /usr/lib/pptpd instead of $(DESTDIR), and pptpctrl.c
-refers to the plugin by this hard coded path.
+20040428-7, CVS HEAD, minor, pptpctrl.c refers to hard coded path
+/usr/lib/pptpd/pptpd-logwtmp.so instead of path derived from prefix
+given to configure script.
 
 review debian bug reports for pptpd package
 http://bugs.debian.org/pptpd
 
 20040428-0, important, bcrelay failure, >bcrelay[357]: mainloop:
 Error, sendto failed! (rv=-1, errno=6), per mailing list thread.
-
-feature: include debian packaging in upstream, use cvs-buildpackage.
 
 20040426-0 bug: terminating immediately on CALL_CLR_RQST from client
 (1.2.0-b3) may violate the RFC, but was done to fix zombie pppd, Bruno

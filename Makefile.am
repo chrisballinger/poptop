@@ -17,7 +17,19 @@ CFLAGS = -O2 -fno-builtin -Wall -DSBINDIR='"$(sbindir)"'
 
 man_MANS = pptpctrl.8 pptpd.8 pptpd.conf.5
 
-EXTRA_DIST = README* ChangeLog* NEWS* TODO samples/chap-secrets samples/options.pptpd samples/pptpd.conf $(man_MANS) version reconf tools/pptp-portslave tools/vpnstats tools/vpnstats.pl tools/vpnuser Makefile.uClinux config.embed.h pptpd.spec makepackage plugins/Makefile plugins/*.h plugins/*.c
+EXTRA_DIST = \
+README* ChangeLog* NEWS* TODO $(man_MANS) \
+samples/chap-secrets samples/options.pptpd samples/pptpd.conf \
+Makefile.uClinux config.embed.h version reconf \
+tools/pptp-portslave tools/vpnstats tools/vpnstats.pl tools/vpnuser \
+pptpd.init pptpd.spec makepackage \
+plugins/Makefile plugins/*.h plugins/*.c \
+debian/README.debian debian/changelog debian/conffiles debian/config \
+debian/control debian/copyright debian/dirs debian/docs \
+debian/examples debian/pptpd-options debian/pptpd.conf \
+debian/pptpd.init debian/pptpdconfig.pl debian/rules debian/templates \
+debian/po/POTFILES.in debian/po/fr.po debian/po/pt_BR.po \
+debian/po/templates.pot
 
 EXTRA_PROGRAMS = 
 sbin_PROGRAMS = pptpd pptpctrl bcrelay
@@ -45,13 +57,13 @@ all-local:
 	for d in $(subdirs); do $(MAKE) $(MFLAGS) -C $$d all; done
 
 install-exec-local:
-	for d in $(subdirs); do $(MAKE) $(MFLAGS) -C $$d install; done
+	for d in $(subdirs); do $(MAKE) $(MFLAGS) -C $$d prefix=$(prefix) DESTDIR=$(DESTDIR) install; done
 
 clean-local:
 	for d in $(subdirs); do $(MAKE) $(MFLAGS) -C $$d clean; done
 
 uninstall-local:
-	for d in $(subdirs); do $(MAKE) $(MFLAGS) -C $$d uninstall; done
+	for d in $(subdirs); do $(MAKE) $(MFLAGS) -C $$d prefix=$(prefix) DESTDIR=$(DESTDIR) uninstall; done
 
 package:
 	fakeroot dpkg-buildpackage -us -uc

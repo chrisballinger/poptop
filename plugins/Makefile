@@ -3,8 +3,9 @@ COPTS	= -O2 -g
 CFLAGS	= $(COPTS) -I.. -I../../include -fPIC
 LDFLAGS	= -shared
 INSTALL	= install -o root
+prefix  = /usr/local
 
-PLUGINS := pptpd-logwtmp.so
+PLUGINS = pptpd-logwtmp.so
 
 # include dependencies if present
 ifeq (.depend,$(wildcard .depend))
@@ -16,7 +17,7 @@ all:	$(PLUGINS)
 %.so: %.c
 	$(CC) -o $@ $(LDFLAGS) $(CFLAGS) $^
 
-LIBDIR	= $(DESTDIR)/usr/lib/pptpd
+LIBDIR	= $(DESTDIR)$(prefix)/lib/pptpd
 
 install: $(PLUGINS)
 	$(INSTALL) -d $(LIBDIR)
