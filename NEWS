@@ -1,4 +1,4 @@
-not yet released
+1.2.3: released 2005-02-17
 
 - error check critical dup2 calls [Cameron]
 - add --enable-facility configure feature for syslog customisation [Cameron]

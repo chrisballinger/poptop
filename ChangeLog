@@ -1,3 +1,11 @@
+Thu Feb 17 13:05:31 2005  James Cameron  <quozl@us.netrek.org>
+
+	* pptpd-1.2.3.tar.gz: released.
+
+Thu Feb 17 13:01:22 2005  James Cameron  <quozl@us.netrek.org>
+
+	* pptpd.c (showusage, showversion): change from poptop to pptpd.
+
 Tue Jan 25 09:01:49 2005  James Cameron  <quozl@us.netrek.org>
 
 	* pptpctrl.c: perform error checking on dup2 calls, as on Linux

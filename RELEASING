@@ -1,12 +1,12 @@
-Releasing Poptop
+Releasing pptpd
 
-Update version number in the following files
+update version number in the following files
 	pptpd.spec
 	configure.in
-Run ./reconf
+run ./reconf
 update NEWS, ChangeLog
 commit changes
-tag (See README.cvs, e.g. cvs tag -F pptpd-1_2_2)
+tag (See README.cvs, e.g. cvs tag -F pptpd-1_2_3)
 make dist
 md5sum
 gpg --detach-sign --armor
@@ -26,13 +26,17 @@ f) "make uninstall"
 
 Packaging
 
-fakeroot rpmbuild -ta pptpd-1.2.2.tar.gz
-# /usr/src/rpm/SRPMS/pptpd-1.2.2-0.src.rpm
-# /usr/src/rpm/RPMS/i386/pptpd-1.2.2-0.i386.rpm
+fakeroot rpmbuild -ta pptpd-1.2.3.tar.gz
+# /usr/src/rpm/SRPMS/pptpd-1.2.3-0.src.rpm
+# /usr/src/rpm/RPMS/i386/pptpd-1.2.3-0.i386.rpm
 
 Source Forge
 
+http://poptop.sourceforge.net/
+SourceForge Project
+Login
+Poptop
 Admin
 File Releases
-Add Release "pptpd-1.2.2" to package "Poptop"
-pptpd-1.2.2.tar.gz
+Add Release "pptpd-1.2.3" to package "Poptop"
+pptpd-1.2.3.tar.gz

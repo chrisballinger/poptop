@@ -4,7 +4,7 @@
  * Grabs any command line argument and processes any further options in
  * the pptpd config file, before throwing over to pptpmanager.c.
  *
- * $Id: pptpd.c,v 1.14 2005/01/14 02:58:11 quozl Exp $
+ * $Id: pptpd.c,v 1.15 2005/02/17 02:04:59 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -89,8 +89,7 @@ static pid_t bcrelayfork;
 
 static void showusage(char *prog)
 {
-	printf("\nPoptop v%s\n", VERSION);
-	printf("The PPTP Server for Linux\n");
+	printf("\npptpd v%s\n", VERSION);
 	printf("Usage: pptpd [options], where options are:\n\n");
 #ifdef BCRELAY
 	printf(" [-b] [--bcrelay if]       Use broadcast relay for broadcasts comming from.\n");
@@ -117,7 +116,7 @@ static void showusage(char *prog)
 #endif
 	printf(" [-t] [--stimeout seconds] Specifies the timeout for the first packet. This is a DOS protection\n");
 	printf("                           (default is 10).\n");
-	printf(" [-v] [--version]          Displays the PoPToP version number.\n");
+	printf(" [-v] [--version]          Displays the pptpd version number.\n");
 	printf(" [-w] [--logwtmp]          Update wtmp as users login.\n");
 
 	printf("\n\nLogs and debugging go to syslog as DAEMON.");
@@ -129,7 +128,7 @@ static void showusage(char *prog)
 
 static void showversion()
 {
-	printf("Poptop v%s\n", VERSION);
+	printf("pptpd v%s\n", VERSION);
 }
 
 int main(int argc, char **argv)
