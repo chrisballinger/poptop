@@ -1,3 +1,21 @@
+Fri Apr 23 17:05:23 2004  James Cameron  <quozl@us.netrek.org>
+
+	* makerpm: remove from CVS in favour of makepackage per Richard's
+	e-mail on 1st August 2003.
+
+	* Makefile.am (EXTRA_DIST): add README.bcrelay, older ChangeLogs,
+	tools, spec file, and makepackage script.
+
+Fri Apr 23 16:15:59 2004  James Cameron  <quozl@us.netrek.org>
+
+	* reconf: remove setting of pptpd.conf version.
+
+	* samples/pptpd.conf: remove package version from file, use CVS
+	revision header instead.
+
+	* samples/options.pptpd: clarify comments, default to work with
+	PPP 2.4.2.
+
 Thu Apr 22 16:38:01 2004  James Cameron  <quozl@us.netrek.org>
 
 	* pptpctrl.c: remove report of connection speed for Linux pppd.
@@ -67,7 +85,7 @@ Tue Dec  9 10:22:01 2003  James Cameron  <quozl@us.netrek.org>
 poptop (1.1.4-b5) unstable; urgency=low
 
   * Added code to pass ipparam to pppd - By Sergio M. Ammirata
-  * Added Debian packaging information
+  * Added Debian packaging information (not included in .tar.gz)
   * Added bcrelay_v1 - By Norbert van Bolhuis
   
  -- R. de Vroede <richard@oip.tudelft.nl>  Fri, 18 Jul 2003 11:34:05 +0200

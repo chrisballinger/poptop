@@ -3,7 +3,7 @@
 # Reconfigure the beast, rebuilding dependencies and updating version numbers
 # as appropriate.
 #
-# $Id: reconf,v 1.1 2002/06/21 08:52:02 fenix_nl Exp $
+# $Id: reconf,v 1.2 2004/04/23 07:11:26 quozl Exp $
 
 if test -f config.h
 then
@@ -40,19 +40,6 @@ rm -f config.h
 if test -f config.h.TMP
 then
   mv -f config.h.TMP config.h
-fi
-SCONF=samples/pptpd.conf
-echo -n "Updating version number in $SCONF..."
-sed 's/^# for PoPToP version .*$/# for PoPToP version '`./version`/ < $SCONF > $SCONF.new
-if ! cmp -s $SCONF.new $SCONF
-then
-  echo 'done.'
-  echo "Updated: <=old >=new"
-  diff $SCONF $SCONF.new | grep '^[<>]'
-  mv -f $SCONF.new $SCONF
-else
-  rm -f $SCONF.new
-  echo "no change."
 fi
 set -x
 rm -f config.cache
