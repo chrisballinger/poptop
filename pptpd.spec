@@ -43,12 +43,17 @@ similar to other C/S protocols.
 %{?_with_pnsmode: %{expand: %%define buildpnsmode 1}}
 
 %prep
-topdir=/devel/vpn/pptpd/poptop
+topdir=`env | grep OLDPWD | cut -d "=" -f2`
+RPM_BUILD_DIR=%{_tmppath}
+RPM_SOURCE_DIR=%{_tmppath}
+RPM_RPM_DIR=$topdir/../
+RPM_SRPM_DIR=$topdir/../
+mkdir -p $RPM_BUILD_DIR
 rm -rf $RPM_BUILD_DIR/%{name}-%{ver}
 mkdir -p $RPM_BUILD_DIR/%{name}-%{ver}
 cp -a $topdir/* $RPM_BUILD_DIR/%{name}-%{ver}
 cd $topdir
-tar -czf /usr/src/redhat/SOURCES/%{name}-%{ver}.tar.gz .
+tar -czf $RPM_SOURCE_DIR/%{name}-%{ver}.tar.gz .
 
 %setup -D -T -n $RPM_BUILD_DIR/%{name}-%{ver}
 
@@ -90,6 +95,7 @@ install -m 0644 pptpd.conf.5 $RPM_BUILD_ROOT/usr/man/man5/pptpd.conf.5
 install -m 0644 pptpd.8 $RPM_BUILD_ROOT/usr/man/man8/pptpd.8
 install -m 0644 pptpctrl.8 $RPM_BUILD_ROOT/usr/man/man8/pptpctrl.8
 strip $RPM_BUILD_ROOT/%{prefix}/sbin/* || :
+make maintainer-clean
 
 %post
 TEMP=$(locate /etc/modules.conf)
