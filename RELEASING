@@ -4,6 +4,8 @@ Update version number in the following files
 	pptpd.spec
 	configure.in
 Run ./reconf
+update NEWS, ChangeLog
+commit changes
 tag (See README.cvs, e.g. cvs tag -F pptpd-1_2_1)
 make dist
 md5sum
@@ -24,7 +26,7 @@ f) "make uninstall"
 
 Packaging
 
-rpmbuild -ta pptpd-1.2.0-b4.tar.gz
+fakeroot rpmbuild -ta pptpd-1.2.1.tar.gz
 
 Source Forge
 

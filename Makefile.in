@@ -694,7 +694,7 @@ deb:
 	fakeroot dpkg-buildpackage -us -uc
 
 rpm:
-	fakeroot rpmbuild -ba pptpd.spec
+	fakeroot rpmbuild -ta pptpd-$(VERSION).tar.gz
 
 bcrelay.o: bcrelay.c config.h defaults.h our_syslog.h our_getopt.h
 
