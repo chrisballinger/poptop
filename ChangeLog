@@ -1,3 +1,13 @@
+Mon May 17 12:31:34 2004  James Cameron  <quozl@us.netrek.org>
+
+	* Makefile.am (EXTRA_DIST): remove html, as the documentation is
+	out of date, explicitly name samples, tools and plugins files to
+	prevent CVS in tarball.
+
+Mon May 17 12:31:09 2004  James Cameron  <quozl@us.netrek.org>
+
+	* debian: merge upstream Debian patches.  From Rene Mayrhofer.
+
 Fri May 14 15:50:35 2004  James Cameron  <quozl@us.netrek.org>
 
 	* pptpd.c (killbcrelay): bug fix, pptpd catches SIGTERM to kill
