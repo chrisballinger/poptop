@@ -1,3 +1,12 @@
+Thu Feb 26 15:17:37 2004  James Cameron  <quozl@us.netrek.org>
+
+	* pptpd.8, pptpd.conf.5 (speed): note that speed is ineffective on
+	Linux, despite being accepted by pppd.
+
+Wed Dec 10 09:28:01 2003  James Cameron  <quozl@us.netrek.org>
+
+	* pptpctrl.c (launch_pppd): report program binary path.
+
 Tue Dec  9 10:22:01 2003  James Cameron  <quozl@us.netrek.org>
 
 	* pptpctrl.c (launch_pppd): report cause of failed execvp().

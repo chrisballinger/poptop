@@ -16,7 +16,8 @@ cannot be set on the command line).
 .BI "speed " speed
 specifies a speed (in bytes per second) to pass to the PPP daemon as the
 interface speed for the tty/pty pair.  This may be ignored by some PPP
-daemons.  This is equivalent to the
+daemons, or be ineffective; e.g. on Linux it has no effect.
+This is equivalent to the
 .B -s
 or
 .B --speed
@@ -33,7 +34,7 @@ or
 .B --option
 command line option.
 .TP
-.BI stimeout seconds
+.BI "stimeout " seconds
 Poptop has some DOS protection built in. One of the protections is that
 it takes a peek at the first packet of a connection and performs some
 checks on it before Poptop continues the connection. The stimeout option

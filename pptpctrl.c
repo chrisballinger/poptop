@@ -3,7 +3,7 @@
  *
  * PPTP control connection between PAC-PNS pair
  *
- * $Id: pptpctrl.c,v 1.6 2003/12/09 21:59:16 quozl Exp $
+ * $Id: pptpctrl.c,v 1.7 2004/02/26 04:17:41 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -584,6 +584,10 @@ static void launch_pppd(char **pppaddrs)
 	int an = 0;
 
 	pppd_argv[an++] = PPP_BINARY;
+
+	if (pptpctrl_debug) {
+		syslog(LOG_DEBUG, "CTRL (PPPD Launcher): program binary = %s", pppd_argv[an - 1]);
+	}
 
 #if BSDUSER_PPP
 
