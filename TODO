@@ -1,3 +1,7 @@
+20040811-0, 1.2.1, inconsistency in timers with RFC2637, IDLE_WAIT should be 60
+but is 65, MAX_ECHO_WAIT should be 60 but is 5, in pptpdefs.h, make these
+configurable, requested by Tobias Brox.
+
 20040623-0, 1.2.1, "Plugin /usr/lib/pptpd/pptpd-logwtmp.so is for pppd
 version 2.4.2, this is 2.4.3" happens if pppd 2.4.3 is installed, or
 vice versa if 2.4.2 is installed.
