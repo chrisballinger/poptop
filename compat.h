@@ -3,7 +3,7 @@
  *
  * Compatibility functions for different OSes (prototypes)
  *
- * $Id: compat.h,v 1.4 2004/04/22 10:48:16 quozl Exp $
+ * $Id: compat.h,v 1.5 2005/01/05 11:01:51 quozl Exp $
  */
 
 #ifndef _PPTPD_COMPAT_H
@@ -59,5 +59,24 @@ extern char *strerror(int);
 
 extern void my_setproctitle(int argc, char **argv, const char *format, ...)
        __attribute__ ((format (printf, 3, 4)));
+
+/* signal to pipe delivery implementation */
+
+/* create a signal pipe, returns 0 for success, -1 with errno for failure */
+int sigpipe_create();
+
+/* generic handler for signals, writes signal number to pipe */
+void sigpipe_handler(int signum);
+
+/* assign a signal number to the pipe */
+void sigpipe_assign(int signum);
+
+/* return the signal pipe read file descriptor for select(2) */
+int sigpipe_fd();
+
+/* read and return the pending signal from the pipe */
+int sigpipe_read();
+
+void sigpipe_close();
 
 #endif	/* !_PPTPD_COMPAT_H */

@@ -4,7 +4,7 @@
  * Grabs any command line argument and processes any further options in
  * the pptpd config file, before throwing over to pptpmanager.c.
  *
- * $Id: pptpd.c,v 1.12 2005/01/05 03:58:13 quozl Exp $
+ * $Id: pptpd.c,v 1.13 2005/01/05 11:01:51 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -84,7 +84,6 @@ static char *lookup(char *);
 
 #ifdef BCRELAY
 static void launch_bcrelay();
-static void killbcrelay(int sigraised);
 static pid_t bcrelayfork;
 #endif
 
@@ -418,28 +417,19 @@ int main(int argc, char **argv)
 	/* after we have our final pid... */
 	log_pid(pid_file);
 
-#ifdef BCRELAY
-        /* be ready for a grisly death */
-        signal(SIGTERM, &killbcrelay);
-#endif
-
+	/* manage connections until SIGTERM */
 	pptp_manager(argc, argv);
+	
+#ifdef BCRELAY
+	if (bcrelayfork > 0) {
+		syslog(LOG_DEBUG, "CTRL: Closing child BCrelay with pid %i", bcrelayfork);
+		kill(bcrelayfork, SIGTERM);
+	}
+#endif
 
         return 1;
 
 }
-
-#ifdef BCRELAY
-static void killbcrelay(int sigraised) {
-/* TODO: syslog() is not allowed in a signal handler, deadlocks */
-        if (sigraised) {
-                syslog(LOG_DEBUG, "CTRL: Closing child BCrelay with pid %i", bcrelayfork);
-                if (bcrelayfork > 0)
-                kill(bcrelayfork, SIGQUIT);
-		exit(0);
-        }
-}
-#endif
 
 static void log_pid(char *pid_file) {
         FILE    *f;

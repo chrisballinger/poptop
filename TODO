@@ -4,10 +4,10 @@ This is the pptpd project TODO list.
 means Junior Jobs, following the KDE tradition suggested by Adriaan de
 Groot in May 2004.)
 
-20050105-0, 1.2.1, process hang, syslog(3) is called in signal
-handlers, resulting in deadlock if syslog(3) was already active on
-stack, strace shows futex(2), no further connections accepted,
-increased probability if debug logging enabled in pptpd.conf.
+20050105-1, 1.2.1, denial of service, for ten seconds (or --stimeout)
+the pptpd will not process further connections while it waits for a
+client to send data.  The second select() will prevent any further
+accept() calls.  To be tested.
 
 20041108-0, 1.2.1, vpnstats does not parse RHEL3 log output
 successfully.  It also creates a cron.weekly entry that is not removed

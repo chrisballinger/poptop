@@ -3,7 +3,7 @@
  *
  * PPTP control connection between PAC-PNS pair
  *
- * $Id: pptpctrl.c,v 1.14 2005/01/05 03:58:13 quozl Exp $
+ * $Id: pptpctrl.c,v 1.15 2005/01/05 11:01:51 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -180,7 +180,8 @@ int main(int argc, char **argv)
             inet_ntoa(addr.sin_addr), ' ');
 
 	/* be ready for a grisly death */
-	signal(SIGTERM, &bail);
+	sigpipe_create();
+	sigpipe_assign(SIGTERM);
 	NOTE_VALUE(PAC, call_id_pair, htons(-1));
 	NOTE_VALUE(PNS, call_id_pair, htons(-1));
 
@@ -233,6 +234,7 @@ static void pptp_handle_ctrl_connection(char **pppaddrs, struct in_addr *inetadd
 #endif
 	int pty_fd = -1;		/* File descriptor of pty */
 	int gre_fd = -1;		/* Network file descriptor */
+	int sig_fd = sigpipe_fd();	/* Signal pipe descriptor	*/
 
 	unsigned char packet[PPTP_MAX_CTRL_PCKT_SIZE];
 	unsigned char rply_packet[PPTP_MAX_CTRL_PCKT_SIZE];
@@ -240,6 +242,7 @@ static void pptp_handle_ctrl_connection(char **pppaddrs, struct in_addr *inetadd
 	for (;;) {
 
 		FD_ZERO(&fds);
+		FD_SET(sig_fd, &fds);
 		FD_SET(clientSocket, &fds);
 		if (pty_fd != -1)
 			FD_SET(pty_fd, &fds);
@@ -285,6 +288,12 @@ static void pptp_handle_ctrl_connection(char **pppaddrs, struct in_addr *inetadd
 
 		default:
 			break;
+		}
+
+		/* check for pending SIGTERM delivery */
+		if (FD_ISSET(sig_fd, &fds)) {
+			if (sigpipe_read() == SIGTERM)
+				bail(SIGTERM);
 		}
 
 		/* detect startup of pppd */
@@ -450,9 +459,8 @@ leave_clear_call:
  */
 static void bail(int sigraised)
 {
-/* TODO: syslog() is not allowed in a signal handler, deadlocks */
 	if (sigraised)
-		syslog(LOG_INFO, "CTRL: Exiting on signal");
+		syslog(LOG_INFO, "CTRL: Exiting on signal %d", sigraised);
 
 	/* send a disconnect to the other end */
 	/* ignore any errors */

@@ -1,3 +1,41 @@
+Wed Jan  5 21:16:15 2005  James Cameron  <quozl@us.netrek.org>
+
+	* compat.h, compat.c (sigpipe_*): build a generalised signal pipe
+	delivery ... thing, for use by pptpd and pptpctrl.
+
+	* pptpctrl.c (main): use signal pipe delivery instead of calling
+	syslog(3) in the SIGTERM handler, call the old handler bail() when
+	SIGTERM is delivered via the pipe.
+
+	* pptpd.c: kill bcrelay outside a signal handler in order to avoid
+	deadlock.
+
+	* pptpmanager.c (pptp_manager): use generalised signal pipe
+	delivery, return to caller on SIGTERM.
+
+Wed Jan  5 17:30:50 2005  James Cameron  <quozl@us.netrek.org>
+
+	* pptpmanager.c: fix bug 2004-01-05-0, hang due to syslog(3)
+	called by signal(2) handler.  Derived from contributions to PPTP
+	Client by Jean Wolter.
+
+	* pptpmanager.c: add pipe for queueing SIGCHLD events.
+	
+	* pptpmanager.c (sigchld_handler): add safe handler for SIGCHLD.
+	
+	* pptpmanager.c (sigchld_responder): move old handler into
+	non-signal context function called from main event loop.
+	
+	* pptpmanager.c (sigchld_setup): move SIGCHLD signal handling
+	setup into own function.
+
+	* pptpmanager.c (pptp_manager): call the new signal handling setup
+	function, FD_ZERO each time around (it wasn't being reset), watch
+	the signal handling pipe in the main event loop, handle EINTR
+	return from select by ignoring it and restarting the select().
+	Added code to handle signal pipe data.  Removed code for blocking
+	SIGCHLD on new connection, now that the signal handling is linear.
+
 Thu Dec 23 09:17:29 2004  James Cameron  <quozl@us.netrek.org>
 
 	* samples/options.pptpd: turn off logging to stderr by default, to

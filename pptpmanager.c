@@ -3,7 +3,7 @@
  *
  * Manages the PoPToP sessions.
  *
- * $Id: pptpmanager.c,v 1.8 2005/01/05 03:58:13 quozl Exp $
+ * $Id: pptpmanager.c,v 1.9 2005/01/05 11:01:51 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -93,9 +93,8 @@ static int createHostSocket(int *hostSocket);
 /* this end's call identifier */
 uint16_t unique_call_id = 0;
 
-static void pptp_reap_child(int sig)
+static void sigchld_responder(int sig)
 {
-/* TODO: syslog() is not allowed in a signal handler, deadlocks */
 	int chld, status;
 
 	while ((chld = waitpid(-1, &status, WNOHANG)) > 0) {
@@ -115,7 +114,6 @@ static void pptp_reap_child(int sig)
 			syslog(LOG_DEBUG, "MGR: Reaped child %d", chld);
 #endif
 	}
-	signal(SIGCHLD, pptp_reap_child);
 }
 
 int pptp_manager(int argc, char **argv)
@@ -127,18 +125,21 @@ int pptp_manager(int argc, char **argv)
 	int ctrl_pid;
 	socklen_t addrsize;
 
-	/* for host stuff */
 	int hostSocket;
 	fd_set connSet;
-	sigset_t sigchld;
-	struct sigaction sa;
 
-	sigemptyset(&sigchld);
-	sigaddset(&sigchld, SIGCHLD);
+	int rc, sig_fd;
 
-	memset(&sa, 0, sizeof(sa));
-	sa.sa_handler = pptp_reap_child;
-	sigaction(SIGCHLD, &sa, NULL);
+	rc = sigpipe_create();
+	if (rc < 0) {
+		syslog(LOG_ERR, "MGR: unable to setup sigchld pipe!");
+		syslog_perror("sigpipe_create");
+		exit(-1);
+	}
+	
+	sigpipe_assign(SIGCHLD);
+	sigpipe_assign(SIGTERM);
+	sig_fd = sigpipe_fd();
 
 	/* openlog() not required, done in pptpd.c */
 
@@ -159,9 +160,9 @@ int pptp_manager(int argc, char **argv)
 		exit(-1);
 	}
 
-	FD_ZERO(&connSet);
-
 	while (1) {
+		int max_fd;
+		FD_ZERO(&connSet);
 #if !defined(PPPD_IP_ALLOC)
 		int firstOpen = -1;
 
@@ -180,14 +181,25 @@ int pptp_manager(int argc, char **argv)
 #else
 		FD_SET(hostSocket, &connSet);
 #endif
+		max_fd = hostSocket;
 
-		/* wait for connection (or for SIGCHLD [EINTR]).  don't just loop on EINTR
-		 * since hostSocket might not be in connSet (see above)
-		 */
-		if (select(hostSocket + 1, &connSet, NULL, NULL, NULL) < 0 && errno != EINTR) {
+		FD_SET(sig_fd, &connSet);
+		if (max_fd < sig_fd) max_fd = sig_fd;
+
+		while (1) {
+			if (select(max_fd + 1, &connSet, NULL, NULL, NULL) != -1) break;
+			if (errno == EINTR) continue;
 			syslog(LOG_ERR, "MGR: Error with manager select()!");
 			syslog_perror("select");
 			exit(-1);
+		}
+
+		if (FD_ISSET(sig_fd, &connSet)) {	/* SIGCHLD */
+			int signum = sigpipe_read();
+			if (signum == SIGCHLD)
+				sigchld_responder(signum);
+			else if (signum == SIGTERM)
+				return signum;
 		}
 
 		if (FD_ISSET(hostSocket, &connSet)) {	/* A call came! */
@@ -224,6 +236,12 @@ int pptp_manager(int argc, char **argv)
 				fd_set rfds;
 				struct timeval tv;
 				struct pptp_header ph;
+
+				/* TODO: this select below prevents
+                                   other connections from being
+                                   processed during the wait for the
+                                   first data packet from the
+                                   client. */
 
 				/*
 				 * DOS protection: get a peek at the first packet
@@ -278,13 +296,6 @@ int pptp_manager(int argc, char **argv)
 					continue;
 				}
 
-				/* block SIGCHLD until parent registers
-				 * child in the connection list, else we
-				 * have a race condition with the handler.
-				 */
-				if (sigprocmask(SIG_BLOCK, &sigchld, NULL) !=0) {
-					syslog_perror("sigprocmask");
-				}
 #ifndef HAVE_FORK
 				switch (ctrl_pid = vfork()) {
 #else
@@ -312,9 +323,6 @@ int pptp_manager(int argc, char **argv)
 #if !defined(PPPD_IP_ALLOC)
 					clientArray[firstOpen].pid = ctrl_pid;
 #endif
-					if (sigprocmask(SIG_UNBLOCK, &sigchld, NULL) !=0) {
-						syslog_perror("sigprocmask");
-					}
 					break;
 				}
 			}
