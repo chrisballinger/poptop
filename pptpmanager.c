@@ -3,7 +3,7 @@
  *
  * Manages the PoPToP sessions.
  *
- * $Id: pptpmanager.c,v 1.1 2002/06/21 08:52:02 fenix_nl Exp $
+ * $Id: pptpmanager.c,v 1.2 2002/07/23 10:34:16 fenix_nl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -113,7 +113,10 @@ static void pptp_reap_child(int sig)
 int pptp_manager(int argc, char **argv)
 {
 	/* misc ints */
-	int loop, ctrl_pid;
+#if !defined(PPPD_IP_ALLOC)
+	int loop;
+#endif
+	int ctrl_pid;
 	socklen_t addrsize;
 
 	/* for host stuff */

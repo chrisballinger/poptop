@@ -4,7 +4,7 @@
  * Grabs any command line argument and procecesses any further options in
  * the pptpd config file, before throwing over to pptpmanager.c.
  *
- * $Id: pptpd.c,v 1.1 2002/06/21 08:52:01 fenix_nl Exp $
+ * $Id: pptpd.c,v 1.2 2002/07/23 10:34:16 fenix_nl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -54,6 +54,10 @@ char *pppdoptstr = NULL;
 char *speedstr = NULL;
 char *bindaddr = NULL;
 int pptp_debug = 0;
+
+#if defined(PPPD_IP_ALLOC)
+int pptp_stimeout = STIMEOUT_DEFAULT;
+#endif
 
 #if !defined(PPPD_IP_ALLOC)
 int maxConnections = MAX_CONNECTIONS;
