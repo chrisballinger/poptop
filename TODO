@@ -1,3 +1,5 @@
+20050511-0, 1.2.0-?, merge debian upstream provided by Rene.
+
 20040429-0, 1.2.0-b3, important, bug, Michael St. Laurent, doing a
 "rpmbuild -ta pptpd-1.2.0-b3.tar.gz" gave the following error: + cd
 poptop-1.2.0 /var/tmp/rpm-tmp.38859: line 33: cd: poptop-1.2.0: No
