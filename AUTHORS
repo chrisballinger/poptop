@@ -2,24 +2,30 @@ Poptop -- The PPTP Server
 -------------------------
 
 Current Maintainer:
-James Cameron <james.cameron@hp.com>
+James Cameron <james.cameron at hp dot com>
 
 Previous Maintainer:
-Richard de Vroede <r.devroede@linvision.com>
+Richard de Vroede <r.devroede at linvision dot com>
 
 Original Authors:
-Matthew Ramsay <matthewr@lineo.com>
-Kevin Thayer <tmk@netmagic.net>
-David Luyer <luyer@ucs.uwa.edu.au>
-Peter Galbavy <Peter.Galbavy@knowledge.com>
+Matthew Ramsay <matthewr at lineo dot com>
+Kevin Thayer <tmk at netmagic.net>
+David Luyer <luyer at ucs.uwa.edu.au>
+Peter Galbavy <Peter.Galbavy at knowledge dot com>
 
 Other Contributors:
-Ron O'Hara <rono@sentuny.com.au>
-Allan Clark <allanc@sco.com>
-Harald Vogt <vogt@serc.nl>
+Ron O'Hara <rono at sentuny dot com.au>
+Allan Clark <allanc at sco dot com>
+Harald Vogt <vogt at serc.nl>
+Bruno Lopes F. Cabral <bruno at openline dot com.br>
+Peter Stamfest <poptop at stamfest dot at>
+Sergio M. Ammirata
+Norbert van Bolhuis
+Visarion Mandzgaladze
+Hernan Otero
 
 The Linux PPTP Server takes advantage of some Linux PPTP client code
-written by C. Scott Ananian <cananian@alumni.princeton.edu>
+written by C. Scott Ananian <cananian at alumni.princeton.edu>
 
 Other Credits:
 Moreton Bay <http://www.moretonbay.com>
@@ -30,10 +36,10 @@ Linvision   <http://www.linvision.com>
 SourceForge <http://sourceforge.net> - Current host for the mailing
 list and CVS repository.
 
-Christopher Schulte <christopher@schulte.org> - Previous host for the
+Christopher Schulte <christopher at schulte.org> - Previous host for the
 PPTP Mailing List (sadly missed, in James' opinion).
 
-Peter Galbavy <Peter.Galbavy@knowledge.com> - Previous host for the
+Peter Galbavy <Peter.Galbavy at knowledge dot com> - Previous host for the
 PPTP CVS server.
 
-Luc Richards <theycallmeluc@yahoo.com.au> - The author of bcrelay.
+Luc Richards <theycallmeluc at yahoo dot com.au> - The author of bcrelay.

@@ -1,0 +1,37 @@
+1.2.0-b3: in preparation
+
+- include vpnwho.pl in package [Cabral]
+- note that speed is ineffective on Linux [Cameron]
+- rework comments in sample configuration files [Cameron]
+- update references to web sites [Cameron]
+- minor edits to manual pages [Cameron]
+- improve script comments [Cameron]
+- remove superfluous files and tidy CVS repository [Cameron]
+- disable obsolete scripts [Cameron]
+
+1.2.0-b2: released 2004-04-22 to test team (Peter & Bruno)
+
+- fix build without bcrelay [Cameron]
+- adopt bcrelay version from main package [Cameron]
+- when built without bcrelay, the bcrelay will exit [Cameron]
+- GNU standards compliance, no CVS in dist
+- new maintainer [Cameron]
+
+1.1.4-b4: 
+
+- terminate call on any CALL_CLR_RQST [Cabral]
+- unblock SIGCHLD [Stamfest]
+- report pppd path in debug mode [Cameron]
+- report cause of failed execvp() [Cameron]
+- explain pppd launch failure [Cameron]
+- pass ipparam to pppd [Ammirata]
+- add bcrelay [Bolhuis]
+- fix loss of first GRE packet [fghdgh]
+- fix inheritance of console file descriptors [fghdgh]
+- fix pidfile option [Mandzgaladze]
+- fix two buffer overflows [Otero]
+- fix potential buffer overflow [Vroede]
+- enhance callid [Vroede]
+
+1.1.3: 
+
