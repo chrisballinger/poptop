@@ -4,7 +4,7 @@
  * This file contains some tuneable parameters, most of which can be overriden
  * at run-time (note, MAX_CONNECTIONS can't!).
  *
- * $Id: defaults.h,v 1.2 2003/02/06 15:59:58 fenix_nl Exp $
+ * $Id: defaults.h,v 1.3 2003/02/06 16:39:46 fenix_nl Exp $
  */
 
 #ifndef _PPTPD_DEFAULTS_H
@@ -47,24 +47,18 @@
 #endif
 #define PIDFILE_DEFAULT			"/var/run/pptpd.pid"
 
-#define STIMEOUT_DEFAULT		10 /* seconds */
+#define STIMEOUT_DEFAULT	10 /* seconds */
 
 /* Location of binaries */
 
 #define PPTP_CTRL_BIN			SBINDIR "/pptpctrl"
 #define PPTPD_BIN			SBINDIR "/pptpd"
-#ifdef BCRELAY
-#define BCRELAY_BIN			SBINDIR "/bcrelay"
-#endif
 
 /* Parameters permitted in the config file */
 
 #define SPEED_KEYWORD			"speed"
 #define PPPD_OPTION_KEYWORD		"option"
 #define DEBUG_KEYWORD			"debug"
-#ifdef BCRELAY
-#define BCRELAY_KEYWORD			"bcrelay"
-#endif
 #define LOCALIP_KEYWORD			"localip"
 #define REMOTEIP_KEYWORD		"remoteip"
 #define LISTEN_KEYWORD			"listen"

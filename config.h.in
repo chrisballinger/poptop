@@ -21,9 +21,6 @@
 /* Let PPPD choose the IP addresses? */
 #undef PPPD_IP_ALLOC
 
-/* Enable Broadcast Relay? */
-#undef BCRELAY
-
 /* Work as a PNS rather than a PAC? */
 #undef PNS_MODE
 

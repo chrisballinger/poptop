@@ -181,8 +181,3 @@ operates.
 
 `configure' also accepts some other, not widely useful, options.
 
-Building packages
-=================
-
-   Just execute ./build.sh and it will build the package.
-Currently only RedHat is supported this way.

@@ -4,7 +4,7 @@
  * Grabs any command line argument and procecesses any further options in
  * the pptpd config file, before throwing over to pptpmanager.c.
  *
- * $Id: pptpd.c,v 1.4 2003/02/06 15:59:58 fenix_nl Exp $
+ * $Id: pptpd.c,v 1.5 2003/02/06 16:42:03 fenix_nl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -24,7 +24,6 @@
 #endif
 
 #include "our_syslog.h"
-#include "our_getopt.h"
 
 #include <fcntl.h>
 #include <netdb.h>
@@ -39,6 +38,7 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <getopt.h>
 
 #include "configfile.h"
 #include "defaults.h"
@@ -53,9 +53,6 @@
 char *pppdoptstr = NULL;
 char *speedstr = NULL;
 char *bindaddr = NULL;
-#ifdef BCRELAY
-char *bcrelay = NULL;
-#endif
 int pptp_debug = 0;
 
 #if defined(PPPD_IP_ALLOC)
@@ -84,10 +81,6 @@ static void showusage(char *prog)
 	printf("\nPoPToP v%s\n", VERSION);
 	printf("The PPTP Server for Linux\n");
 	printf("Usage: pptpd [options], where options are:\n\n");
-#ifdef BCRELAY
-	printf(" [-b] [--bcrelay if]       Use broadcast relay for broadcasts comming from.\n");
-	printf("                           the specified interface (default is eth1).\n");
-#endif
 	printf(" [-c] [--conf file]        Specifies the config file to read default\n");
 	printf("                           settings from (default is /etc/pptpd.conf).\n");
 	printf(" [-d] [--debug]            Turns on debugging (to syslog).\n");
@@ -141,9 +134,6 @@ int main(int argc, char **argv)
 
 		static struct option long_options[] =
 		{
-#ifdef BCRELAY
-			{"bcrelay", 1, 0, 0},
-#endif
 			{"conf", 1, 0, 0},
 			{"debug", 0, 0, 0},
 			{"fg", 0, 0, 0},
@@ -156,22 +146,13 @@ int main(int argc, char **argv)
 			{0, 0, 0, 0}
 		};
 
-		c = getopt_long(argc, argv, "b:c:dfhl:o:p:s:v", long_options, &option_index);
+		c = getopt_long(argc, argv, "c:dfhl:o:p:s:v", long_options, &option_index);
 		if (c == -1)
 			break;
 		/* convert long options to short form */
 		if (c == 0)
-			c = "bcdfhlopsv"[option_index];
+			c = "cdfhlopsv"[option_index];
 		switch (c) {
-#ifdef BCRELAY
-		case 'b':
-			/* Have to build in some checking when I know how -rdv */
-			if(bcrelay)
-				free(bcrelay);
-			bcrelay = strdup(optarg);
-			break;
-#endif
-
 		case 'l':
 			tmpstr = lookup(optarg);
 			if(!tmpstr) {
@@ -255,11 +236,6 @@ int main(int argc, char **argv)
 
 	if (!pptp_debug && read_config_file(configFile, DEBUG_KEYWORD, tmp) > 0)
 		pptp_debug = TRUE;
-
-#ifdef BCRELAY
-	if (!bcrelay && read_config_file(configFile, BCRELAY_KEYWORD, tmp) > 0) 
-		bcrelay = strdup(tmp);
-#endif
 
 	if (read_config_file(configFile, STIMEOUT_KEYWORD, tmp) > 0) {
 		pptp_stimeout = atoi(tmp);
@@ -353,11 +329,11 @@ static void log_pid() {
         fclose(f);
 }
 
-//#if HAVE_SETSID
-//#define SETSIDPGRP setsid
-//#else
-//#define SETSIDPGRP setpgrp
-//#endif
+#if HAVE_SETSID
+#define SETSIDPGRP setsid
+#else
+#define SETSIDPGRP setpgrp
+#endif
 
 #ifndef HAVE_DAEMON
 static void my_daemon(int argc, char **argv)

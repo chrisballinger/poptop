@@ -3,7 +3,7 @@
  *
  * Manages the PoPToP sessions.
  *
- * $Id: pptpmanager.c,v 1.3 2003/02/06 15:59:58 fenix_nl Exp $
+ * $Id: pptpmanager.c,v 1.4 2003/02/06 16:39:46 fenix_nl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -53,9 +53,6 @@ int deny_severity = LOG_WARNING;
 #include "compat.h"
 
 /* command line arg variables */
-#ifdef BCRELAY
-extern char *bcrelay;
-#endif
 extern char *pppdoptstr;
 extern char *speedstr;
 extern char *bindaddr;
@@ -386,9 +383,6 @@ static void connectCall(int clientSocket, int clientNumber)
 
 	/* lame strings to hold passed args. */
 	char ctrl_debug[2];
-#ifdef BCRELAY
-	char ctrl_bcrelay[2];
-#endif
 	char pppdoptfile_argv[2];
 	char speedgiven_argv[2];
 	extern char **environ;
@@ -410,16 +404,6 @@ static void connectCall(int clientSocket, int clientNumber)
 	ctrl_debug[0] = pptp_debug ? '1' : '0';
 	ctrl_debug[1] = '\0';
 	ctrl_argv[pptpctrl_argc++] = ctrl_debug;
-
-#ifdef BCRELAY
-	ctrl_bcrelay[0] = bcrelay ? '1' : '0';
-	ctrl_bcrelay[1] = '\0';
-	ctrl_argv[pptpctrl_argc++] = ctrl_bcrelay;
-	if (bcrelay) {
-		/* send the bcrelay interface to the CTRL manager */
-		ctrl_argv[pptpctrl_argc++] = bcrelay;
-	}
-#endif
 
 	/* optionfile = TRUE or FALSE; so the CTRL manager knows whether to load a non-standard options file */
 	pppdoptfile_argv[0] = pppdoptstr ? '1' : '0';

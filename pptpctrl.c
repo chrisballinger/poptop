@@ -3,7 +3,7 @@
  *
  * PPTP control connection between PAC-PNS pair
  *
- * $Id: pptpctrl.c,v 1.3 2003/02/06 15:59:58 fenix_nl Exp $
+ * $Id: pptpctrl.c,v 1.4 2003/02/06 16:39:46 fenix_nl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -23,10 +23,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
-#include <dirent.h>
-// #include <sys/time.h> /* Wrong in linux, maybe correct for uClinux -rdv */
-#include <net/if.h>
+#include <sys/time.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -44,9 +41,9 @@
 #define socklen_t int
 #endif
 
-//#ifndef HAVE_SETPROCTITLE
-//#include "inststr.h"
-//#endif
+#ifndef HAVE_SETPROCTITLE
+#include "inststr.h"
+#endif
 #include "compat.h"
 #include "pptpctrl.h"
 #include "pptpgre.h"
@@ -57,11 +54,6 @@
 /* Globals because i'm lazy -tmk */
 static char speed[32];
 static char pppdxfig[256];
-#ifdef BCRELAY
-static char bcrelay[32];		/* specifies broadcast relay interface */
-static pid_t bcrelayfork;		/* so we can kill it after disconnect */
-#endif
-static pid_t pppfork;                   /* so we can kill it after disconnect */
 
 /*
  * Global to handle dying
@@ -74,17 +66,12 @@ static u_int32_t call_id_pair;	/* call id (to terminate call) */
 
 /* Needed by this and ctrlpacket.c */
 int pptpctrl_debug = 0;		/* specifies if debugging is on or off */
-int gargc;                     /* Command line argument count */
-char **gargv;                  /* Command line argument vector */
 
 /* Local function prototypes */
 static void bail(int sigraised);
 static void pptp_handle_ctrl_connection(char **pppaddrs, struct in_addr *inetaddrs);
 static int startCall(char **pppaddrs);
 static void launch_pppd(char **pppaddrs);
-#ifdef BCRELAY
-static void launch_bcrelay();
-#endif
 
 /* Oh the horror.. lets hope this covers all the ones we have to handle */
 #if defined(O_NONBLOCK) && !defined(__sun__) && !defined(__sun)
@@ -107,12 +94,12 @@ int main(int argc, char **argv)
 	struct sockaddr_in addr;	/* client address */
 	socklen_t addrlen;
 	int arg = 1;
+#ifndef HAVE_SETPROCTITLE
+	char proctitle[32];
+#endif
 	int flags;
 	struct in_addr inetaddrs[2];
 	char *pppaddrs[2] = { pppLocal, pppRemote };
-
-        gargc = argc;
-        gargv = argv;
 
 	/* open a connection to the syslog daemon */
 	openlog("pptpd", LOG_PID, LOG_DAEMON);
@@ -122,19 +109,12 @@ int main(int argc, char **argv)
 
 	pptpctrl_debug = atoi(argv[arg++]);
 
-#ifdef BCRELAY
-	GETARG(bcrelay);
-#endif
 	GETARG(pppdxfig);
 	GETARG(speed);
 	GETARG(pppLocal);
 	GETARG(pppRemote);
 
 	if (pptpctrl_debug) {
-#ifdef BCRELAY
-		if (*bcrelay)
-			syslog(LOG_DEBUG, "CTRL: BCrelay internal interface = %s", bcrelay);
-#endif
 		if (*pppLocal)
 			syslog(LOG_DEBUG, "CTRL: local address = %s", pppLocal);
 		if (*pppRemote)
@@ -174,8 +154,12 @@ int main(int argc, char **argv)
 
 	
 	/* Fiddle with argv */
-        my_setproctitle(gargc, gargv, "pptpd [%s]%20c",
-            inet_ntoa(addr.sin_addr), ' ');
+#if HAVE_SETPROCTITLE
+	setproctitle("pptpd [%s]", inet_ntoa(addr.sin_addr));
+#else
+	sprintf(proctitle, "pptpd [%s]", inet_ntoa(addr.sin_addr));
+	inststr(argc, argv, proctitle);
+#endif
 
 	/* be ready for a grisly death */
 	signal(SIGTERM, &bail);
@@ -184,14 +168,6 @@ int main(int argc, char **argv)
 
 	syslog(LOG_INFO, "CTRL: Client %s control connection started", inet_ntoa(addr.sin_addr));
 	pptp_handle_ctrl_connection(pppaddrs, inetaddrs);
-#ifdef BCRELAY
-	syslog(LOG_DEBUG, "CTRL: Closing child BCrelay with pid %i", bcrelayfork);
-	if(bcrelayfork>0)
-		kill(bcrelayfork,SIGQUIT);
-#endif
-	syslog(LOG_DEBUG, "CTRL: Closing child ppp with pid %i", pppfork);
-	if(pppfork>0)
-		kill(pppfork,SIGINT);
 	syslog(LOG_INFO, "CTRL: Client %s control connection finished", inet_ntoa(addr.sin_addr));
 
 	bail(0);		/* NORETURN */
@@ -220,7 +196,7 @@ static void pptp_handle_ctrl_connection(char **pppaddrs, struct in_addr *inetadd
 	/* For echo requests used to check link is alive */
 	int echo_wait = FALSE;		/* Waiting for echo? */
 	u_int32_t echo_count = 0;	/* Sequence # of echo */
-	time_t echo_time = 0;		/* Time last echo req sent */
+	time_t echo_time;		/* Time last echo req sent */
 	struct timeval idleTime;	/* How long to select() */
 
 	/* General local variables */
@@ -305,11 +281,7 @@ static void pptp_handle_ctrl_connection(char **pppaddrs, struct in_addr *inetadd
 		}
 		/* send from GRE off to pty */
 		if (gre_fd != -1 && FD_ISSET(gre_fd, &fds) && decaps_gre(gre_fd, encaps_hdlc, pty_fd) < 0) {
-			if (gre_fd == 6 && pty_fd == 5) {
-				syslog(LOG_ERR, "CTRL: GRE-tunnel has collapsed (GRE read or PTY write failed (gre,pty)=(%d,%d))", gre_fd, pty_fd);
-			} else {
-				syslog(LOG_ERR, "CTRL: GRE read or PTY write failed (gre,pty)=(%d,%d)", gre_fd, pty_fd);
-			}
+			syslog(LOG_ERR, "CTRL: GRE read or PTY write failed (gre,pty)=(%d,%d)", gre_fd, pty_fd);
 			break;
 		}
 		/* handle control messages */
@@ -371,14 +343,6 @@ static void pptp_handle_ctrl_connection(char **pppaddrs, struct in_addr *inetadd
 				}
 				/* Start the call */
 				syslog(LOG_INFO, "CTRL: Starting call (launching pppd, opening GRE)");
-
-                                /* Fiddle with argv */
-                                my_setproctitle(gargc, gargv,
-                                      "pptpd [%s:%04X - %04X]",
-                                      inet_ntoa(inetaddrs[1]),
-                                      ntohs(((struct pptp_out_call_rply *) (rply_packet))->call_id_peer),
-                                      ntohs(((struct pptp_out_call_rply *) (rply_packet))->call_id));
-
 				if ((pty_fd = startCall(pppaddrs)) > maxfd)
 					maxfd = pty_fd;
 				if ((gre_fd = pptp_gre_init(call_id_pair, pty_fd, inetaddrs)) > maxfd)
@@ -394,12 +358,6 @@ static void pptp_handle_ctrl_connection(char **pppaddrs, struct in_addr *inetadd
 			case SET_LINK_INFO:
 				send_packet = FALSE;
 				break;
-
-#ifdef PNS_MODE
-			case IN_CALL_RQST:
-			case IN_CALL_RPLY:
-			case IN_CALL_CONN:
-#endif
 
 			case CALL_DISCONN_NTFY:
 			case STOP_CTRL_CONN_RPLY:
@@ -522,7 +480,7 @@ static void bail(int sigraised)
 	if (pptpctrl_debug)
 		syslog(LOG_DEBUG, "CTRL: Exiting now");
 
-	// solved with kill pppfork; exit((GET_VALUE(PAC, call_id_pair)==htons(-1)) ? 0 : 1);
+	exit((GET_VALUE(PAC, call_id_pair)==htons(-1)) ? 0 : 1);
 }
 
 /*
@@ -538,7 +496,6 @@ static int startCall(char **pppaddrs)
 {
 	/* PTY/TTY pair for talking to PPPd */
 	int pty_fd, tty_fd;
-	/* register pids of children */
 #if BSDUSER_PPP || SLIRP
 	int sockfd[2];
 
@@ -572,14 +529,13 @@ static int startCall(char **pppaddrs)
 	}
 	/* Launch the PPPD  */
 #ifndef HAVE_FORK
-        switch(pppfork=vfork()){
+	switch (vfork()) {
 #else
-        switch(pppfork=fork()){
+	switch (fork()) {
 #endif
 	case -1:	/* fork() error */
 		syslog(LOG_ERR, "CTRL: Error forking to exec pppd");
-		//break;
-		_exit(1);
+		break;
 
 	case 0:		/* child */
 		dup2(tty_fd, 0);
@@ -604,48 +560,26 @@ static int startCall(char **pppaddrs)
 #endif
 		launch_pppd(pppaddrs);
 		syslog(LOG_ERR, "CTRL: PPPD launch failed!");
-		_exit(1);
+		exit(1);
 	}
-	
-#ifdef BCRELAY
-	if (*bcrelay) {
-		syslog(LOG_DEBUG, "CTRL: BCrelay incoming interface is %s", bcrelay);
-		/* Launch BCrelay  */
-#ifndef HAVE_FORK
-        	switch(bcrelayfork=vfork()){
-#else
-        	switch(bcrelayfork=fork()){
-#endif
-			case -1:	/* fork() error */
-			syslog(LOG_ERR, "CTRL: Error forking to exec bcrelay");
-			_exit(1);
-
-			case 0:		/* child */
-			launch_bcrelay();
-			syslog(LOG_ERR, "CTRL (BCrelay Launcher): Failed to launch BCrelay.");
-			_exit(1);
-		}
-	} /* End bcrelay */
-#endif
 	close(tty_fd);
 	return pty_fd;
 }
 
+
 /*
- * launch_pppd
+ * lanuch_pppd
  *
  * Launches the PPP daemon. The PPP daemon is responsible for assigning the
  * PPTP client its IP address.. These values are assigned via the command
  * line.
- *
- * Add return of connected ppp interface
  *
  * retn: 0 on success, -1 on failure.
  *
  */
 static void launch_pppd(char **pppaddrs)
 {
-	char *pppd_argv[10];
+	char *pppd_argv[16];
 	int an = 0;
 
 	pppd_argv[an++] = PPP_BINARY;
@@ -668,7 +602,7 @@ static void launch_pppd(char **pppaddrs)
 	 add 10.0.0/24
 
 	 * To be honest, at the time of writing, I haven't had the thing
-	  working enough to understand :) I will update this comment and
+	 * working enough to understand :) I will update this comment and
 	 * make a sample config available when I get there.
 	 */
 
@@ -746,66 +680,8 @@ static void launch_pppd(char **pppaddrs)
 #endif
 
 	/* argv arrays must always be NULL terminated */
-	pppd_argv[an++] = NULL;
+	pppd_argv[an] = NULL;
 	execvp(pppd_argv[0], pppd_argv);
-		/* execvp() failed */
-		syslog(LOG_ERR, "CTRL (PPPD Launcher): Failed to launch PPP daemon.");
+	/* execvp() failed */
+	syslog(LOG_ERR, "CTRL (PPPD Launcher): Failed to launch PPP daemon.");
 }
-#ifdef BCRELAY
-/*
- * launch_bcrelay
- *
- * Launches broadcast relay. Broadcast relay is responsible for relaying broadcasts to the clients
- *
- * retn: 0 on success, -1 on failure.
- *
- */
-static void launch_bcrelay() {
-	char *bcrelay_argv[6];
-	int an = 0;
-	char pppdpid[16];
-
-  char *pppif = "";
-  char pid_string[64];
-  char filename[256];
-  FILE *pidfile;
-  DIR *dir_pointer;
-  struct dirent *dp;
-        
-	sprintf(pppdpid, "%ld", (long)pppfork);
-	syslog(LOG_DEBUG, "CTRL: pppdpid is %s", pppdpid);
-
-      while (pppif == "") {
-        dir_pointer = opendir("/var/run");
-        while ((dp = readdir(dir_pointer)) != NULL) {
-          if ( (strncmp((char *)dp->d_name, "ppp", 3)) == 0 && (strncmp((char *)dp->d_name, "pppd", 4)) != 0 ) {
-            sprintf(filename,"/var/run/%s",dp->d_name);
-            if ( (pidfile = fopen(filename,"r")) == NULL ) {
-              syslog(LOG_DEBUG,"Cannot open the pid file %s\n", dp->d_name);
-            }
-            if (! fscanf(pidfile,"%s",pid_string)) {
-              syslog(LOG_DEBUG,"Cannot read %s\n",dp->d_name);
-              _exit(1);
-            }
-            syslog(LOG_DEBUG,"Content of pidfile: %s\n",pid_string);
-            if ( (strcmp(pid_string, pppdpid)) == 0 ) {
-              pppif = strndup(dp->d_name, 4);
-              syslog(LOG_DEBUG, "CTRL: BCrelay outgoing interface is %s", pppif);
-              break;
-            }
-            fclose(pidfile);
-          }
-        }
-        closedir(dir_pointer);
-      }
-
-	bcrelay_argv[an++] = BCRELAY_BIN;
-	bcrelay_argv[an++] = "-i";
-	bcrelay_argv[an++] = bcrelay;
-	bcrelay_argv[an++] = "-o";
-	bcrelay_argv[an++] = pppif;
-	bcrelay_argv[an++] = NULL;
-
-	execvp(bcrelay_argv[0], bcrelay_argv);
-}
-#endif
