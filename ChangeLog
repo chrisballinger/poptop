@@ -1,3 +1,11 @@
+Fri May 14 15:50:35 2004  James Cameron  <quozl@us.netrek.org>
+
+	* pptpd.c (killbcrelay): bug fix, pptpd catches SIGTERM to kill
+	bcrelay, but doesn't kill itself.  "This patch solves partially
+	the problem.  When there is a connection established klling the
+	main pptpd process will not kill the control connection process."
+	From: Pawel Guraj.
+
 Thu Apr 29 20:18:19 2004  James Cameron  <quozl@us.netrek.org>
 
 	* pptpd.8, pptpd.conf.5: adopt man page review suggestions.

@@ -1,5 +1,6 @@
 1.2.0-b4: unreleased
 
+- fix for SIGTERM handling [Guraj]
 - minor manual page edits [Wilson]
 - fix printing of connection speed [Dubiec]
 - fix segfault if built --with-bcrelay but no option used [Cameron]
