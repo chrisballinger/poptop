@@ -4,7 +4,7 @@
  * Grabs any command line argument and procecesses any further options in
  * the pptpd config file, before throwing over to pptpmanager.c.
  *
- * $Id: pptpd.c,v 1.2 2002/07/23 10:34:16 fenix_nl Exp $
+ * $Id: pptpd.c,v 1.3 2002/09/10 09:51:30 fenix_nl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -244,9 +244,9 @@ int main(int argc, char **argv)
 	}
 
 	if (!bindaddr && read_config_file(configFile, LISTEN_KEYWORD, tmp) > 0) {
-		tmpstr = lookup(optarg);
+		tmpstr = lookup(tmp);
 		if(!tmpstr) {
-			syslog(LOG_ERR, "MGR: Invalid listening address: %s!", optarg);
+			syslog(LOG_ERR, "MGR: Invalid listening address: %s!", tmp);
 			return 1;
 		}
 		bindaddr = strdup(tmpstr);
