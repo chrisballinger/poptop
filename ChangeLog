@@ -1,3 +1,20 @@
+Fri Feb 27 09:53:19 2004  James Cameron  <quozl@us.netrek.org>
+
+	* pptpctrl.c (pptp_handle_ctrl_connection): on any CALL_CLR_RQST,
+	terminate the call.  From: "Bruno Lopes F. Cabral"
+	<bruno@openline.com.br> 2004-01-08
+	http://marc.theaimsgroup.com/?l=poptop-server&m=107359240120864&w=2
+
+Fri Feb 27 09:50:41 2004  James Cameron  <quozl@us.netrek.org>
+
+	* pptpctrl.c (launch_pppd): make sure SIGCHLD is unblocked. The
+	procmask gets inherited from the manager and usually has the
+	SIGCHLD blocked. Actually pppd does not expect that somebody
+	tampered with its signal mask, thus we just unblock all signals
+	and leave them to be handled by pppd.  This fixes the "ip-up
+	zombie" bug.  From: Peter Stamfest <poptop@stamfest.at> 2003-09-06
+	http://marc.theaimsgroup.com/?l=poptop-server&m=106284825408104&w=2
+
 Thu Feb 26 15:17:37 2004  James Cameron  <quozl@us.netrek.org>
 
 	* pptpd.8, pptpd.conf.5 (speed): note that speed is ineffective on

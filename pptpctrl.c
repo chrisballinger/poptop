@@ -3,7 +3,7 @@
  *
  * PPTP control connection between PAC-PNS pair
  *
- * $Id: pptpctrl.c,v 1.7 2004/02/26 04:17:41 quozl Exp $
+ * $Id: pptpctrl.c,v 1.8 2004/02/27 00:45:54 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -321,9 +321,7 @@ static void pptp_handle_ctrl_connection(char **pppaddrs, struct in_addr *inetadd
 					close(pty_fd);
 					pty_fd = -1;
 				}
-				NOTE_VALUE(PAC, call_id_pair, htons(-1));
-				NOTE_VALUE(PNS, call_id_pair, htons(-1));
-				break;
+				goto leave_drop_call;
 
 			case OUT_CALL_RQST:
 				/* for killing off the link later (ugly) */
@@ -582,6 +580,7 @@ static void launch_pppd(char **pppaddrs)
 {
 	char *pppd_argv[16];
 	int an = 0;
+	sigset_t sigs;
 
 	pppd_argv[an++] = PPP_BINARY;
 
@@ -686,6 +685,10 @@ static void launch_pppd(char **pppaddrs)
 
 	/* argv arrays must always be NULL terminated */
 	pppd_argv[an] = NULL;
+	/* make sure SIGCHLD is unblocked, pppd does not expect it */
+	sigfillset(&sigs);
+	sigprocmask(SIG_UNBLOCK, &sigs, NULL);
+	/* run pppd now */
 	execvp(pppd_argv[0], pppd_argv);
 	/* execvp() failed */
 	syslog(LOG_ERR,
