@@ -3,7 +3,7 @@
  *
  * Manages the PoPToP sessions.
  *
- * $Id: pptpmanager.c,v 1.6 2004/04/24 12:55:08 quozl Exp $
+ * $Id: pptpmanager.c,v 1.7 2004/04/28 11:36:07 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -60,6 +60,7 @@ extern char *speedstr;
 extern char *bindaddr;
 extern int pptp_debug;
 extern int pptp_noipparam;
+extern int pptp_logwtmp;
 
 #if !defined(PPPD_IP_ALLOC)
 extern char localIP[MAX_CONNECTIONS][16];
@@ -458,6 +459,9 @@ static void connectCall(int clientSocket, int clientNumber)
 
 	/* pass path to ppp binary */
 	ctrl_argv[pptpctrl_argc++] = ppp_binary;
+
+	/* pass logwtmp flag */
+	ctrl_argv[pptpctrl_argc++] = pptp_logwtmp ? "1" : "0";
 
 	/* note: update pptpctrl.8 if the argument list format is changed */
 

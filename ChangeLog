@@ -1,3 +1,21 @@
+Wed Apr 28 21:24:25 2004  James Cameron  <quozl@us.netrek.org>
+
+	* README.logwtmp: write up new feature to track user connections
+	and disconnections using the standard wtmp(5) mechanism.
+	* defaults.h, pptpd.8, pptpctrl.8, pptpctrl.c, pptpd.c,
+	pptpmanager.c, samples/pptpd.conf: add --logwtmp option.
+	* plugins/Makefile: derive from PPP CVS plugins example.
+	* plugins/patchlevel.h, plugins/pppd.h: copy headers from PPP CVS.
+	* plugins/pptpd-logwtmp.c: add plugin to update wtmp.
+	* Makefile.am: add targets for plugins build and any future
+	subdirectories.
+	* tools/vpnwho.pl: mark as obsolete.
+
+Wed Apr 28 19:54:04 2004  James Cameron  <quozl@us.netrek.org>
+
+	* pptpctrl.c (main): waitpid() rather than kill() the pppd, so
+	that ip-down scripts get executed.
+
 Tue Apr 27 09:11:32 2004  James Cameron  <quozl@us.netrek.org>
 
 	* NEWS: change attribution on request from author.

@@ -3,7 +3,7 @@
  *
  * PPTP control connection between PAC-PNS pair
  *
- * $Id: pptpctrl.c,v 1.12 2004/04/27 07:24:36 quozl Exp $
+ * $Id: pptpctrl.c,v 1.13 2004/04/28 11:36:07 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -27,6 +27,7 @@
 #include <sys/time.h>
 #include <dirent.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -53,6 +54,7 @@
 #include <net/if.h>
 
 static char *ppp_binary = PPP_BINARY;
+static int pptp_logwtmp;
 static int noipparam;			/* if true, don't send ipparam to ppp */
 static char speed[32];
 static char pppdxfig[256];
@@ -132,6 +134,7 @@ int main(int argc, char **argv)
 
 	if (arg < argc) unique_call_id = atoi(argv[arg++]);
 	if (arg < argc) ppp_binary = strdup(argv[arg++]);
+	if (arg < argc) pptp_logwtmp = atoi(argv[arg++]);
 	
 	if (pptpctrl_debug) {
 		if (*pppLocal)
@@ -183,9 +186,9 @@ int main(int argc, char **argv)
 
 	syslog(LOG_INFO, "CTRL: Client %s control connection started", inet_ntoa(addr.sin_addr));
 	pptp_handle_ctrl_connection(pppaddrs, inetaddrs);
-	syslog(LOG_DEBUG, "CTRL: Closing child ppp with pid %i", pppfork);
+	syslog(LOG_DEBUG, "CTRL: Reaping child PPP[%i]", pppfork);
 	if (pppfork > 0)
-		kill(pppfork, SIGINT);
+		waitpid(pppfork, NULL, 0);
 	syslog(LOG_INFO, "CTRL: Client %s control connection finished", inet_ntoa(addr.sin_addr));
 
 	bail(0);		/* NORETURN */
@@ -615,7 +618,7 @@ static int startCall(char **pppaddrs, struct in_addr *inetaddrs)
  */
 static void launch_pppd(char **pppaddrs, struct in_addr *inetaddrs)
 {
-	char *pppd_argv[10];
+	char *pppd_argv[14];
 	int an = 0;
 	sigset_t sigs;
 
@@ -726,6 +729,13 @@ static void launch_pppd(char **pppaddrs, struct in_addr *inetaddrs)
 
         if (!noipparam) {
                  pppd_argv[an++] = "ipparam";
+                 pppd_argv[an++] = inet_ntoa(inetaddrs[1]);
+        }
+
+        if (pptp_logwtmp) {
+                 pppd_argv[an++] = "plugin";
+                 pppd_argv[an++] = "/usr/lib/pptpd/pptpd-logwtmp.so";
+                 pppd_argv[an++] = "pptpd-original-ip";
                  pppd_argv[an++] = inet_ntoa(inetaddrs[1]);
         }
 

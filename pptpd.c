@@ -4,7 +4,7 @@
  * Grabs any command line argument and processes any further options in
  * the pptpd config file, before throwing over to pptpmanager.c.
  *
- * $Id: pptpd.c,v 1.7 2004/04/24 12:55:08 quozl Exp $
+ * $Id: pptpd.c,v 1.8 2004/04/28 11:36:07 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -59,6 +59,7 @@ char *bcrelay = NULL;
 #endif
 int pptp_debug = 0;
 int pptp_noipparam = 0;
+int pptp_logwtmp = 0;
 
 #if defined(PPPD_IP_ALLOC)
 int pptp_stimeout = STIMEOUT_DEFAULT;
@@ -118,6 +119,7 @@ static void showusage(char *prog)
 	printf(" [-t] [--stimeout seconds] Specifies the timeout for the first packet. This is a DOS protection\n");
 	printf("                           (default is 10).\n");
 	printf(" [-v] [--version]          Displays the PoPToP version number.\n");
+	printf(" [-w] [--logwtmp]          Update wtmp as users login.\n");
 
 	printf("\n\nLogs and debugging go to syslog as DAEMON.");
 
@@ -153,9 +155,9 @@ int main(int argc, char **argv)
 	while (1) {
 		int option_index = 0;
 #ifdef BCRELAY
-		char *optstring = "b:c:de:fhil:o:p:s:t:v";
+		char *optstring = "b:c:de:fhil:o:p:s:t:vw";
 #else
-		char *optstring = "c:de:fhil:o:p:s:t:v";
+		char *optstring = "c:de:fhil:o:p:s:t:vw";
 #endif
 
 		static struct option long_options[] =
@@ -175,6 +177,7 @@ int main(int argc, char **argv)
 			{"speed", 1, 0, 0},
 			{"stimeout", 1, 0, 0},
 			{"version", 0, 0, 0},
+			{"logwtmp", 0, 0, 0},
 			{0, 0, 0, 0}
 		};
 
@@ -184,9 +187,9 @@ int main(int argc, char **argv)
 		/* convert long options to short form */
 		if (c == 0)
 #ifdef BCRELAY
-			c = "bcdefhilopstv"[option_index];
+			c = "bcdefhilopstvw"[option_index];
 #else
-			c = "cdefhilopstv"[option_index];
+			c = "cdefhilopstvw"[option_index];
 #endif
 		switch (c) {
 #ifdef BCRELAY
@@ -230,6 +233,10 @@ int main(int argc, char **argv)
 		case 'v': /* --version */
 			showversion();
 			return 0;
+
+		case 'w': /* --logwtmp */
+		        pptp_logwtmp = TRUE;
+			break;
 
 		case 'o': /* --option */
 			if (pppdoptstr) free(pppdoptstr);
@@ -313,6 +320,10 @@ int main(int argc, char **argv)
 
 	if (!ppp_binary && read_config_file(configFile, PPP_BINARY_KEYWORD, tmp) > 0) {
 		ppp_binary = strdup(tmp);
+	}
+
+	if (!pptp_logwtmp && read_config_file(configFile, LOGWTMP_KEYWORD, tmp) > 0) {
+		pptp_logwtmp = TRUE;
 	}
 
 	if (!pid_file)

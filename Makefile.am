@@ -19,7 +19,7 @@ man_MANS = pptpctrl.8 pptpd.8 pptpd.conf.5
 
 EXTRA_DIST = README* ChangeLog* NEWS* TODO html samples $(man_MANS) \
 version reconf tools Makefile.uClinux config.embed.h pptpd.spec \
-makepackage
+makepackage plugins
 
 EXTRA_PROGRAMS = 
 sbin_PROGRAMS = pptpd pptpctrl bcrelay
@@ -40,6 +40,20 @@ pptpd_LDADD = $(XTRALIBS_MGR)
 pptpctrl_LDADD = $(XTRALIBS_CTRL)
 
 bcrelay_SOURCES = bcrelay.c defaults.h our_syslog.h our_getopt.h
+
+subdirs = plugins
+
+all-local:
+	for d in $(subdirs); do $(MAKE) $(MFLAGS) -C $$d all; done
+
+install-exec-local:
+	for d in $(subdirs); do $(MAKE) $(MFLAGS) -C $$d install; done
+
+clean-local:
+	for d in $(subdirs); do $(MAKE) $(MFLAGS) -C $$d clean; done
+
+uninstall-local:
+	for d in $(subdirs); do $(MAKE) $(MFLAGS) -C $$d uninstall; done
 
 package:
 	fakeroot dpkg-buildpackage -us -uc

@@ -1,11 +1,24 @@
+minor bug: plugins/Makefile installs to /usr/lib/pptpd instead of $(DESTDIR)
+
+review debian bug reports for pptpd package
+http://bugs.debian.org/pptpd
+
+20040428-0, important, bcrelay failure, >bcrelay[357]: mainloop:
+Error, sendto failed! (rv=-1, errno=6), per mailing list thread.
+
 package most recent vpnwho.pl, per bruno's mail.
 
 accept chris wilson's man page edits, per mail.
 
 feature: include debian packaging in upstream, use cvs-buildpackage.
 
-bug: terminating immediately on CALL_CLR_RQST from client (1.2.0-b3)
-may violate the RFC, but was done to fix some problem.
+20040426-0 bug: terminating immediately on CALL_CLR_RQST from client
+(1.2.0-b3) may violate the RFC, but was done to fix zombie pppd, Bruno
+will try older version to gather system state information to see why
+it happened, but there is indeed a design defect that doesn't reap
+(wait() on the PID of) the pppd it had previously forked.  it probably
+isn't right to simply kill() the pppd until it has had a chance to
+finish up, e.g. ip-down scripts.  context is pptpctrl.c
 
 minor bug: pptpctrl.c:302 (1.11) test for absolute file descriptor numbers.
 

@@ -1,4 +1,4 @@
-.TH PPTPCTRL 8 "24 April 2004"
+.TH PPTPCTRL 8 "28 April 2004"
 .SH NAME
 pptpctrl - PPTP control connection manager
 .SH SYNOPSIS
@@ -14,6 +14,9 @@ pptpctrl - PPTP control connection manager
 ]
 .RB [
 .IR ppp-binary
+]
+.RB [
+.IR pptp-logwtmp
 ]
 .SH DESCRIPTION
 .B pptpctrl
@@ -89,6 +92,11 @@ and passed to pptpctrl.
 ppp-binary
 if present, path to the PPP binary to use.  If omitted, the default
 value is used.
+.TP
+pptp-logwtmp
+if present, specifies whether 
+.BR wtmp (5)
+should be updated as users connect and disconnect.
 .SH FILES
 none.
 .SH AUTHORS

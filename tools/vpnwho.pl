@@ -1,4 +1,6 @@
 #!/usr/bin/perl
+# NOTE: superceded by --logwtmp feature, see ../README.logwtmp
+#
 # By Jason Collins-Webb (jason@rbaltd.co.uk)
 # usage: vpnwho
 #
