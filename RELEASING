@@ -4,7 +4,7 @@ Update version number in the following files
 	pptpd.spec
 	configure.in
 Run ./reconf
-tag (See README.cvs)
+tag (See README.cvs, e.g. cvs tag -F pptpd-1_2_0-b4)
 make dist
 md5sum
 gpg --detach-sign --armor
@@ -21,6 +21,10 @@ e) set configuration files for a tunnel, establish two tunnels, ping,
    ssh, scp 10Mb random data, close tunnel, re-establish, ping, close
    tunnels.
 f) "make uninstall"
+
+Packaging
+
+rpmbuild -ta pptpd-1.2.0-b4.tar.gz
 
 Source Forge
 

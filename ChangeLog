@@ -1,3 +1,12 @@
+Fri Jun  4 13:56:20 2004  James Cameron  <quozl@us.netrek.org>
+
+	* pptpd.init: warn that restart may cause problems, provide
+	restart-kill.  From: Peter Mueller.
+
+Tue May 25 11:35:49 2004  James Cameron  <quozl@us.netrek.org>
+
+	* pptpd-1.2.0-b4.tar.gz: released.
+
 Mon May 24 20:27:53 2004  James Cameron  <quozl@us.netrek.org>
 
 	* debian/copyright: fix spelling to fix lintian warning.

@@ -34,9 +34,18 @@ case "$1" in
   restart)
         $0 stop
         $0 start
+        echo "Warning: a pptpd restart does not terminate existing "
+        echo "connections, so new connections may be assigned the same IP "
+        echo "address and cause unexpected results.  Use restart-kill to "
+        echo "destroy existing connections during a restart."
+        ;;
+  restart-kill)
+        $0 stop
+        ps -ef | grep pptpd | grep -v grep | grep -v rc.d | awk '{print $2}' | uniq | xargs kill
+        $0 start
         ;;
   *)
-        echo "Usage: $0 {start|stop|restart|status}"
+        echo "Usage: $0 {start|stop|restart|restart-kill|status}"
         exit 1
 esac
 
