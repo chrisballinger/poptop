@@ -1,3 +1,11 @@
+Mon May 24 20:27:53 2004  James Cameron  <quozl@us.netrek.org>
+
+	* debian/copyright: fix spelling to fix lintian warning.
+	* debian/changelog: remove emacs stuff to fix lintian warning.
+	* pptpd.8: refer to pptpd.conf(5) early on, and remove EXAMPLES
+	section, as it contributes nothing.
+	* pptpd.conf.5: add documentation for firewall rules.
+
 Fri May 21 20:43:55 2004  James Cameron  <quozl@us.netrek.org>
 
 	* pptpd.spec: rework to build under rpm 4.0.4, depend on ppp >=

@@ -1,4 +1,4 @@
-.TH PPTPD 8 "29 April 2004"
+.TH PPTPD 8 "24 May 2004"
 .SH NAME
 pptpd - PPTP VPN daemon
 .SH SYNOPSIS
@@ -13,6 +13,11 @@ is the Poptop PPTP daemon, which manages tunnelled PPP connections
 encapsulated in GRE using the PPTP VPN protocol.  It may contain
 features like IP address management and TCP wrappers if compiled in.
 .SH OPTIONS
+
+Here we document the command line options.  See 
+.BR pptpd.conf (5)
+for configuration directives, IP address allocation, routing, and
+firewall rules.
 
 .TP
 \fB-b\fR|\fB--bcrelay \fIinternal-interface
@@ -93,23 +98,6 @@ as users connect and disconnect.  See
 .BR -v | --version
 displays the current version of the pptp daemon.
 
-.SH EXAMPLES
-.PP
-.B pptpd
-will start the Poptop PPTP VPN daemon (which will detach from the
-terminal and return immediately), using default options such as
-reading the configuration from
-.I /etc/pptpd.conf
-and noting the process ID in
-.IR /var/run/pptpd.pid .
-.PP
-.B "pptpd --debug -l 192.168.0.1 -fg -c /etc/pptpd.conf.test -p /etc/pptpd.pid"
-will start the Poptop PPTP VPN daemon, with debugging increased,
-listening on local interface 192.168.0.1, running in the foreground
-and using the config file
-.I /etc/pptpd.conf.test
-and recording the process ID in
-.IR /etc/pptpd.pid .
 .SH FILES
 /etc/pptpd.conf
 .br

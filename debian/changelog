@@ -166,7 +166,3 @@ pptpd (0.9.12-1) unstable; urgency=low
 
  -- Rene Mayrhofer <rmayr@vianova.at>  Tue, 24 Aug 1999 08:05:10 +0200
 
-Local variables:
-mode: debian-changelog
-add-log-mailing-address: "rmayr@vianova.at"
-End:

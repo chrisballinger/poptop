@@ -18,7 +18,8 @@ detecting "Serial line is looped back."  Subsequent connection
 attempts work fine.  Can be reproduced on a 266MHz Pentium II if
 memory is first purged with "dd < /dev/zero > tmp".
 
-20040521-0, 1.2.0-b3, write bcrelay man page.
+20040521-0, 1.2.0-b3, write bcrelay man page.  (Debian lintian for
+pptpd 1.1.4-0b4-1)
 
 feature: nuke prior login by user, using pppd plugin.
 

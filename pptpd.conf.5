@@ -1,4 +1,4 @@
-.TH PPTPD.CONF 5 "29 April 2004"
+.TH PPTPD.CONF 5 "24 May 2004"
 .SH NAME
 .B pptpd.conf
 - PPTP VPN daemon configuration
@@ -198,6 +198,22 @@ corresponding to the server.  The LAN need not have an explicit route
 to the clients.
 .BR bcrelay (8)
 will be required to support broadcast protocols such as NETBIOS.
+
+.SH FIREWALL RULES
+.BR pptpd (8)
+accepts control connections on TCP port 1723, and then uses GRE
+(protocol 47) to exchange data packets.  Add these rules to your
+.BR iptables (8)
+configuration, or use them as the basis for your own rules:
+.P
+iptables --append INPUT --protocol 47 --jump ACCEPT 
+.br
+.nf
+iptables --append INPUT --protocol tcp --match tcp \\
+.br
+         --destination-port 1723 --jump ACCEPT 
+.fi
+.P
 
 .SH "SEE ALSO"
 .BR pppd (8),
