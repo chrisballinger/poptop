@@ -1,4 +1,7 @@
 #!/bin/sh
+echo "build.sh: superceded by makepackage"
+exit 1
+
 POPTOPVERSION=`./version`
 CURRENTDIR=`pwd`
 THISDIR=${CURRENTDIR##*/}

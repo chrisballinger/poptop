@@ -16,13 +16,12 @@ else
 fi
 
 version=$(./version)
-ver=$(echo $version | cut -d "-" -f1)
 
 if [ "$DISTRO" == "RedHat" ]; then
- mkdir -p /tmp/pptpd-$ver
- cp -ar * /tmp/pptpd-$ver/
+ mkdir -p /tmp/pptpd-$version
+ cp -ar * /tmp/pptpd-$version/
  cd /tmp
- tar -czf /usr/src/redhat/SOURCES/pptpd-$version.tar.gz pptpd-$ver
+ tar -czf /usr/src/redhat/SOURCES/pptpd-$version.tar.gz pptpd-$version
  cd -
  rpmbuild -ba pptpd.spec
 elif [ "$DISTRO" == "Debian" ]; then
@@ -35,4 +34,3 @@ elif [ "$DISTRO" == "Debian" ]; then
 else
  echo "No packagebuilder implemented yet."
 fi
-

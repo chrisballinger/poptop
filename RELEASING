@@ -3,7 +3,7 @@ Files to update version number in
 	pptpd.spec
 	configure.in
 
-Run ./reconf to propogate version, which also runs automake, autoconf
+Run ./reconf
 
 make dist
 

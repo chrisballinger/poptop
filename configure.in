@@ -242,14 +242,4 @@ else
   echo 'IP tunneling server (PAC).'
 fi
 
-echo '==============================================================================='
-
-if test -f /usr/local/bin/pptpd
-then
-  echo 'WARNING*WARNING*WARNING*WARNING*WARNING*WARNING*WARNING*WARNING*WARNING*WARNING'
-  echo 'WARNING The location of pptpd has changed - please manually delete the  WARNING'
-  echo 'WARNING old /usr/local/bin/pptpd and pptpctrl (and maybe others) - NOW! WARNING'
-  echo 'WARNING*WARNING*WARNING*WARNING*WARNING*WARNING*WARNING*WARNING*WARNING*WARNING'
-fi
-
 AC_OUTPUT(Makefile)

@@ -1,3 +1,43 @@
+Fri Apr 23 20:00:02 2004  James Cameron  <quozl@us.netrek.org>
+
+	* stamp-h, config.h: remove from CVS.
+	
+	* import: remove huge superfluous screen snapshot that was slowing
+	CVS access.
+
+	* .cvsignore: update for new build environment, include everything
+	that might normally be in a user directory checked out from CVS.
+
+	* samples/options: not relevant, removed.
+
+	* tools/confmod.sh: mark as obsolete, relevant only for ppp-2.4.1
+	forks.
+
+	* reconf, version: adjust comments.
+
+	* pptpd.spec: include vpnwho.pl (old version at this stage until
+	Bruno finds me the latest version) in the RPM packaging.
+
+	* pptpd.conf.5, pptpd.8: expand acronymn DOS.
+
+	* pptpctrl.8: add note that speed is ineffective on Linux.
+
+	* makepackage: use complete version, including beta release, as
+	part of the packaging; don't hide the beta release version.
+
+	* configure.in: remove warning about /usr/local/bin/pptpd, since
+	/usr/local/bin is locally administered; we have no right to warn,
+	we may have been responsible even in this version for placing the
+	file there.
+
+	* Anon-CVS-Root: obsolete, removed.
+	
+	* build.sh: obsolete build.sh
+
+	* README.bcrelay: wrap to 80 columns.
+
+	* README: rework for new release.
+
 Fri Apr 23 17:05:23 2004  James Cameron  <quozl@us.netrek.org>
 
 	* makerpm: remove from CVS in favour of makepackage per Richard's

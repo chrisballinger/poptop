@@ -84,6 +84,7 @@ install -m 0644 samples/options.pptpd $RPM_BUILD_ROOT/etc/ppp/options.pptpd
 install -m 0755 tools/vpnuser $RPM_BUILD_ROOT/usr/bin/vpnuser
 install -m 0755 tools/vpnstats $RPM_BUILD_ROOT/usr/bin/vpnstats
 install -m 0755 tools/vpnstats.pl $RPM_BUILD_ROOT/usr/bin/vpnstats.pl
+install -m 0755 tools/vpnwho.pl $RPM_BUILD_ROOT/usr/bin/vpnwho.pl
 install -m 0755 tools/confmod.sh $RPM_BUILD_ROOT/usr/bin/confmod.sh
 mkdir -p $RPM_BUILD_ROOT/usr/man/man5
 mkdir -p $RPM_BUILD_ROOT/usr/man/man8
@@ -125,6 +126,7 @@ rm -rf $RPM_BUILD_ROOT
 /usr/bin/vpnuser
 /usr/bin/vpnstats
 /usr/bin/vpnstats.pl
+/usr/bin/vpnwho.pl
 /usr/man/man5/pptpd.conf.5*
 /usr/man/man8/pptpd.8*
 /usr/man/man8/pptpctrl.8*
@@ -133,6 +135,8 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) /etc/ppp/options.pptpd
 
 %changelog
+* Fri Apr 23 2004 James Cameron <james.cameron@hp.com>
+- include vpnwho.pl
 * Thu Apr 22 2004 James Cameron <james.cameron@hp.com>
 - change description wording
 - change URL for upstream
