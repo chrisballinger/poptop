@@ -1,3 +1,9 @@
+Thu Dec 23 09:17:29 2004  James Cameron  <quozl@us.netrek.org>
+
+	* samples/options.pptpd: turn off logging to stderr by default, to
+	prevent loopback detected.  From: Andrew Hall
+	<ahall@sportingstatz.com>
+
 Thu Nov 11 14:20:18 2004  James Cameron  <quozl@us.netrek.org>
 
 	* pptpd.spec: allows the RPM to be built on Red Hat Enterprise

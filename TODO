@@ -35,6 +35,7 @@ NOTES section of 'man 2 wait').  Workaround activated."
 20040521-3, 1.2.0-b3, possible related to 20040521-1, connection to a
 busy pptpd host shows many packets from the client being echoed back
 unprocessed, until the first packet emitted by pppd.
+[20041222, perhaps this is fixed by nologfd]
 
 20040521-2, 1.2.0-b3, with ppp 2.4.2, pptpd reports "GRE: Bad checksum
 from pppd" once or twice.
@@ -45,7 +46,9 @@ openpty(), pppd fails with "Failed to open /dev/pts/0: No such file or
 directory", and the remote client receives every packet back, quickly
 detecting "Serial line is looped back."  Subsequent connection
 attempts work fine.  Can be reproduced on a 266MHz Pentium II if
-memory is first purged with "dd < /dev/zero > tmp".
+memory is first purged with "dd < /dev/zero > tmp".  [20041222, if this is due
+to a reference counter failure, per George Ross, then we should be able to
+reproduce it easily in a test framework.]
 
 20040521-0, 1.2.0-b3, write bcrelay man page.  (Debian lintian for
 pptpd 1.1.4-0b4-1)  [JJ]

@@ -1,5 +1,5 @@
 ###############################################################################
-# $Id: options.pptpd,v 1.5 2004/04/23 07:11:33 quozl Exp $
+# $Id: options.pptpd,v 1.6 2004/12/22 22:39:30 quozl Exp $
 #
 # Sample Poptop PPP options file /etc/ppp/options.pptpd
 # Options used by PPP when a connection arrives from a client.
@@ -102,3 +102,7 @@ lock
 
 # Disable BSD-Compress compression
 nobsdcomp 
+
+# turn off logging to stderr, since this may be redirected to pptpd
+nologfd
+
