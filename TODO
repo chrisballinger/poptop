@@ -1,10 +1,28 @@
+This is the pptpd project TODO list.
+
+(Note: tasks that are probably easy are marked with a [JJ], which
+means Junior Jobs, following the KDE tradition suggested by Adriaan de
+Groot in May 2004.)
+
+20041108-0, 1.2.1, vpnstats does not parse RHEL3 log output
+successfully.  It also creates a cron.weekly entry that is not removed
+when the package is removed.  Yet to test if vpnstats.pl works okay.
+[JJ]
+
+20040831-0, 1.2.1, when preparing source for distribution (e.g. using
+reconf script), use an antique version of automake, requested by
+Charlie Brady on poptop-server mailing list, for compatibility with
+antique distribution versions like RH7.3 and RHEL3.  (Review, perhaps
+reject on the grounds that it is a packaging issue and use of very old
+distributions).  [JJ]
+
 20040811-0, 1.2.1, inconsistency in timers with RFC2637, IDLE_WAIT should be 60
 but is 65, MAX_ECHO_WAIT should be 60 but is 5, in pptpdefs.h, make these
-configurable, requested by Tobias Brox.
+configurable, requested by Tobias Brox.  [JJ]
 
 20040623-0, 1.2.1, "Plugin /usr/lib/pptpd/pptpd-logwtmp.so is for pppd
 version 2.4.2, this is 2.4.3" happens if pppd 2.4.3 is installed, or
-vice versa if 2.4.2 is installed.
+vice versa if 2.4.2 is installed.  [JJ]
 
 20040525-0, 1.2.0-b4, "configure: WARNING: `missing' script is too
 old or missing"
@@ -30,9 +48,9 @@ attempts work fine.  Can be reproduced on a 266MHz Pentium II if
 memory is first purged with "dd < /dev/zero > tmp".
 
 20040521-0, 1.2.0-b3, write bcrelay man page.  (Debian lintian for
-pptpd 1.1.4-0b4-1)
+pptpd 1.1.4-0b4-1)  [JJ]
 
-feature: nuke prior login by user, using pppd plugin.
+feature: nuke prior login by user, by writing a new pppd plugin.
 
 feature: prevent login by user if prior login still in progress, using
 pppd plugin that captures old hook and re-uses it, during chap auth.

@@ -1,6 +1,6 @@
 %define name pptpd
 %define ver 1.2.1
-%define rel 1
+%define rel 2
 %define prefix /usr
 %define buildlibwrap 1
 %define buildbsdppp 0
@@ -46,7 +46,6 @@ connect to an internal firewalled network using their dialup.
 %prep
 
 %setup -q -n pptpd-%{ver}
-aclocal
 
 %build
 buildopts=""
@@ -76,12 +75,12 @@ rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT/etc/rc.d/init.d
 mkdir -p $RPM_BUILD_ROOT/etc/ppp
 mkdir -p $RPM_BUILD_ROOT/usr/bin/
-make prefix=$RPM_BUILD_ROOT%{prefix} install
+make prefix=$RPM_BUILD_ROOT%{prefix} INSTALL=install install
 install -m 0755 pptpd.init $RPM_BUILD_ROOT/etc/rc.d/init.d/pptpd
 install -m 0644 samples/pptpd.conf $RPM_BUILD_ROOT/etc/pptpd.conf
 install -m 0644 samples/options.pptpd $RPM_BUILD_ROOT/etc/ppp/options.pptpd
 install -m 0755 tools/vpnuser $RPM_BUILD_ROOT/usr/bin/vpnuser
-install -m 0755 tools/vpnstats $RPM_BUILD_ROOT/usr/bin/vpnstats
+#install -m 0755 tools/vpnstats $RPM_BUILD_ROOT/usr/bin/vpnstats
 install -m 0755 tools/vpnstats.pl $RPM_BUILD_ROOT/usr/bin/vpnstats.pl
 install -m 0755 tools/pptp-portslave $RPM_BUILD_ROOT/usr/sbin/pptp-portslave
 mkdir -p $RPM_BUILD_ROOT/usr/man/man5
@@ -116,12 +115,13 @@ rm -rf $RPM_BUILD_ROOT
 %doc AUTHORS COPYING INSTALL README* TODO ChangeLog* samples
 /usr/sbin/pptpd
 /usr/sbin/pptpctrl
+/usr/sbin/pptp-portslave
 %if %{buildbcrelay}
 /usr/sbin/bcrelay
 %endif
 /usr/lib/pptpd/pptpd-logwtmp.so
 /usr/bin/vpnuser
-/usr/bin/vpnstats
+#/usr/bin/vpnstats
 /usr/bin/vpnstats.pl
 /usr/man/man5/pptpd.conf.5*
 /usr/man/man8/pptpd.8*
@@ -131,6 +131,9 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) /etc/ppp/options.pptpd
 
 %changelog
+* Thu Nov 11 2004 James Cameron <james.cameron@hp.com>
+- adjust for building on Red Hat Enterprise Linux, per Charlie Brady
+- remove vpnstats, superceded by vpnstats.pl
 * Fri May 21 2004 James Cameron <james.cameron@hp.com>
 - adjust for packaging naming and test
 * Fri Apr 23 2004 James Cameron <james.cameron@hp.com>
