@@ -70,11 +70,13 @@ RANLIB = @RANLIB@
 VERSION = @VERSION@
 XTRALIBS_CTRL = @XTRALIBS_CTRL@
 XTRALIBS_MGR = @XTRALIBS_MGR@
+XTRA_PROG = @XTRA_PROG@
 
 AUTOMAKE_OPTIONS = no-dependencies foreign
 
 INCLUDES = -I.
-CFLAGS = -O2 -fno-builtin -Wall -ansi -DSBINDIR='"$(sbindir)"'
+CFLAGS = -O2 -fno-builtin -Wall -DSBINDIR='"$(sbindir)"'
+#CFLAGS = -O2 -fno-builtin -Wall -ansi -DSBINDIR='"$(sbindir)"'
 #CFLAGS = -O2 -fno-builtin -Wall -ansi -pedantic -Wmissing-prototypes -Werror -DSBINDIR='"$(sbindir)"'
 
 man_MANS = pptpctrl.8 pptpd.8 pptpd.conf.5
@@ -84,13 +86,14 @@ EXTRA_DIST = README.inetd README.slirp ChangeLog-0.8 \
 	CVS html samples $(man_MANS)
 
 
-sbin_PROGRAMS = pptpd pptpctrl
+EXTRA_PROGRAMS = 
+sbin_PROGRAMS = pptpd pptpctrl $(XTRA_PROG)
 
 # Header files are only used to determine what to put in a distribution, not
 # for dependencies, so just attribute them all to pptpd.
 
 pptpd_SOURCES = \
-	pptpd.c configfile.c pptpmanager.c compat.c getopt.c getopt1.c \
+	pptpd.c configfile.c pptpmanager.c compat.c inststr.c getopt.c getopt1.c \
 	compat.h configfile.h ctrlpacket.h defaults.h inststr.h our_getopt.h \
 	our_syslog.h ppphdlc.h pptpctrl.h pptpdefs.h pptpgre.h pptpmanager.h
 
@@ -106,7 +109,7 @@ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = config.h
 CONFIG_CLEAN_FILES = 
-sbin_PROGRAMS =  pptpd$(EXEEXT) pptpctrl$(EXEEXT)
+sbin_PROGRAMS =  pptpd$(EXEEXT) pptpctrl$(EXEEXT) @XTRA_PROG@
 PROGRAMS =  $(sbin_PROGRAMS)
 
 
@@ -115,8 +118,8 @@ CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
 pptpd_OBJECTS =  pptpd.$(OBJEXT) configfile.$(OBJEXT) \
-pptpmanager.$(OBJEXT) compat.$(OBJEXT) getopt.$(OBJEXT) \
-getopt1.$(OBJEXT)
+pptpmanager.$(OBJEXT) compat.$(OBJEXT) inststr.$(OBJEXT) \
+getopt.$(OBJEXT) getopt1.$(OBJEXT)
 pptpd_DEPENDENCIES = 
 pptpd_LDFLAGS = 
 pptpctrl_OBJECTS =  pptpctrl.$(OBJEXT) ctrlpacket.$(OBJEXT) \
@@ -485,32 +488,34 @@ dist-hook:
 		cp -pf $(srcdir)/Anon-CVS-Root $$file ; \
 	done
 
-compat.o: compat.c config.h compat.h our_syslog.h
+bcrelay.o: bcrelay.c our_syslog.h
 
-configfile.o: configfile.c config.h defaults.h configfile.h
+compat.o: compat.c config.h compat.h our_syslog.h inststr.h
+
+configfile.o: configfile.c config.h defaults.h configfile.h our_syslog.h
 
 ctrlpacket.o: ctrlpacket.c config.h our_syslog.h pptpdefs.h pptpctrl.h \
- ctrlpacket.h compat.h
-
-getopt.o: getopt.c config.h our_getopt.h
+  ctrlpacket.h compat.h
 
 getopt1.o: getopt1.c config.h our_getopt.h
+
+getopt.o: getopt.c config.h our_getopt.h
 
 inststr.o: inststr.c config.h inststr.h compat.h
 
 ppphdlc.o: ppphdlc.c config.h ppphdlc.h
 
-pptpctrl.o: pptpctrl.c config.h our_syslog.h inststr.h compat.h \
- pptpctrl.h pptpgre.h pptpdefs.h ctrlpacket.h defaults.h
+pptpctrl.o: pptpctrl.c config.h our_syslog.h compat.h pptpctrl.h \
+  pptpgre.h pptpdefs.h ctrlpacket.h defaults.h
 
-pptpd.o: pptpd.c config.h our_syslog.h configfile.h defaults.h \
- compat.h our_getopt.h pptpmanager.h
+pptpd.o: pptpd.c config.h our_syslog.h our_getopt.h configfile.h \
+  defaults.h compat.h pptpmanager.h
 
-pptpgre.o: pptpgre.c config.h our_syslog.h ppphdlc.h pptpgre.h \
- pptpdefs.h defaults.h compat.h
+pptpgre.o: pptpgre.c config.h our_syslog.h ppphdlc.h pptpgre.h pptpdefs.h \
+  defaults.h compat.h
 
 pptpmanager.o: pptpmanager.c config.h our_syslog.h configfile.h \
- defaults.h pptpctrl.h pptpdefs.h pptpmanager.h compat.h
+  defaults.h pptpctrl.h pptpdefs.h pptpmanager.h compat.h
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

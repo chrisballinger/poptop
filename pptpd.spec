@@ -1,11 +1,12 @@
 %define name pptpd
-%define ver 1.1.3
-%define rel 3
+%define ver 1.1.4
+%define rel 1b2
 %define prefix /usr
 %define buildlibwrap 1
 %define buildbsdppp 0
 %define buildslirp 0
 %define buildipalloc 0
+%define buildbcrelay 1
 %define buildpnsmode 0
 
 Summary: A PPTP server daemon started from init (/etc/rc.d/init.d/).
@@ -15,9 +16,10 @@ Release: %{rel}
 Copyright: GPL
 Group: Networking/Daemons
 Packager: R. de Vroede <r.devroede@linvision.com>
-Source0: %{name}-%{ver}.tar.gz
+Source0: %{name}-%{ver}-%{rel}.tar.gz
 URL: http://www.poptop.org
 Buildroot: %{_tmppath}/%{name}-root
+Requires: ppp-mppe >= 2.4.1-7
 
 %description
 PPTPd, Point-to-Point Tunnelling Protocol Daemon, offers out
@@ -35,11 +37,13 @@ similar to other C/S protocols.
 %{?_without_bsdppp: %{expand: %%define buildbsdppp 0}}
 %{?_without_slirp: %{expand: %%define buildslirp 0}}
 %{?_without_ipalloc: %{expand: %%define buildipalloc 0}}
+%{?_without_bcrelay: %{expand: %%define buildbcrelay 0}}
 %{?_without_pnsmode: %{expand: %%define buildpnsmode 0}}
 %{?_with_libwrap: %{expand: %%define buildlibwrap 1}}
 %{?_with_bsdppp: %{expand: %%define buildbsdppp 1}}
 %{?_with_slirp: %{expand: %%define buildslirp 1}}
 %{?_with_ipalloc: %{expand: %%define buildipalloc 1}}
+%{?_with_bcrelay: %{expand: %%define buildbcrelay 1}}
 %{?_with_pnsmode: %{expand: %%define buildpnsmode 1}}
 
 %prep
@@ -60,6 +64,9 @@ buildopts="$buildopts --with-slirp"
 %endif
 %if %{buildipalloc}
 buildopts="$buildopts --with-pppd-ip-alloc"
+%endif
+%if %{buildbcrelay}
+buildopts="$buildopts --with-bcrelay"
 %endif
 %if %{buildpnsmode}
 buildopts="$buildopts --with-pns-mode"
@@ -88,26 +95,34 @@ install -m 0644 pptpctrl.8 $RPM_BUILD_ROOT/usr/man/man8/pptpctrl.8
 strip $RPM_BUILD_ROOT/%{prefix}/sbin/* || :
 
 %post
+/usr/bin/confmod.sh
 OUTD="" ; for i in d manager ctrl ; do
     test -x /sbin/pptp$i && OUTD="$OUTD /sbin/pptp$i" ;
 done
 test -z "$OUTD" || \
 { echo "possible outdated executable detected; you should do run the following command:"; echo "rm -i $OUTD" ;}
 /sbin/chkconfig --add pptpd
-/sbin/chkconfig pptpd on
+/sbin/chkconfig --level 345 pptpd on
 
 %preun
 /sbin/chkconfig --del pptpd
+
+%clean
+rm -rf $RPM_BUILD_DIR/%{name}-%{ver}
+rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root)
 %doc AUTHORS COPYING INSTALL README* TODO html samples
 /usr/sbin/pptpd
 /usr/sbin/pptpctrl
+%if %{buildbcrelay}
+/usr/sbin/bcrelay
+%endif
+/usr/bin/confmod.sh
 /usr/bin/vpnuser
 /usr/bin/vpnstats
 /usr/bin/vpnstats.pl
-/usr/bin/confmod.sh
 /usr/man/man5/pptpd.conf.5*
 /usr/man/man8/pptpd.8*
 /usr/man/man8/pptpctrl.8*
@@ -116,15 +131,12 @@ test -z "$OUTD" || \
 %config(noreplace) /etc/ppp/options.pptpd
 
 %changelog
-* Thu Dec 26 2002 Arnt Karlsen <arnt@c2i.net>
-- Put in "aclocal" to get this built on Red Hat 8.0
+* Fri Oct 11 2002 Richard de Vroede <richard@linvision.com
+- updated to 1.1.4 (with bcrelay)
 
-* Mon Nov 25 2002 Richard de Vroede <richard@linvision.com>
-- Took out the module conf stuff. This belongs in the kernel section.
-
-* Sun Nov 24 2002 Nico Kadel-Garcia <nkadel@verizon.net>
-- Pull out customizations of SPEC file, use RPM standard locations
-- for compatibility with RedHat 7.3
+* Wed Oct  9 2002 Richard de Vroede <richard@linvision.com
+- added release version to tarball
+- isolated script for editing /etc/modules.conf
 
 * Thu Aug 22 2002 Richard de Vroede <richard@linvision.com>
 - added stimeout option to pptpd.conf manpage
@@ -180,4 +192,3 @@ test -z "$OUTD" || \
 - updated source to 0.9.10
 - built to be included into Powertools
 - spec based heavily on spec by "Allan's Package-O-Matic Blenderfier"
-

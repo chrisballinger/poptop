@@ -1,7 +1,7 @@
 AC_INIT(reconf)
 
 AM_CONFIG_HEADER(config.h)
-AM_INIT_AUTOMAKE(pptpd,1.1.3)
+AM_INIT_AUTOMAKE(pptpd,1.1.4)
 AC_PROG_CC
 AC_PROG_RANLIB
 AC_PROG_INSTALL
@@ -139,6 +139,11 @@ AC_ARG_WITH(pppd-ip-alloc,
 	[ AC_DEFINE(PPPD_IP_ALLOC)
 	  PPPD_IP_ALLOC=yes ])
 
+AC_ARG_WITH(bcrelay,
+	[  --with-bcrelay          Enable broadcast relay function ],
+	[ AC_DEFINE(BCRELAY)
+	  BCRELAY=yes ])
+
 AC_ARG_WITH(pns-mode,
 	[  --with-pns-mode         Option is NOT FUNCTIONAL YET ],
 	[ AC_DEFINE(PNS_MODE)
@@ -174,6 +179,15 @@ if test "$BSDUSER_PPP" = "yes"; then
   fi
 fi
 
+if test "$BCRELAY" = "yes"; then
+  if test "$BCRELAY" = "yes"; then
+    XTRA_PROG="bcrelay"
+    true
+  else
+    echo "No BCrelay selected." 1>&2
+  fi
+fi
+
 if test "$PNS_MODE" = "yes"; then
   if test "$PPPD_IP_ALLOC" = "yes"; then
     true
@@ -183,6 +197,8 @@ if test "$PNS_MODE" = "yes"; then
     PPPD_IP_ALLOC = yes
   fi
 fi
+
+AC_SUBST(XTRA_PROG)
 
 echo '==============================================================================='
 
@@ -207,6 +223,13 @@ fi
 
 echo -n '   LIBWRAP security:   '
 if test "$LIBWRAP" = "yes"; then
+  echo 'Yes.'
+else
+  echo 'No.'
+fi
+
+echo -n '   Broadcast Relay:    '
+if test "$BCRELAY" = "yes"; then
   echo 'Yes.'
 else
   echo 'No.'

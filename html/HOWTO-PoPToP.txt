@@ -1,7 +1,7 @@
 PoPToP HOWTO/FAQ
 ----------------
-Last Updated: 19990813
-Send changes to: Matthew Ramsay <matthewr@lineo.com>
+Last Updated: 20021024
+Send changes to: Richard de Vroede <r.devroede@linvision.com>
 
 HOWTO/FAQ mostly compiled from PoPToP help pages and the PoPToP Mailing List
 (hosted by Christopher Schulte) by Matthew Ramsay. Large contributions from
@@ -46,137 +46,42 @@ Vidal, Harald Vogt and Ron O'Hara.
 And finally, credit to all the PoPToP followers who test and report
 problems.
 
+1.3 PopToP migrating from poptop.lineo.com
+March 18, 2002
+
+The main PoPToP developers left Lineo with the SnapGear spin-out. The ball 
+is being picked up by Daniel Djamludin. PoPToP has been actively developed 
+within SnapGear and a number of improvements need to be rolled out.
+
+Henceforth from this sentence onwards you should refer to "PoPToP" as 
+"Poptop" for ease of use and typing.
+
+Lineo have been asked to forward poptop.lineo.com to poptop.sourceforge.net
+
+The sources are being gathered to go into CVS, new binaries and dev images will follow.
+
+Source Forge looks like the best neutral ground to smooth out future upheavals.
+
 
 2.0 System Requirements
 -----------------------
 1. A modern Linux distribution (such as Debian, Red Hat, etc.) with a recent
-	kernel (2.2.x recommended, 2.0.x should be ok). Note: ports exist for
+	kernel (2.4.x recommended, 2.2.x should be ok). Note: ports exist for
 	Solaris, BSD and others but are not supported in this HOWTO at this
 	time.
-2. PPP 2.3.8 (and the MSCHAPv2/MPPE patch if you want enhanced Microsoft
+2. PPP (2.4.1 recommended, 2.3.11 should be ok)
+	(and the MSCHAPv2/MPPE patch if you want enhanced Microsoft
 	compatible authentication and encryption).
-3. PoPToP v0.9.11 (or download the latest release at:
-	http://www.moretonbay.com/vpn/download_pptp.html
+3. PoPToP v1.1.3 (or download the latest release at:
+	http://sourceforge.net/projects/poptop
 
 
-3.0 PPP (and MSCHAP/MPPE) Installation
---------------------------------------
-It is only necessary to use PPP 2.3.8 if you want Microsoft compatible
-MSCHAPv2/MPPE authentication and encryption. The reason for this is that
-the MSCHAPv2/MPPE patch currently supplied (19990813) is against PPP 2.3.8.
-If you don't need Microsoft compatible authentication/encryption any 2.3.x
-PPP source will be fine.
-
-Assuming you want Microsoft compatible authentication/encryption follow
-these steps:
-
-Note: [] are example commands to run
-
-1. Grab yourself a clean copy of the PPP deamon v2.3.8 (ppp-2.3.8.tar.gz).
-	I usually go here for my PPP files: ftp://cs.anu.edu.au/pub/software/ppp/
-	Note: You must get the tarball (tar.gz) and *not* the RPM.
-2. Grab youself the MSCHAP/MPPE diff file from:
-	http://www.moretonbay.com/vpn/releases/ppp-2.3.8-mppe-others-norc4_TH7.diff.gz
-3. Grab yourself the SSLeay-0.6.6b file from:
-	ftp://ftp.psy.uq.oz.au/pub/Crypto/SSL/SSLeay-0.6.6b.tar.gz
-4. You should now have 3 files:
-		ppp-2.3.8.tar.gz
-		ppp-2.3.8-mppe-others-norc4_TH7.diff.gz
-		SSLeay-0.6.6b.tar.gz
-	Copy these files to your preferred location (I prefer /usr/local/src/)
-5. Assuming your files are in /usr/local/src/ and your current working
-	directory is also /usr/local/src/ do the following:
-		[tar zxvf ppp-2.3.8.tar.gz]
-		[gunzip ppp-2.3.8-mppe-others-norc4_TH7.diff.gz]
-		[tar zxvf SSLeay-0.6.6b.tar.gz]
-		[cp SSLeay-0.6.6b/crypto/rc4/rc4.h ppp-2.3.8/linux/]
-		[cp SSLeay-0.6.6b/crypto/rc4/rc4_enc.c ppp-2.3.8/linux/]
-		[patch -p0 < ppp-2.3.8-mppe-others-norc4_TH7.diff]
-		[cd ppp-2.3.8]
-6. The files should now all be in place and we are ready to compile PPP.
-	Follow these steps to compile it:
-		[./configure]
-		[cd linux]
-		[./kinstall.sh]
-		[cd ..]
-		[make]
-		[cp pppd/pppd /usr/sbin/]
-		[cd /usr/src/linux]
-		[make modules SUBDIRS=drivers/net]
-		[make modules_install]
-		[rmmod ppp]
-		[insmod ppp]
-		[insmod ppp_mppe]
-7. The new PPP daemon should now be correctly installed. You now need to
-	update some of your configuration files:
-	Here is an example PPP options file (/etc/ppp/options):
-		lock
-		debug
-		auth
-		+chap
-		+chapms
-		+chapms-v2
-		mppe-40
-		mppe-128
-		mppe-stateless
-
-	Here is an example chap-secrets file (/etc/ppp/chap-secrets)
-		username * password *
-
-
-4.0 PoPToP Installation
+3.0 PoPToP Installation
 -----------------------
-Follow these instructions to install PoPToP:
-
-1. Grab the latest version of PoPToP (v0.9.11 as of 19990813)
-	(http://www.moretonbay.com/vpn/download_pptp.html)
-2. You will need to be root to install and run PoPToP.
-3a. If you downloaded the PoPToP v0.9.11 tarball (and stored it in
-	/usr/local/src/) follow these instructions:
-		[cd /usr/local/src/]
-		[tar zxvf pptpd-0.9.11.tgz]
-		[cd pptpd-0.9.11]
-		[./configure]
-		[make]
-		[make install]
-3b. If you downloaded the PoPToP RPM (pptpd-0.9.9-1.i386.rpm as of 19990813)
-	follow these instructions:
-		[rpm --install pptpd-0.9.9-1.i386.rpm]
-4. Note: PoPToP's binaries are located in /usr/local/sbin. PoPToP goes
-	looking for its binaries in that directory! So if they are not there it
-	won't work! Check that there is 'pptpd' and 'pptpctrl' in /usr/local/sbin/
-	now.
-5. If you want to enable debugging follow these steps:
-	Change directory to /etc/ and open up syslog.conf. Add the line:
-		daemon.debug /var/log/pptpd.log
-	Kill off the current syslogd and start a new one:
-		[killall syslogd]
-		[/usr/sbin/syslogd]
-6. Make sure the following files exist and look similar to:
-         /etc/ppp/options
-              debug
-              name servername
-              auth
-              require-chap
-              proxyarp
-
-         /etc/pptpd.conf 
-              speed 115200
-              localip 192.168.0.234-238
-              remoteip 192.168.1.234-238
-
-         /etc/ppp/chap-secrets 
-              billy   servername      bob     *
-
-7. You are now ready to launch PoPToP. If you want to launch PoPToP now:
-	[/usr/local/sbin/pptpd]
-
-Note: If you can't connect for some reason open up /var/log/pptpd.log and
-search for any error messages. If that doesn't help read the FAQ (below) or
-as a last resort send a message to the mailing list.
+Check out the documentation at http://sourceforge.net/docman/?group_id=44827
 
 
-5.0 Windows Client Setup
+4.0 Windows Client Setup
 ------------------------
 
 Install it using the add-remove programs tool. Go to windows->communications
@@ -226,7 +131,7 @@ Once your Machine is back
 Note that the Win95 routine is similar but requires Dial Up Networking Update 1.3 (free from Microsoft) to be installed first. 
 
 
-6.0 FAQ
+5.0 FAQ
 -------
 
 Q&A.
@@ -295,12 +200,18 @@ version.
 Then I spent a whole day trying to figure out why data encryption does
 not work.  I tried just about everything I could think of that could be
 wrong.  That's when I discovered this archive, for which I am truly
-grateful.  It turns out that the Win98 implementation of encrytpion is
+grateful.  It turns out that the Win9x implementation of encrytpion is
 FUBAR!  You have to download one of those patches from Microsoft,
-DUN40.exe to get the thing to work.  This is for 40 bit encryption.
-Don't hold your breath waiting for 128 bit.
+MSDUN 1.4 to get the thing to work. 
 
-ftp://ftp.microsoft.com/softlib/mslfiles/dun40.exe
+Windows 95
+http://download.microsoft.com/download/win95/Update/17648/W95/EN-US/dun14-95.exe
+
+Windows 98
+http://download.microsoft.com/download/win98/Update/17648/W98/EN-US/dun14-98.exe
+
+Windows 98se
+http://download.microsoft.com/download/win98SE/Update/17648/W98/EN-US/dun14-SE.exe
 
 
 FIREWALL CONFIGURATION

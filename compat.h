@@ -3,7 +3,7 @@
  *
  * Compatibility functions for different OSes (prototypes)
  *
- * $Id: compat.h,v 1.1 2002/06/21 08:51:55 fenix_nl Exp $
+ * $Id: compat.h,v 1.2 2003/02/06 15:59:57 fenix_nl Exp $
  */
 
 #ifndef _PPTPD_COMPAT_H
@@ -11,6 +11,12 @@
 
 #if HAVE_CONFIG_H
 #include "config.h"
+#endif
+
+#if HAVE_SETSID
+#define SETSIDPGRP setsid
+#else
+#define SETSIDPGRP setpgrp
 #endif
 
 #include <sys/types.h>
@@ -50,5 +56,8 @@ extern int openpty(int *, int *, char *, void *, void *);
 #ifndef HAVE_STRERROR
 extern char *strerror(int);
 #endif
+
+extern void my_setproctitle(int argc, char **argv, const char *format, ...)
+       __attribute__ ((format (printf, 3, 4)));
 
 #endif	/* !_PPTPD_COMPAT_H */
