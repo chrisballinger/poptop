@@ -1,3 +1,10 @@
+Thu Apr 29 19:49:59 2004  James Cameron  <quozl@us.netrek.org>
+
+	* plugins/pptpd-logwtmp.c (ip_up): use the username that was
+	authenticated from the peer_authname variable rather than the
+	local host name hiding in the user variable.
+	Reported by: Pawel Guraj.
+
 Thu Apr 29 16:56:05 2004  James Cameron  <quozl@us.netrek.org>
 
 	* ctrlpacket.c (deal_out_call): print connection speed properly.
