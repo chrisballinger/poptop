@@ -4,7 +4,7 @@
  * originally by C. S. Ananian
  * Modified for PoPToP
  *
- * $Id: pptpgre.c,v 1.2 2004/04/22 10:48:16 quozl Exp $
+ * $Id: pptpgre.c,v 1.3 2004/04/24 12:55:08 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -116,8 +116,16 @@ int decaps_hdlc(int fd, int (*cb) (int cl, void *pack, unsigned len), int cl)
 		 * network write failed.
 		 */
 		if ((status = read(fd, buffer, sizeof(buffer))) <= 0) {
-			syslog(LOG_ERR, "GRE: read(fd=%d,buffer=%lx,len=%d) from PTY failed: status = %d error = %s",
-			       fd, (unsigned long) buffer, sizeof(buffer), status, status ? strerror(errno) : "No error");
+			syslog(LOG_ERR, "GRE: read(fd=%d,buffer=%lx,len=%d) from PTY failed: status = %d error = %s%s",
+			       fd, (unsigned long) buffer, sizeof(buffer), 
+			       status, status ? strerror(errno) : "No error", 
+			       errno != EIO ? "" : ", usually caused by unexpected termination of pppd, check option syntax and pppd logs");
+			/* FAQ: mistakes in pppd option spelling in
+			 * /etc/ppp/options.pptpd often cause EIO,
+			 * with pppd not reporting the problem to any
+			 * logs.  Termination of pppd by signal can
+			 * *also* cause this situation. -- James Cameron
+			 */
 			return -1;
 		}
 		end = status;

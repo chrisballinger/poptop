@@ -4,7 +4,7 @@
  * This file contains some tuneable parameters, most of which can be overriden
  * at run-time (note, MAX_CONNECTIONS can't!).
  *
- * $Id: defaults.h,v 1.4 2004/04/22 10:48:16 quozl Exp $
+ * $Id: defaults.h,v 1.5 2004/04/24 12:55:08 quozl Exp $
  */
 
 #ifndef _PPTPD_DEFAULTS_H
@@ -71,5 +71,6 @@
 #define PIDFILE_KEYWORD			"pidfile"
 #define STIMEOUT_KEYWORD		"stimeout"
 #define NOIPPARAM_KEYWORD		"noipparam"
+#define PPP_BINARY_KEYWORD		"ppp"
 
 #endif	/* !_PPTPD_DEFAULTS_H */

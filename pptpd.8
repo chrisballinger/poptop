@@ -4,99 +4,88 @@ pptpd - PPTP VPN daemon
 .SH SYNOPSIS
 .PP
 .B pptpd
-.RB [ -b
-.IR internal-interface ]
-.RB [ -c
-.IR conf-file ]
-.RB [ -d ]
-.RB [ -f ]
-.RB [ -h ]
-.RB [ -l
-.IR x.x.x.x ]
-.RB [ -o
-.IR ppp-conf-file ]
-.RB [ -p
-.IR pid-file ]
-.RB [ -s
-.IR baud ]
-.RB [ -t
-.IR seconds ]
-.RB [ -v ]
-.PP
-.B pptpd
-.RB [ --bcrelay
-.IR internal-interface ]
-.RB [ --conf
-.IR conf-file ]
-.RB [ --debug ]
-.RB [ --fg ]
-.RB [ --help ]
-.RB [ --listen
-.IR x.x.x.x ]
-.RB [ --option
-.IR ppp-conf-file ]
-.RB [ --pidfile
-.IR pid-file ]
-.RB [ --speed
-.IR baud ]
-.RB [ --stimeout
-.IR seconds ]
-.RB [ --version ]
+[ 
+.IR options
+]
 .SH DESCRIPTION
 .B pptpd
-is the Poptop PPTP daemon, which manages tunneled PPP connections
+is the Poptop PPTP daemon, which manages tunnelled PPP connections
 encapsulated in GRE using the PPTP VPN protocol.  It may contain
-features like IP address management and support TCP wrappers if
-this support has been compiled in.
+features like IP address management and TCP wrappers if compiled in.
 .SH OPTIONS
+
 .TP
 \fB-b\fR|\fB--bcrelay \fIinternal-interface
-specifies that all broadcasts received on the server's internal 
-interface should be relayed to the clients.
+specifies that broadcasts received on the server's internal 
+network interface should be relayed to the clients.
+
 .TP
 \fB-c\fR|\fB--conf \fIconf-file
 specifies the configuration file for
 .B pptpd
 (default
 .IR /etc/pptpd.conf )
+
 .TP
 .BR -d | --debug
 turns on debugging mode, causing more debugging messages to be sent
 to syslog.
+
+.TP
+\fB-e\fR|\fB--ppp \fIpppd-program
+use
+.I pppd-program
+in place of the default
+.BR pppd (8).
+
 .TP
 .BR -f | --fg
-makes the pptp daemon run in the foreground (instead of the default
-of backgrounding itself)
+run in the foreground instead of detaching from terminal
+
 .TP
 .BR -h | --help
-displays some simple help.
+display program usage.
+
+.TP
+.BR -i | --noipparam
+do not send the client's IP address to ip-up scripts (required if you are using the 
+.BR pppd (8)
+.I ipparam
+option for some other purpose).
+
 .TP
 \fB-l\fR|\fB--listen \fIx.x.x.x
 specifies the local interface IP address to listen on.
+
 .TP
 \fB-o\fR|\fB--option \fIppp-conf-file
 specifies that pptpd should specify an alternate configuration file
 for the ppp daemon (the default is normally
 .I /etc/ppp/options
 but may vary depending on your ppp daemon).
+
 .TP
 \fB-p\fR|\fB--pidfile \fIpid-file
 specifies an alternate location to store the process ID file (default
 .IR /var/run/pptpd.pid ).
+
 .TP
 \fB-s\fR|\fB--speed \fIbaud
 specifies that the speed
 .I baud
 should be passed to the ppp daemon as the tty speed to use (in some
 cases this is ignored by the ppp daemon).
+
 .TP
 \fB-t\fR|\fB--stimeout \fIseconds
 specifies that the timeout value for the first packet should be 
 .I seconds
 before dropping it. This is a denial of service protection feature.
+
 .TP
 .BR -v | --version
 displays the current version of the pptp daemon.
+
 .SH EXAMPLES
 .PP
 .B pptpd
@@ -145,9 +134,6 @@ The most recent version of Poptop is available for download from
 SourceForge at
 .IR http://sourceforge.net/projects/poptop .
 .SH "SEE ALSO"
-.BR inetd (8),
-.BR inetd.conf (5),
 .BR pppd (8),
 .BR pptpd (8),
-.BR pptpd.conf (5),
-.BR tcpd (8).
+.BR pptpd.conf (5).

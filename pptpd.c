@@ -1,10 +1,10 @@
 /*
  * pptpd.c
  *
- * Grabs any command line argument and procecesses any further options in
+ * Grabs any command line argument and processes any further options in
  * the pptpd config file, before throwing over to pptpmanager.c.
  *
- * $Id: pptpd.c,v 1.6 2004/04/22 10:48:16 quozl Exp $
+ * $Id: pptpd.c,v 1.7 2004/04/24 12:55:08 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -50,6 +50,7 @@
 #endif
 
 /* command line arg variables */
+char *ppp_binary = NULL;
 char *pppdoptstr = NULL;
 char *speedstr = NULL;
 char *bindaddr = NULL;
@@ -96,8 +97,9 @@ static void showusage(char *prog)
 	printf("                           the specified interface (default is eth1).\n");
 #endif
 	printf(" [-c] [--conf file]        Specifies the config file to read default\n");
-	printf("                           settings from (default is /etc/pptpd.conf).\n");
+	printf("                           settings from (default is %s).\n", PPTPD_CONFIG_FILE_DEFAULT);
 	printf(" [-d] [--debug]            Turns on debugging (to syslog).\n");
+	printf(" [-e] [--ppp file]         Use alternate pppd binary, default %s.\n", PPP_BINARY);
 	printf(" [-f] [--fg]               Run in foreground.\n");
 	printf(" [-h] [--help]             Displays this help message.\n");
 	printf(" [-i] [--noipparam]        Suppress the passing of the client's IP address\n");
@@ -120,7 +122,7 @@ static void showusage(char *prog)
 	printf("\n\nLogs and debugging go to syslog as DAEMON.");
 
 	printf("\n\nCommand line options will override any default settings and any settings\n");
-	printf("specified in the config file (default config file: /etc/pptpd.conf).\n\n");
+	printf("specified in the config file (default config file: %s).\n\n", PPTPD_CONFIG_FILE_DEFAULT);
 }
 
 
@@ -147,12 +149,13 @@ int main(int argc, char **argv)
 	/* open a connection to the syslog daemon */
 	openlog("pptpd", LOG_PID, LOG_DAEMON);
 
+	/* process command line options */
 	while (1) {
 		int option_index = 0;
 #ifdef BCRELAY
-		char *optstring = "b:c:dfhil:o:p:s:t:v";
+		char *optstring = "b:c:de:fhil:o:p:s:t:v";
 #else
-		char *optstring = "c:dfhil:o:p:s:t:v";
+		char *optstring = "c:de:fhil:o:p:s:t:v";
 #endif
 
 		static struct option long_options[] =
@@ -162,6 +165,7 @@ int main(int argc, char **argv)
 #endif
 			{"conf", 1, 0, 0},
 			{"debug", 0, 0, 0},
+			{"ppp", 1, 0, 0},
 			{"fg", 0, 0, 0},
 			{"help", 0, 0, 0},
 			{"noipparam", 0, 0, 0},
@@ -180,82 +184,73 @@ int main(int argc, char **argv)
 		/* convert long options to short form */
 		if (c == 0)
 #ifdef BCRELAY
-			c = "bcdfhilopstv"[option_index];
+			c = "bcdefhilopstv"[option_index];
 #else
-			c = "cdfhilopstv"[option_index];
+			c = "cdefhilopstv"[option_index];
 #endif
 		switch (c) {
 #ifdef BCRELAY
-		case 'b':
-			/* Have to build in some checking -rdv */
-			if(bcrelay)
-				free(bcrelay);
+		case 'b': /* --bcrelay */
+			if (bcrelay) free(bcrelay);
 			bcrelay = strdup(optarg);
 			break;
 #endif
 
-		case 'l':
+		case 'l': /* --listen */
 			tmpstr = lookup(optarg);
-			if(!tmpstr) {
+			if (!tmpstr) {
 				syslog(LOG_ERR, "MGR: Invalid listening address: %s!", optarg);
 				return 1;
 			}
-			if(bindaddr)
-				free(bindaddr);
+			if (bindaddr) free(bindaddr);
 			bindaddr = strdup(tmpstr);
 			break;
 
-		case 'h':
+		case 'h': /* --help */
 			showusage(argv[0]);
 			return 0;
 
-		case 'i':
+		case 'i': /* --noipparam */
 			pptp_noipparam = TRUE;
-			return 0;
+			break;
 
-		case 'd':
+		case 'e': /* --ppp */
+			if (ppp_binary) free(ppp_binary);
+			ppp_binary = strdup(optarg);
+			break;
+
+		case 'd': /* --debug */
 			pptp_debug = TRUE;
 			break;
 
-		case 'f':
+		case 'f': /* --fg */
 			foreground = TRUE;
 			break;
 
-		case 'v':
+		case 'v': /* --version */
 			showversion();
 			return 0;
 
-		case 'o':
-			{
-				FILE *f;
-				if (!(f = fopen(optarg, "r"))) {
-					syslog(LOG_ERR, "MGR: PPP options file not found!");
-					return 1;
-				}
-				fclose(f);
-				if(pppdoptstr)
-					free(pppdoptstr);
-				pppdoptstr = strdup(optarg);
-				break;
-			}
+		case 'o': /* --option */
+			if (pppdoptstr) free(pppdoptstr);
+			pppdoptstr = strdup(optarg);
+			break;
 
-		case 'p':
-			if(pid_file)
-				free(pid_file);
+		case 'p': /* --pidfile */
+			if (pid_file) free(pid_file);
 			pid_file = strdup(optarg);
 			break;
 
-		case 's':
-			if(speedstr)
-				free(speedstr);
+		case 's': /* --speed */
+			if (speedstr) free(speedstr);
 			speedstr = strdup(optarg);
 			break;
 
-		case 't':
-			(int *)pptp_stimeout = strdup(optarg);
+		case 't': /* --stimeout */
+			pptp_stimeout = atoi(optarg);
 			break;
 
-		case 'c':
+		case 'c': /* --conf */
 			{
 				FILE *f;
 				if (!(f = fopen(optarg, "r"))) {
@@ -263,8 +258,7 @@ int main(int argc, char **argv)
 					return 1;
 				}
 				fclose(f);
-				if(configFile)
-					free(configFile);
+				if(configFile) free(configFile);
 				configFile = strdup(optarg);
 				break;
 			}
@@ -314,12 +308,13 @@ int main(int argc, char **argv)
 		speedstr = strdup(tmp);
 
 	if (!pppdoptstr && read_config_file(configFile, PPPD_OPTION_KEYWORD, tmp) > 0) {
-		if (!(fopen(tmp, "r"))) {
-			syslog(LOG_ERR, "MGR: PPP options file not found!");
-			return 1;
-		}
 		pppdoptstr = strdup(tmp);
 	}
+
+	if (!ppp_binary && read_config_file(configFile, PPP_BINARY_KEYWORD, tmp) > 0) {
+		ppp_binary = strdup(tmp);
+	}
+
 	if (!pid_file)
 		pid_file = strdup((read_config_file(configFile, PIDFILE_KEYWORD,
 					tmp) > 0) ? tmp : PIDFILE_DEFAULT);
@@ -343,6 +338,29 @@ int main(int argc, char **argv)
 #endif
 
 	free(configFile);
+
+	/* if not yet set, adopt default PPP binary path */
+	if (!ppp_binary) ppp_binary = strdup(PPP_BINARY);
+	/* check that the PPP binary is executable */
+	if (access(ppp_binary, X_OK) < 0) {
+		syslog(LOG_ERR, "MGR: PPP binary %s not executable",
+		       ppp_binary);
+		return 1;
+	}
+	/* check that the PPP options file is readable */
+	if (access(pppdoptstr, R_OK) < 0) {
+		syslog(LOG_ERR, "MGR: PPP options file %s not readable",
+		       pppdoptstr);
+		return 1;
+	}
+#ifdef BCRELAY
+	/* check that the bcrelay binary is executable */
+	if (bcrelay && access(BCRELAY_BIN, X_OK) < 0) {
+		syslog(LOG_ERR, "MGR: bcrelay binary %s not executable", 
+		       BCRELAY_BIN);
+		return 1;
+	}
+#endif
 
 	if (!foreground) {
 #if HAVE_DAEMON

@@ -3,7 +3,7 @@
  *
  * PPTP control connection between PAC-PNS pair
  *
- * $Id: pptpctrl.c,v 1.10 2004/04/23 10:36:48 quozl Exp $
+ * $Id: pptpctrl.c,v 1.11 2004/04/24 12:55:08 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -52,7 +52,7 @@
 // placing net/if.h here fixes build on Solaris
 #include <net/if.h>
 
-/* Globals because i'm lazy -tmk */
+static char *ppp_binary = PPP_BINARY;
 static int noipparam;			/* if true, don't send ipparam to ppp */
 static char speed[32];
 static char pppdxfig[256];
@@ -69,7 +69,7 @@ static u_int32_t call_id_pair;	/* call id (to terminate call) */
 
 /* Needed by this and ctrlpacket.c */
 int pptpctrl_debug = 0;		/* specifies if debugging is on or off */
-uint16_t unique_call_id;	/* Start value for our call IDs on this TCP link */
+uint16_t unique_call_id = 0xFFFF;	/* Start value for our call IDs on this TCP link */
 
 int gargc;                     /* Command line argument count */
 char **gargv;                  /* Command line argument vector */
@@ -121,6 +121,7 @@ int main(int argc, char **argv)
 	/* autoreap if supported */
 	signal(SIGCHLD, SIG_IGN);
 
+	/* note: update pptpctrl.8 if the argument list format is changed */
 	pptpctrl_debug = atoi(argv[arg++]);
 	noipparam = atoi(argv[arg++]);
 
@@ -129,11 +130,8 @@ int main(int argc, char **argv)
 	GETARG(pppLocal);
 	GETARG(pppRemote);
 
-	if (argv[arg] != NULL) {
-		unique_call_id = atoi(argv[arg++]);
-	} else {
-		unique_call_id = 0xFFFF;
-	}
+	if (arg < argc) unique_call_id = atoi(argv[arg++]);
+	if (arg < argc) ppp_binary = strdup(argv[arg++]);
 	
 	if (pptpctrl_debug) {
 		if (*pppLocal)
@@ -620,7 +618,7 @@ static void launch_pppd(char **pppaddrs, struct in_addr *inetaddrs)
 	int an = 0;
 	sigset_t sigs;
 
-	pppd_argv[an++] = PPP_BINARY;
+	pppd_argv[an++] = ppp_binary;
 
 	if (pptpctrl_debug) {
 		syslog(LOG_DEBUG, 

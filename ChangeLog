@@ -1,3 +1,32 @@
+Sat Apr 24 20:51:54 2004  James Cameron  <quozl@us.netrek.org>
+
+	* pptpgre.c (decaps_hdlc): add hint for EIO on read() of PTY,
+	suggesting a look at option syntax and pppd logs.  To address a
+	FAQ seen on mailing lists.
+
+	* pptpd.conf.5: add routing checklists for three different methods
+	of allocating subnets and configuring pptpd.
+
+	* pptpd.8, pptpd.conf.5: add noipparam option documentation.  Move
+	speed option to end of list.  Rework text for simplicity.  Cross
+	check against pptpd.c.
+
+	* pptpctrl.8: rework argument list, cross check against
+	pptpctrl.c, remove examples because running from inetd(8) is
+	unusual and not encouraged.
+
+	* pptpd.c, pptpd.8, pptpmanager.c, pptpctrl.c, defaults.h: add
+	--ppp option to specify PPP program to use in place of default
+	PPP_BINARY, and pass the new parameter to pptpctrl.  Also reworked
+	option handling and validation to simplify code.  Use access()
+	instead of fopen() to verify that files can be read or executed.
+
+	* pptpd.c: bug fix, --stimeout option was not working due to use
+	of strdup() and a blind cast instead of atoi().
+
+	* pptpd.c: bug fix, --noipparam option on command line was causing
+	premature exit during option processing.
+
 Fri Apr 23 21:01:31 2004  James Cameron  <quozl@us.netrek.org>
 
 	* tools/pptp-portslave: add contribution from Russell Coker, on

@@ -3,7 +3,7 @@
  *
  * Manages the PoPToP sessions.
  *
- * $Id: pptpmanager.c,v 1.5 2004/04/22 10:48:16 quozl Exp $
+ * $Id: pptpmanager.c,v 1.6 2004/04/24 12:55:08 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -54,6 +54,7 @@ int deny_severity = LOG_WARNING;
 #include "compat.h"
 
 /* command line arg variables */
+extern char *ppp_binary;
 extern char *pppdoptstr;
 extern char *speedstr;
 extern char *bindaddr;
@@ -455,6 +456,11 @@ static void connectCall(int clientSocket, int clientNumber)
 	NUM2ARRAY(callid_argv, unique_call_id);
 	ctrl_argv[pptpctrl_argc++] = callid_argv;
 
+	/* pass path to ppp binary */
+	ctrl_argv[pptpctrl_argc++] = ppp_binary;
+
+	/* note: update pptpctrl.8 if the argument list format is changed */
+
 	/* terminate argv array with a NULL */
 	ctrl_argv[pptpctrl_argc] = NULL;
 	pptpctrl_argc++;
@@ -462,6 +468,5 @@ static void connectCall(int clientSocket, int clientNumber)
 	/* ok, args are setup: invoke the call handler */
 	execve(PPTP_CTRL_BIN, ctrl_argv, environ);
 	syslog(LOG_ERR, "MGR: Failed to exec " PPTP_CTRL_BIN "!");
-	/* syslog_perror("execvp " PPTP_CTRL_BIN); */
 	_exit(1);
 }

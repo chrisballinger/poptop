@@ -12,7 +12,18 @@ unpack
 ./configure with defaults and various options
 make
 
-Tags
+CVS Tags
 
 cvs tag -F pptpd-1_2_0-b2
 cvs tag -F poptop-1_1_3-a
+
+Test Plan
+
+a) unpacks into subdirectory with correct package and version string,
+b) "./configure"
+c) "make" 
+d) "make install" 
+e) set configuration files for a tunnel, establish two tunnels, ping,
+   ssh, scp 10Mb random data, close tunnel, re-establish, ping, close
+   tunnels.
+f) "make uninstall"

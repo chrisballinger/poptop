@@ -1,5 +1,11 @@
 1.2.0-b3: in preparation
 
+- add hint for EIO to suggest pppd option syntax [Cameron]
+- add routing checklists to pptpd.conf man page [Cameron]
+- fix broken --stimeout option [Cameron]
+- rework all manual pages, cross check against programs [Cameron]
+- add --ppp option for portslave support [Cameron]
+- fix unanticipated exit() when --noipparam option used [Cameron]
 - fix segfault on pptpctrl called with no arguments [Cameron]
   {closes: Bug#140709}
 - include vpnwho.pl in package [Cabral]

@@ -1,3 +1,7 @@
+bug: configfile.c opens, reads and closes /etc/pptpd.conf as many
+times as there are possible option values, and only returns the first
+match for a keyword, not the last.
+
 PPTP Server TODO
 ----------------
 
