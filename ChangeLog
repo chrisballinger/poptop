@@ -1,3 +1,7 @@
+Thu Jun 24 09:35:58 2004  Peter Mueller  <pmueller@sidestep.com>
+
+	* pptpd.init: avoid spitting garbage if no processes exist.
+
 Wed Jun 23 19:42:33 2004  James Cameron  <quozl@us.netrek.org>
 
 	* pptpd-1.2.1.tar.gz: released.

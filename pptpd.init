@@ -41,7 +41,7 @@ case "$1" in
         ;;
   restart-kill)
         $0 stop
-        ps -ef | grep pptpd | grep -v grep | grep -v rc.d | awk '{print $2}' | uniq | xargs kill
+        ps -ef | grep pptpd | grep -v grep | grep -v rc.d | awk '{print $2}' | uniq | xargs kill 1> /dev/null 2>&1
         $0 start
         ;;
   *)
