@@ -14,7 +14,7 @@ Name: %{name}
 Requires: ppp >= 2.4.3
 Version: %{ver}
 Release: %{rel}
-Copyright: GPL
+License: GPL
 Group: Networking/Daemons
 Vendor: Hewlett-Packard
 Packager: James Cameron <james.cameron@hp.com>
