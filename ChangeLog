@@ -1,3 +1,7 @@
+Wed Jan  5 22:12:38 2005  James Cameron  <quozl@us.netrek.org>
+
+	* pptpd-1.2.2.tar.gz: released.
+
 Wed Jan  5 21:16:15 2005  James Cameron  <quozl@us.netrek.org>
 
 	* compat.h, compat.c (sigpipe_*): build a generalised signal pipe

@@ -6,7 +6,7 @@ Update version number in the following files
 Run ./reconf
 update NEWS, ChangeLog
 commit changes
-tag (See README.cvs, e.g. cvs tag -F pptpd-1_2_1)
+tag (See README.cvs, e.g. cvs tag -F pptpd-1_2_2)
 make dist
 md5sum
 gpg --detach-sign --armor

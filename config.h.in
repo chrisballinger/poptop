@@ -4,7 +4,7 @@
  *
  * Additional autoconf defines for this program.
  *
- * $Id: config.h.in,v 1.9 2004/06/23 09:54:49 quozl Exp $
+ * $Id: config.h.in,v 1.10 2005/01/05 11:12:52 quozl Exp $
  */
 
 /* Use BSD User land PPP? */

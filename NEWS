@@ -1,6 +1,9 @@
-1.2.x: not yet released
+1.2.2: released 2005-01-05
 
 - fix deadlock hang due to syslog(3) called by signal handler [Cameron]
+- turn off logging to stderr, to prevent loopback [Hall]
+- allow RPM to be build on RHEL [Brady]
+- init.d script, avoid spitting garbage [Mueller]
 
 1.2.1: released 2004-06-23
 
