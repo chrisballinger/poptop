@@ -3,7 +3,7 @@
  *
  * PPTP control connection between PAC-PNS pair
  *
- * $Id: pptpctrl.c,v 1.13 2004/04/28 11:36:07 quozl Exp $
+ * $Id: pptpctrl.c,v 1.14 2005/01/05 03:58:13 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -450,6 +450,7 @@ leave_clear_call:
  */
 static void bail(int sigraised)
 {
+/* TODO: syslog() is not allowed in a signal handler, deadlocks */
 	if (sigraised)
 		syslog(LOG_INFO, "CTRL: Exiting on signal");
 

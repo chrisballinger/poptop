@@ -3,7 +3,7 @@
  *
  * Manages the PoPToP sessions.
  *
- * $Id: pptpmanager.c,v 1.7 2004/04/28 11:36:07 quozl Exp $
+ * $Id: pptpmanager.c,v 1.8 2005/01/05 03:58:13 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -95,6 +95,7 @@ uint16_t unique_call_id = 0;
 
 static void pptp_reap_child(int sig)
 {
+/* TODO: syslog() is not allowed in a signal handler, deadlocks */
 	int chld, status;
 
 	while ((chld = waitpid(-1, &status, WNOHANG)) > 0) {

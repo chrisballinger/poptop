@@ -4,7 +4,7 @@
  * Grabs any command line argument and processes any further options in
  * the pptpd config file, before throwing over to pptpmanager.c.
  *
- * $Id: pptpd.c,v 1.11 2004/05/17 06:32:00 quozl Exp $
+ * $Id: pptpd.c,v 1.12 2005/01/05 03:58:13 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -431,6 +431,7 @@ int main(int argc, char **argv)
 
 #ifdef BCRELAY
 static void killbcrelay(int sigraised) {
+/* TODO: syslog() is not allowed in a signal handler, deadlocks */
         if (sigraised) {
                 syslog(LOG_DEBUG, "CTRL: Closing child BCrelay with pid %i", bcrelayfork);
                 if (bcrelayfork > 0)
