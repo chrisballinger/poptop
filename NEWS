@@ -1,4 +1,4 @@
-1.2.0-b3: in preparation
+1.2.0-b3: released 2004-04-25 (ANZAC day)
 
 - add hint for EIO to suggest pppd option syntax [Cameron]
 - add routing checklists to pptpd.conf man page [Cameron]
