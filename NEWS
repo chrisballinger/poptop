@@ -1,3 +1,7 @@
+1.2.1: released 2004-06-23
+
+- init.d script, warn that restart may cause problems [Mueller]
+
 1.2.0-b4: released 2004-05-25
 
 - fix rpmbuild [Cameron]
