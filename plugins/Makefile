@@ -16,7 +16,7 @@ all:	$(PLUGINS)
 %.so: %.c
 	$(CC) -o $@ $(LDFLAGS) $(CFLAGS) $^
 
-LIBDIR	= $(DESTDIR)/usr/lib/pptpd/
+LIBDIR	= $(DESTDIR)/usr/lib/pptpd
 
 install: $(PLUGINS)
 	$(INSTALL) -d $(LIBDIR)
