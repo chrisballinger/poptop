@@ -131,9 +131,8 @@ done
 test -z "$OUTD" || \
 { echo "possible outdated executable detected; you should do run the following command:"; echo "rm -i $OUTD" ;}
 /sbin/chkconfig --add pptpd
-/sbin/chkconfig pptpd on
-rm -f /usr/src/redhat/SOURCES/%{name}-%{ver}.tar.gz
-
+/sbin/chkconfig --level 345 pptpd on
+rm -f $RPM_SOURCE_DIR/%{name}-%{ver}.tar.gz
 %preun
 /sbin/chkconfig --del pptpd
 
