@@ -1,8 +1,10 @@
 #!/bin/bash
 curdir=`pwd`
-mkdir -p /tmp/pptpd-1.1.3
-cp -ar * /tmp/pptpd-1.1.3/
+version=$(./version)
+ver=$(echo $version | cut -d "-" -f1)
+mkdir -p /tmp/pptpd-$ver
+cp -ar * /tmp/pptpd-$ver/
 cd /tmp
-tar -czf /usr/src/redhat/SOURCES/pptpd-1.1.3.tar.gz pptpd-1.1.3
+tar -czf /usr/src/redhat/SOURCES/pptpd-$version.tar.gz pptpd-$ver
 cd $curdir
 rpmbuild -bb pptpd.spec

@@ -3,7 +3,7 @@
  *
  * PPTP control connection between PAC-PNS pair
  *
- * $Id: pptpctrl.c,v 1.4 2003/02/06 16:39:46 fenix_nl Exp $
+ * $Id: pptpctrl.c,v 1.5 2003/04/23 10:16:02 fenix_nl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
+#include <time.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
