@@ -1,5 +1,5 @@
 ###############################################################################
-# $Id: options.pptpd,v 1.6 2004/12/22 22:39:30 quozl Exp $
+# $Id: options.pptpd,v 1.7 2005/04/13 22:50:17 quozl Exp $
 #
 # Sample Poptop PPP options file /etc/ppp/options.pptpd
 # Options used by PPP when a connection arrives from a client.
@@ -102,6 +102,12 @@ lock
 
 # Disable BSD-Compress compression
 nobsdcomp 
+
+# Disable Van-Jacobson compression 
+# (needed on some networks with Windows 9x/ME clients, see posting to
+# poptop-server on 14th April 2005 by Pawel Pokrywka)
+# novj
+# novjccomp
 
 # turn off logging to stderr, since this may be redirected to pptpd
 nologfd
