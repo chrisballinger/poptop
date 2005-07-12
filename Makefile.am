@@ -38,12 +38,12 @@ sbin_PROGRAMS = pptpd pptpctrl bcrelay
 # for dependencies, so just attribute them all to pptpd.
 
 pptpd_SOURCES = \
-	pptpd.c configfile.c pptpmanager.c compat.c inststr.c getopt.c getopt1.c \
-	compat.h configfile.h ctrlpacket.h defaults.h inststr.h our_getopt.h \
+	 pqueue.c pptpd.c configfile.c pptpmanager.c compat.c inststr.c getopt.c getopt1.c \
+	pqueue.h compat.h configfile.h ctrlpacket.h defaults.h inststr.h our_getopt.h \
 	our_syslog.h ppphdlc.h pptpctrl.h pptpdefs.h pptpgre.h pptpmanager.h
 
 pptpctrl_SOURCES = \
-	pptpctrl.c ctrlpacket.c inststr.c compat.c pptpgre.c ppphdlc.c
+	pqueue.c pptpctrl.c ctrlpacket.c inststr.c compat.c pptpgre.c ppphdlc.c
 
 pptpd_LDADD = $(XTRALIBS_MGR)
 
@@ -100,8 +100,10 @@ pptpd.o: pptpd.c config.h our_syslog.h our_getopt.h configfile.h \
   defaults.h compat.h pptpmanager.h
 
 pptpgre.o: pptpgre.c config.h our_syslog.h ppphdlc.h pptpgre.h pptpdefs.h \
-  defaults.h compat.h
+  defaults.h pqueue.h compat.h
 
 pptpmanager.o: pptpmanager.c config.h our_syslog.h configfile.h \
   defaults.h pptpctrl.h pptpdefs.h pptpmanager.h compat.h
+
+pqueue.o: pqueue.c pqueue.h
 

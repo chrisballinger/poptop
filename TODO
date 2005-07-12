@@ -4,6 +4,9 @@ This is the pptpd project TODO list.
 means Junior Jobs, following the KDE tradition suggested by Adriaan de
 Groot in May 2004.)
 
+20050401-1, current, logwtmp, strip domain from username, a new option such as
+"logwtmp-strip-domain".
+
 20050105-1, 1.2.1, denial of service, for ten seconds (or --stimeout)
 the pptpd will not process further connections while it waits for a
 client to send data.  The second select() will prevent any further

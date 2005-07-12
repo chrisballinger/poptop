@@ -1,5 +1,7 @@
 1.x.x: unreleased
 
+- process initial packet length header properly [Beregszaszi]
+- ignore ENETDOWN and ENXIO on sendto in bcrelay [Cameron]
 - add section on debugging to pptpd.8 [Mueller]
 
 1.2.3: released 2005-02-17
