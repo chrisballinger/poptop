@@ -3,7 +3,7 @@
  *
  * PPTP structs and defines
  *
- * $Id: pptpdefs.h,v 1.1 2002/06/21 08:52:01 fenix_nl Exp $
+ * $Id: pptpdefs.h,v 1.2 2005/07/29 13:00:41 quozl Exp $
  */
 
 #ifndef _PPTPD_PPTPDEFS_H
@@ -73,6 +73,9 @@
 
 /* how long should we wait for an echo reply? (seconds) */
 #define MAX_ECHO_WAIT			5
+
+/* how long to wait for ppp to begin negotiation (seconds) */
+#define PPP_WAIT			10
 
 #define RESERVED			0x0000
 
