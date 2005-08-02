@@ -1,5 +1,7 @@
 1.3.0: unreleased
 
+- disable Van Jacobson compression by default [Pokrywka]
+- prototype packet buffering and reordering [Cameron/Anonymous]
 - comply with RFC2637 on echo wait and idle wait parameters [Brox]
 - new pptpd-logwtmp-strip-domain option [Cameron]
 - include html directory in make dist [Cameron]

@@ -1,3 +1,14 @@
+Tue Aug  2 21:31:25 2005  James Cameron  <quozl@us.netrek.org>
+
+	* samples/options.pptpd: disable Van Jacobson compression.
+	Reported by Pawel Pokrywka.
+
+Tue Aug  2 21:27:11 2005  James Cameron  <quozl@us.netrek.org>
+
+	* pptpgre.c: packet reordering implementation, contributed from
+	PPTP Client anonymously (maintainer can't find who provided the
+	first patch, but worked to get it working).
+
 Tue Aug  2 19:32:47 2005  James Cameron  <quozl@us.netrek.org>
 
 	* pptpdefs.h (MAX_ECHO_WAIT, IDLE_WAIT): comply with RFC2637,

@@ -3,7 +3,7 @@
  *
  * Functions to handle the GRE en/decapsulation
  *
- * $Id: pptpgre.h,v 1.2 2005/07/12 06:59:29 quozl Exp $
+ * $Id: pptpgre.h,v 1.3 2005/08/02 11:33:31 quozl Exp $
  */
 
 #ifndef _PPTPD_PPTPGRE_H
@@ -21,9 +21,6 @@ struct gre_state {
 	u_int32_t seq_sent, seq_recv;
 	u_int32_t call_id_pair;
 };
-
-
-/* patch for reordering */
 
 extern int disable_buffer;
 
@@ -64,7 +61,5 @@ typedef struct gre_stats {
 } gre_stats_t;
 
 extern gre_stats_t stats;
-
-/* End patch for reordering */
 
 #endif	/* !_PPTPD_PPTPGRE_H */
