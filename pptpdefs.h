@@ -3,7 +3,7 @@
  *
  * PPTP structs and defines
  *
- * $Id: pptpdefs.h,v 1.2 2005/07/29 13:00:41 quozl Exp $
+ * $Id: pptpdefs.h,v 1.3 2005/08/02 09:51:18 quozl Exp $
  */
 
 #ifndef _PPTPD_PPTPDEFS_H
@@ -69,10 +69,10 @@
 #define SET_LINK_INFO			15
 
 /* how long before a link is idle? (seconds) */
-#define IDLE_WAIT			65
+#define IDLE_WAIT			60
 
 /* how long should we wait for an echo reply? (seconds) */
-#define MAX_ECHO_WAIT			5
+#define MAX_ECHO_WAIT			60
 
 /* how long to wait for ppp to begin negotiation (seconds) */
 #define PPP_WAIT			10

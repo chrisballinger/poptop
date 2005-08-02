@@ -1,3 +1,18 @@
+Tue Aug  2 19:32:47 2005  James Cameron  <quozl@us.netrek.org>
+
+	* pptpdefs.h (MAX_ECHO_WAIT, IDLE_WAIT): comply with RFC2637,
+	reported by Tobias Brox, updates 20040811-0.
+
+Tue Aug  2 19:30:30 2005  James Cameron  <quozl@us.netrek.org>
+
+	* plugins/pptpd-logwtmp.c (ip_up): implement
+	pptpd-logwtmp-strip-domain option, closes 20050401-1.
+
+Tue Aug  2 19:01:42 2005  James Cameron  <quozl@us.netrek.org>
+
+	* Makefile.am (EXTRA_DIST): add html directory, missing from
+	distribution, closes 20050729-1.
+
 Fri Jul 29 22:56:08 2005  James Cameron  <quozl@us.netrek.org>
 
 	* pptpdefs.h (PPP_WAIT): default ten seconds wait for PPP packets
@@ -15,6 +30,7 @@ Tue Jul 12 16:33:23 2005  James Cameron  <quozl@us.netrek.org>
 Thu Mar  3 16:19:17 2005  James Cameron  <quozl@us.netrek.org>
 
 	* bcrelay.c (mainloop): ignore ENETDOWN and ENXIO from sendto(2).
+	Closes 20040428-0.
 
 Thu Feb 24 11:48:08 2005  James Cameron  <quozl@us.netrek.org>
 

@@ -4,14 +4,8 @@ This is the pptpd project TODO list.
 means Junior Jobs, following the KDE tradition suggested by Adriaan de
 Groot in May 2004.)
 
-20050729-1, current, html directory not included in .tar.gz, used by
-debian package. [JJ]
-
 20050729-0, current, packet reordering fails to generate good packet
 replies
-
-20050401-1, current, logwtmp, strip domain from username, a new option such as
-"logwtmp-strip-domain".
 
 20050105-1, 1.2.1, denial of service, for ten seconds (or --stimeout)
 the pptpd will not process further connections while it waits for a
@@ -23,8 +17,7 @@ successfully.  It also creates a cron.weekly entry that is not removed
 when the package is removed.  Yet to test if vpnstats.pl works okay.
 [JJ]
 
-20040811-0, 1.2.1, inconsistency in timers with RFC2637, IDLE_WAIT
-should be 60 but is 65, MAX_ECHO_WAIT should be 60 but is 5, in
+20040811-0, 1.2.1, RFC2637 timers IDLE_WAIT and MAX_ECHO_WAIT, in
 pptpdefs.h, make these configurable, requested by Tobias Brox.  [JJ]
 
 20040623-0, 1.2.1, "Plugin /usr/lib/pptpd/pptpd-logwtmp.so is for pppd
@@ -58,9 +51,6 @@ fakeroot.
 
 review debian bug reports for pptpd package
 http://bugs.debian.org/pptpd
-
-20040428-0, important, bcrelay failure, >bcrelay[357]: mainloop:
-Error, sendto failed! (rv=-1, errno=6), per mailing list thread.
 
 20040426-0 bug: terminating immediately on CALL_CLR_RQST from client
 (1.2.0-b3) may violate the RFC, but was done to fix zombie pppd, Bruno
