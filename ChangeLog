@@ -1,3 +1,14 @@
+Wed Aug  3 19:04:07 2005  James Cameron  <quozl@us.netrek.org>
+
+	* plugins/pptpd-logwtmp.c: fix compilation warning by including
+	string.h
+
+	* ctrlpacket.c (read_pptp_packet): initialise return control
+	message type, to fix compilation warnings.
+
+	* pqueue.c: compilation fixes, use of log() and warn() replaced
+	with syslog().
+
 Wed Aug  3 17:33:40 2005  James Cameron  <quozl@us.netrek.org>
 
 	* pptpd-1.3.0.tar.gz: released.

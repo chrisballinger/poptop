@@ -1,5 +1,5 @@
 /*
- * $Id: pptpd-logwtmp.c,v 1.3 2005/08/02 09:51:18 quozl Exp $
+ * $Id: pptpd-logwtmp.c,v 1.4 2005/08/03 09:10:59 quozl Exp $
  * pptpd-logwtmp.c - pppd plugin to update wtmp for a pptpd user
  *
  * Copyright 2004 James Cameron.
@@ -11,6 +11,7 @@
  */
 #include <unistd.h>
 #include <utmp.h>
+#include <string.h>
 #include "pppd.h"
 
 char pppd_version[] = VERSION;

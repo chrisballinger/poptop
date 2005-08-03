@@ -425,7 +425,7 @@ static void mainloop(int argc, char **argv)
   struct iflist *iflist = NULL;         // Initialised after the 1st packet
   struct sockaddr_ll sa;
   struct packet *ipp_p;
-  char *udppdu;
+  char *udppdu; // FIXME: warning: pointer targets in assignment differ in signedness
   fd_set sock_set;
   struct timeval time_2_wait;
   static struct ifsnr old_ifsnr[MAXIF+1]; // Old iflist to socket fd's mapping list
