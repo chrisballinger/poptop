@@ -1,3 +1,7 @@
+Wed Aug  3 17:33:40 2005  James Cameron  <quozl@us.netrek.org>
+
+	* pptpd-1.3.0.tar.gz: released.
+
 Tue Aug  2 21:31:25 2005  James Cameron  <quozl@us.netrek.org>
 
 	* samples/options.pptpd: disable Van Jacobson compression.

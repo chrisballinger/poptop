@@ -1,0 +1,12 @@
+Review of Debian bugs
+
+171831: requires significant redesign, in TODO as item 19990705
+	(upstream acknowledges and has added it to the list)
+
+181005: requires code change, added to TODO as item 20030214
+	(upstream acknowledges and has added it to the list)
+        (ip_gre module is not needed at all, comment made)
+        (the GRE response is an acknowledgement packet)
+
+209082: debian project's problem, not upstream
+
