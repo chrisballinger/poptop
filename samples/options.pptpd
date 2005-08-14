@@ -1,5 +1,5 @@
 ###############################################################################
-# $Id: options.pptpd,v 1.9 2005/08/02 11:33:32 quozl Exp $
+# $Id: options.pptpd,v 1.10 2005/08/14 23:39:40 quozl Exp $
 #
 # Sample Poptop PPP options file /etc/ppp/options.pptpd
 # Options used by PPP when a connection arrives from a client.
@@ -110,6 +110,10 @@ nobsdcomp
 novj
 novjccomp
 
-# turn off logging to stderr, since this may be redirected to pptpd
+# turn off logging to stderr, since this may be redirected to pptpd, 
+# which may trigger a loopback
 nologfd
+
+# put plugins here 
+# (putting them higher up may cause them to sent messages to the pty)
 
