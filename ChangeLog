@@ -25,9 +25,8 @@ Tue Aug  2 21:31:25 2005  James Cameron  <quozl@us.netrek.org>
 
 Tue Aug  2 21:27:11 2005  James Cameron  <quozl@us.netrek.org>
 
-	* pptpgre.c: packet reordering implementation, contributed from
-	PPTP Client anonymously (maintainer can't find who provided the
-	first patch, but worked to get it working).
+	* pptpgre.c: packet reordering implementation, contributed by Vijay
+	Bharadwaj.
 
 Tue Aug  2 19:32:47 2005  James Cameron  <quozl@us.netrek.org>
 
