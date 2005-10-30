@@ -3,7 +3,7 @@
  *
  * PPTP control connection between PAC-PNS pair
  *
- * $Id: pptpctrl.c,v 1.18 2005/07/29 13:00:40 quozl Exp $
+ * $Id: pptpctrl.c,v 1.19 2005/10/30 22:40:41 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -90,8 +90,16 @@ static void launch_pppd(char **pppaddrs, struct in_addr *inetaddrs);
 #define OUR_NB_MODE O_NDELAY
 #endif
 
-/* Macro to read command line args */
-#define GETARG(X) \
+/* read a command line argument, a flag alone */
+#define GETARG_INT(X) \
+	X = atoi(argv[arg++])
+
+/* read a command line argument, a string alone */
+#define GETARG_STRING(X) \
+	X = strdup(argv[arg++])
+
+/* read a command line argument, a presence flag followed by string */
+#define GETARG_VALUE(X) \
 	if(atoi(argv[arg++]) != 0) \
 		strlcpy(X, argv[arg++], sizeof(X)); \
 	else \
@@ -124,17 +132,15 @@ int main(int argc, char **argv)
 	signal(SIGCHLD, SIG_IGN);
 
 	/* note: update pptpctrl.8 if the argument list format is changed */
-	pptpctrl_debug = atoi(argv[arg++]);
-	noipparam = atoi(argv[arg++]);
-
-	GETARG(pppdxfig);
-	GETARG(speed);
-	GETARG(pppLocal);
-	GETARG(pppRemote);
-
-	if (arg < argc) unique_call_id = atoi(argv[arg++]);
-	if (arg < argc) ppp_binary = strdup(argv[arg++]);
-	if (arg < argc) pptp_logwtmp = atoi(argv[arg++]);
+	GETARG_INT(pptpctrl_debug);
+	GETARG_INT(noipparam);
+	GETARG_VALUE(pppdxfig);
+	GETARG_VALUE(speed);
+	GETARG_VALUE(pppLocal);
+	GETARG_VALUE(pppRemote);
+	if (arg < argc) GETARG_INT(unique_call_id);
+	if (arg < argc) GETARG_STRING(ppp_binary);
+	if (arg < argc) GETARG_INT(pptp_logwtmp);
 	
 	if (pptpctrl_debug) {
 		if (*pppLocal)

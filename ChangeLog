@@ -1,3 +1,8 @@
+Mon Oct 31 09:21:11 2005  James Cameron  <quozl@us.netrek.org>
+
+	* pptpctrl.c: change GETARG to GETARG_VALUE and add a GETARG_INT
+	and GETARG_STRING macro, to improve readability.
+
 Mon Aug 22 10:45:14 2005  James Cameron  <quozl@us.netrek.org>
 
 	* compat.c (sigpipe_assign): remove superfluous sigset variable
