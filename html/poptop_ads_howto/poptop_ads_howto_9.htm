@@ -38,7 +38,7 @@
 <hr>
 <p><strong><a name="access"></a>13.2 PPTP Access Control </strong></p>
 <p>The above configuration allows everyone with a valid userID in the AD to connect to the pptpd server. If you want to restrict access to a group of users, you can create a group, say VPN_Allowed, in the AD. Add users to the group and modify the ntml_auth line in /etc/raddb/radius.conf to include the parameter &quot;--require-membership-of=EXAMPLE+VPN_Allowed&quot;. </p>
-<p>In the example, I split the line into multiple lines for clarify. It should be one continuous line in the configuration file. </p>
+<p>In the example, I split the line into multiple lines for clarity. It should be one continuous line in the configuration file. </p>
 <blockquote>
   <pre>ntlm_auth = &quot;/usr/bin/ntlm_auth --request-nt-key 
                   --username=%{Stripped-User-Name:-%{User-Name:-None}} 
