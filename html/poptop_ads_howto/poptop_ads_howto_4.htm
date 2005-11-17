@@ -8,7 +8,13 @@
 
 <body>
 <p><strong><a name="mppe"></a>6. Install MPPE Kernel Module </strong></p>
-<p>As the kernel in FC4 does not support MPPE which is required by MSCHAPv2, you will have to add this additional feature to it. You can download the MPPE module builder in rpm format from <a href="http://sourceforge.net/project/showfiles.php?group_id=44827">here</a>. You will need:</p>
+<p>MPPE support is required for MSCHAPv2. Depending on the kernel version, you may or may not require to perform this step.</p>
+<p>If you replace the FC kernel with v2.6.15-rc1 or above, MPPE support is built in the kernel already.  To test if your kernel supports MPPE:</p>
+<blockquote>
+  <pre>[root@pptp ~]# modprobe ppp-compress-18 &amp;&amp; echo ok</pre>
+</blockquote>
+<p>If it returns an &quot;ok&quot;, you can safety skip this step and move to <a href="#pppd_pptpd">step 7</a>. If you see &quot;FATAL: Module ppp_mppe not found.&quot;, install MPPE support as described in the following procedure. </p>
+<p>The latest FC4 kernel at the time of writing is 2.6.14. It does not support MPPE, you will have to add this feature to it. Download the MPPE module builder in rpm format from <a href="http://sourceforge.net/project/showfiles.php?group_id=44827">here</a>. The required RPMs are::</p>
 <blockquote>
   <pre>dkms-2.0.6-1.noarch.rpm
 kernel_ppp_mppe-1.0.2-3dkms.noarch.rpm</pre>
@@ -18,11 +24,10 @@ kernel_ppp_mppe-1.0.2-3dkms.noarch.rpm</pre>
   <pre>[root@pptp ~]# rpm -ivh dkms-2.0.6-1.noarch.rpm
 [root@pptp ~]# rpm -ivh kernel_ppp_mppe-1.0.2-3dkms.noarch.rpm </pre>
 </blockquote>
-<p>If you upgrade your kernel to 2.6.13, kernel_ppp_mppe version 1.0.2 or above must be used. Otherwise, the pptp tunnel will not connect and you will see error message &quot;This system lacks kernel support for PPP.&quot; in /var/log/messages.</p>
+<p>If you upgrade your kernel to 2.6.13 or above, kernel_ppp_mppe version 1.0.2 or above must be used. Otherwise, the pptp tunnel will not connect and you will see error message &quot;This system lacks kernel support for PPP.&quot; in /var/log/messages.</p>
 <dt><strong>Note:</strong></dt>
-<dd>(1) apparently MPPE support has gone into the kernel v2.6.12 or above. Not sure the updated FC4 kernel has it or not. At the moment, you will probably have to install MPPE yourself. </dd>
-<dd>(2) Fedora Extra provides also a dkms rpm, dkms-2.0.6-3.fc4.noarch.rpm. I have not tested it. You may want to use the one I mentioned above to make sure the installation will work. </dd>
-<hr>
+<dd>(1) Fedora Extra provides also a dkms rpm, dkms-2.0.6-3.fc4.noarch.rpm. I have not tested it. You may want to use the one I mentioned above to make sure the installation will work. </dd>
+<br><hr>
 <strong><a name="autoinstaller"></a>6.1 Kernel Upgrade and dkms_autoinstaller</strong>
 <p>If you upgrade your kernel after installing dkms, thanks to the dkms_autoinstaller service, you will not have to worry about the dkms kernel module. dkms_autoinstaller runs on every bootup. It checks  the dkms module to ensure it match the kernel version. If a mismatch is found, it will create a proper one for the boot kernel. </p>
 <p>For dkms_autoinstaller to work, you will need the correct kernel-devel version installed in your system. It is always a good idea to install the kernel-devel rpm alongside with your new kernel. </p>

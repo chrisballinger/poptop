@@ -47,11 +47,11 @@
 <p>Before trying to connect to AD, the AD DNS should have a A record for the pptp server. To add the A record, on your Windows DNS server, click Start -&gt; Administrative Tools -&gt; DNS. The dnsmgmt window pops up. Click on the &quot;+&quot; of &quot;Forward Lookup Zones&quot;. Right click on AD Domain name, in our test environment is EXAMPLENET.ORG, and choose &quot;New Host (A)...&quot;. Put in the server name and ip address and then press the &quot;Add Host&quot; button.</p>
 <p>When the DNS is ready, it is time to test Kerberos. Please note that the domain name must be in capital. </p>
 <blockquote>
-  <pre>[root@acna-pptp etc]# kinit -V skwok@EXAMPLENET.ORG<br>Password for skwok@EXAMPLENET.ORG: <br>Authenticated to Kerberos v5 </pre>
+  <pre>[root@pptp etc]# kinit -V skwok@EXAMPLENET.ORG<br>Password for skwok@EXAMPLENET.ORG: <br>Authenticated to Kerberos v5 </pre>
 </blockquote>
 <p>To check the Kerberos tickets:</p>
 <blockquote>
-  <pre>[root@acna-pptp etc]# klist<br>Ticket cache: FILE:/tmp/krb5cc_0<br>Default principal: skwok@EXAMPLENET.ORG</pre>
+  <pre>[root@pptp etc]# klist<br>Ticket cache: FILE:/tmp/krb5cc_0<br>Default principal: skwok@EXAMPLENET.ORG</pre>
   <pre>Valid starting Expires Service principal
      09/03/05 14:43:47 09/04/05 00:43:04 krbtgt/EXAMPLENET.ORG@EXAMPLENET.ORG
    renew until 09/04/05 14:43:47</pre>
