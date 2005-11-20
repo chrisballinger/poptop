@@ -1,3 +1,8 @@
+Mon Nov 21 10:53:09 2005  James Cameron  <quozl@us.netrek.org>
+
+	* bcrelay.c (mainloop): ignore ENOBUFS rather than fail.
+	From: Rajkumar S <rajkumars@asianetindia.com>
+
 Mon Oct 31 09:21:11 2005  James Cameron  <quozl@us.netrek.org>
 
 	* pptpctrl.c: change GETARG to GETARG_VALUE and add a GETARG_INT

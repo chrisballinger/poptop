@@ -668,6 +668,8 @@ static void mainloop(int argc, char **argv)
 		    syslog(LOG_NOTICE, "ignored ENETDOWN from sendto(), a network interface was going down?");
 		  } else if (errno == ENXIO) {
 		    syslog(LOG_NOTICE, "ignored ENXIO from sendto(), a network interface went down?");
+		  } else if (errno == ENOBUFS) {
+		    syslog(LOG_NOTICE, "ignored ENOBUFS from sendto(), temporary shortage of buffer memory");
 		  } else {
 		    syslog(LOG_ERR, "mainloop: Error, sendto failed! (rv=%d, errno=%d)", nrsent, errno);
 		    exit(1);
