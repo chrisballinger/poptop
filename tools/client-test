@@ -1,0 +1,159 @@
+#!/bin/sh
+#
+#   $Id: client-test,v 1.1 2005/12/29 04:36:29 quozl Exp $
+#
+#   client-test, PPTP lab test script
+#   Copyright (C) 2005  James Cameron (quozl@us.netrek.org)
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+# --
+#
+#   Creates many tunnels from a test client to a single server.
+#   Test sequence is as follows
+#
+#   1.  on server ... set it to listen on chosen network address
+#       ip addr add 10.9.0.3/16 dev eth0
+#
+#   2.  on client ... run pptpconfig to define a tunnel named test
+#
+#   3.  run "./client-test start" to create the tunnels
+#
+#   4.  run "./client-test status" to test the tunnels with ping
+#
+#   5.  run "./client-test stop" to stop the tunnels
+#
+
+# number of sets of tunnels to create
+MAX_C=1
+
+# number of tunnels in each set
+MAX_D=101
+
+# network address prefix for test network
+PREFIX=10.9
+
+# address of server on test network
+SERVER=10.9.0.3
+
+# create a virtual interface for the address
+function if_up {
+    ip addr add ${PREFIX}.${2}.${3}/16 dev eth0
+}
+
+# delete the virtual interface
+function if_down {
+    ip addr del ${PREFIX}.${2}.${3}/16 dev eth0
+}
+
+# create a tunnel from the virtual interface to the server
+function tu_up {
+    pppd call test updetach linkname test-${1} \
+        pty "pptp ${SERVER} --nolaunchpppd --localbind=${PREFIX}.${2}.${3}"
+}
+
+# delete a tunnel previously created
+function tu_down {
+    if test -f /var/run/ppp-test-${1}.pid; then
+	kill `head -1 /var/run/ppp-test-${1}.pid`
+    fi
+}
+
+# check the state of a tunnel slot
+function state {
+    echo -n "slot ${1} "
+    if ! test -f /var/run/ppp-test-${1}.pid; then
+	echo -n "(missing) "
+    else
+	pid=`head -1 /var/run/ppp-test-${1}.pid`
+	echo -n "pid ${pid} "
+	if ! kill -0 ${pid} 2>/dev/null; then
+	    echo -n "(missing) "
+	fi
+	iface=`tail -1 /var/run/ppp-test-${1}.pid`
+	echo -n "iface ${iface} "
+	if ! ip addr show dev ${iface} 1>/dev/null 2>/dev/null; then
+	    echo -n "(missing) "
+	fi
+	inet=`ip addr show dev ${iface}|egrep --only-matching "inet [0-9.]*"|awk '{print $2}'`
+	echo -n "inet ${inet} "
+	peer=`ip addr show dev ${iface}|egrep --only-matching "peer [0-9.]*"|awk '{print $2}'`
+	echo -n "peer ${peer} "
+	avg=`/bin/ping -c 1 ${peer} 2>/dev/null | grep "rtt min" | cut -f6 -d/`
+	if test -z "${avg}"; then
+	    echo -n "ping (missing) "
+	else
+	    echo -n "ping ${avg} "
+	fi
+    fi
+    echo
+}
+
+# general purpose iteration function to call a handler (above) once
+# for each slot in the test set.  Handler receives slot number, then
+# the fragments of IP address a.b.C.D.
+function iterate {
+    x=1
+    for c in `seq ${MAX_C}`; do
+	for d in `seq ${MAX_D}`; do
+	    ${1} ${x} ${c} ${d}
+	    x=`expr ${x} + 1`
+	done
+    done
+}
+
+# start the test
+function start {
+    iterate if_up
+    iterate tu_up
+}
+
+# stop the test
+function stop {
+    iterate tu_down
+    sleep 10
+    iterate if_down
+}
+
+# check status of test
+function status {
+    iterate state
+}
+
+# main dispatcher
+case "$1" in
+    start)
+	start
+	break
+    ;;
+    stop)
+	stop
+	break
+    ;;
+    restart)
+	stop
+	start
+	break
+    ;;
+    status)
+        status
+	break
+    ;;
+    *)
+	echo "Usage: ${0} start|stop|restart|status" 1>&2
+	exit 1
+    ;;
+esac
+
