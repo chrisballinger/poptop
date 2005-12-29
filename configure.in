@@ -147,11 +147,6 @@ AC_MSG_RESULT(LOG_DAEMON (the default))
 AC_DEFINE_UNQUOTED(PPTP_FACILITY, LOG_DAEMON)
 ])
 
-AC_ARG_WITH(pppd-ip-alloc,
-	[  --with-pppd-ip-alloc    Let pppd allocate IP addresses ],
-	[ AC_DEFINE(PPPD_IP_ALLOC)
-	  PPPD_IP_ALLOC=yes ])
-
 AC_ARG_WITH(bcrelay,
 	[  --with-bcrelay          Enable broadcast relay function ],
 	[ AC_DEFINE(BCRELAY)
@@ -172,26 +167,6 @@ else
   fi
 fi
 
-if test "$SLIRP" = "yes"; then
-  if test "$PPPD_IP_ALLOC" = "yes"; then
-    true
-  else
-    echo "SLIRP mode selected - disabling PoPToP internal IP allocation." 1>&2
-    AC_DEFINE(PPPD_IP_ALLOC)
-    PPPD_IP_ALLOC = yes
-  fi
-fi
-
-if test "$BSDUSER_PPP" = "yes"; then
-  if test "$PPPD_IP_ALLOC" = "yes"; then
-    true
-  else
-    echo "BSD user-space ppp selected - disabling PoPToP internal IP allocation." 1>&2
-    AC_DEFINE(PPPD_IP_ALLOC)
-    PPPD_IP_ALLOC = yes
-  fi
-fi
-
 if test "$BCRELAY" = "yes"; then
   if test "$BCRELAY" = "yes"; then
     XTRA_PROG="bcrelay"
@@ -201,27 +176,11 @@ if test "$BCRELAY" = "yes"; then
   fi
 fi
 
-if test "$PNS_MODE" = "yes"; then
-  if test "$PPPD_IP_ALLOC" = "yes"; then
-    true
-  else
-    echo "PNS mode selected - disabling PoPToP internal IP allocation." 1>&2
-    AC_DEFINE(PPPD_IP_ALLOC)
-    PPPD_IP_ALLOC = yes
-  fi
-fi
-
 AC_SUBST(XTRA_PROG)
 
 echo '==============================================================================='
 
 echo 'Configuration chosen:'
-echo -n '   PPPd IP allocation: '
-if test "$PPPD_IP_ALLOC" = "yes"; then
-  echo 'Yes.'
-else
-  echo 'No.'
-fi
 
 echo -n '   PPPd:               '
 if test "$BSDUSER_PPP" = "yes"; then

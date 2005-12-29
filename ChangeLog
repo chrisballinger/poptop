@@ -1,3 +1,21 @@
+Thu Dec 29 12:11:23 2005  James Cameron  <quozl@us.netrek.org>
+
+	* pptpd: remove PPPD_IP_ALLOC in favour of a configuration option.
+	
+	* pptpd.8: add --delegate
+	
+	* pptpd.conf.5, samples/pptpd.conf: add delegate option
+	
+	* config.h.in, configure.in: remove --with-pppd-ip-alloc option
+	
+	* pptpmanager.c, defaults.h, pptpd.c: convert from conditional
+	compilation to run-time checking.
+	
+	* samples/options.pptpd: describe how to force local IP for tunnel
+	even in delegate mode.
+
+	* INSTALL: remove build.sh reference.
+	
 Thu Dec 29 11:04:13 2005  James Cameron  <quozl@us.netrek.org>
 
 	* pptpgre.c (pptp_gre_init): prevent initial unwanted GRE ACK.

@@ -4,7 +4,7 @@
  * This file contains some tuneable parameters, most of which can be overriden
  * at run-time (note, MAX_CONNECTIONS can't!).
  *
- * $Id: defaults.h,v 1.6 2004/04/28 11:36:07 quozl Exp $
+ * $Id: defaults.h,v 1.7 2005/12/29 01:21:09 quozl Exp $
  */
 
 #ifndef _PPTPD_DEFAULTS_H
@@ -29,11 +29,9 @@
 
 /* Default configuration values, mostly configurable */
 
-#if !defined(PPPD_IP_ALLOC)
 #define MAX_CONNECTIONS			100
 #define DEFAULT_LOCAL_IP_LIST		"192.168.0.1-100"
 #define DEFAULT_REMOTE_IP_LIST		"192.168.1.1-100"
-#endif
 
 #define MAX_CALLS_PER_TCP_LINK		128
 
@@ -73,5 +71,6 @@
 #define NOIPPARAM_KEYWORD		"noipparam"
 #define PPP_BINARY_KEYWORD		"ppp"
 #define LOGWTMP_KEYWORD			"logwtmp"
+#define DELEGATE_KEYWORD		"delegate"
 
 #endif	/* !_PPTPD_DEFAULTS_H */

@@ -1,5 +1,5 @@
 ###############################################################################
-# $Id: options.pptpd,v 1.10 2005/08/14 23:39:40 quozl Exp $
+# $Id: options.pptpd,v 1.11 2005/12/29 01:21:09 quozl Exp $
 #
 # Sample Poptop PPP options file /etc/ppp/options.pptpd
 # Options used by PPP when a connection arrives from a client.
@@ -81,6 +81,15 @@ require-mppe-128
 # (you do not need this if your PPTP server is responsible for routing
 # packets to the clients -- James Cameron)
 proxyarp
+
+# Normally pptpd passes the IP address to pppd, but if pptpd has been
+# given the delegate option in pptpd.conf or the --delegate command line
+# option, then pppd will use chap-secrets or radius to allocate the
+# client IP address.  The default local IP address used at the server
+# end is often the same as the address of the server.  To override this,
+# specify the local IP address here.
+# (you must not use this unless you have used the delegate option)
+#10.8.0.100
 
 
 # Logging

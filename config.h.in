@@ -4,7 +4,7 @@
  *
  * Additional autoconf defines for this program.
  *
- * $Id: config.h.in,v 1.17 2005/08/03 09:10:58 quozl Exp $
+ * $Id: config.h.in,v 1.18 2005/12/29 01:21:09 quozl Exp $
  */
 
 /* Use BSD User land PPP? */
@@ -12,9 +12,6 @@
 
 /* Use SLIRP? */
 #undef SLIRP
-
-/* Let PPPD choose the IP addresses? */
-#undef PPPD_IP_ALLOC
 
 /* Enable Broadcast Relay? */
 #undef BCRELAY

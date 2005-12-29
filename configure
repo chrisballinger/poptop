@@ -855,7 +855,6 @@ Optional Packages:
   --with-libwrap          Use libwrap (tcp wrappers)
   --with-bsdppp           Use BSD user-space ppp
   --with-slirp            Use SLIRP instead of pppd
-  --with-pppd-ip-alloc    Let pppd allocate IP addresses
   --with-bcrelay          Enable broadcast relay function
   --with-pns-mode         Option is NOT FUNCTIONAL YET
 
@@ -5905,17 +5904,6 @@ _ACEOF
 fi;
 
 
-# Check whether --with-pppd-ip-alloc or --without-pppd-ip-alloc was given.
-if test "${with_pppd_ip_alloc+set}" = set; then
-  withval="$with_pppd_ip_alloc"
-   cat >>confdefs.h <<\_ACEOF
-#define PPPD_IP_ALLOC 1
-_ACEOF
-
-	  PPPD_IP_ALLOC=yes
-fi;
-
-
 # Check whether --with-bcrelay or --without-bcrelay was given.
 if test "${with_bcrelay+set}" = set; then
   withval="$with_bcrelay"
@@ -5956,32 +5944,6 @@ _ACEOF
   fi
 fi
 
-if test "$SLIRP" = "yes"; then
-  if test "$PPPD_IP_ALLOC" = "yes"; then
-    true
-  else
-    echo "SLIRP mode selected - disabling PoPToP internal IP allocation." 1>&2
-    cat >>confdefs.h <<\_ACEOF
-#define PPPD_IP_ALLOC 1
-_ACEOF
-
-    PPPD_IP_ALLOC = yes
-  fi
-fi
-
-if test "$BSDUSER_PPP" = "yes"; then
-  if test "$PPPD_IP_ALLOC" = "yes"; then
-    true
-  else
-    echo "BSD user-space ppp selected - disabling PoPToP internal IP allocation." 1>&2
-    cat >>confdefs.h <<\_ACEOF
-#define PPPD_IP_ALLOC 1
-_ACEOF
-
-    PPPD_IP_ALLOC = yes
-  fi
-fi
-
 if test "$BCRELAY" = "yes"; then
   if test "$BCRELAY" = "yes"; then
     XTRA_PROG="bcrelay"
@@ -5991,30 +5953,11 @@ if test "$BCRELAY" = "yes"; then
   fi
 fi
 
-if test "$PNS_MODE" = "yes"; then
-  if test "$PPPD_IP_ALLOC" = "yes"; then
-    true
-  else
-    echo "PNS mode selected - disabling PoPToP internal IP allocation." 1>&2
-    cat >>confdefs.h <<\_ACEOF
-#define PPPD_IP_ALLOC 1
-_ACEOF
-
-    PPPD_IP_ALLOC = yes
-  fi
-fi
-
 
 
 echo '==============================================================================='
 
 echo 'Configuration chosen:'
-echo -n '   PPPd IP allocation: '
-if test "$PPPD_IP_ALLOC" = "yes"; then
-  echo 'Yes.'
-else
-  echo 'No.'
-fi
 
 echo -n '   PPPd:               '
 if test "$BSDUSER_PPP" = "yes"; then

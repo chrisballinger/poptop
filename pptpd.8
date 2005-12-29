@@ -95,6 +95,15 @@ as users connect and disconnect.  See
 .BR wtmp (1).
 
 .TP
+.BR -D | --delegate
+delegates the allocation of client IP addresses to 
+.BR pppd (8).
+Without this option, which is the default, pptpd manages the list of
+IP addresses for clients and passes the next free address to pppd.
+With this option, pptpd does not pass an address, and so pppd may use
+radius or chap-secrets to allocate an address.
+
+.TP
 .BR -v | --version
 displays the current version of the pptp daemon.
 
