@@ -4,7 +4,7 @@
  * Grabs any command line argument and processes any further options in
  * the pptpd config file, before throwing over to pptpmanager.c.
  *
- * $Id: pptpd.c,v 1.16 2005/12/29 01:21:09 quozl Exp $
+ * $Id: pptpd.c,v 1.17 2005/12/29 09:59:49 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -64,10 +64,7 @@ int pptp_delegate = 0;
 
 int pptp_stimeout = STIMEOUT_DEFAULT;
 
-int maxConnections = MAX_CONNECTIONS;
-
-char localIP[MAX_CONNECTIONS][16];
-char remoteIP[MAX_CONNECTIONS][16];
+int pptp_connections = CONNECTIONS_DEFAULT;
 
 /* Local prototypes */
 static void processIPStr(int type, char *ipstr);
@@ -115,6 +112,8 @@ static void showusage(char *prog)
 	printf("                           (default is 10).\n");
 	printf(" [-v] [--version]          Displays the pptpd version number.\n");
 	printf(" [-w] [--logwtmp]          Update wtmp as users login.\n");
+	printf(" [-C] [--connections n]    Limit on number of connections.\n");
+	printf(" [-D] [--delegate]         Delegate IP allocation to pppd.\n");
 
 	printf("\n\nLogs and debugging go to syslog as DAEMON.");
 
@@ -150,9 +149,9 @@ int main(int argc, char **argv)
 	while (1) {
 		int option_index = 0;
 #ifdef BCRELAY
-		char *optstring = "b:c:de:fhil:o:p:s:t:vwD";
+		char *optstring = "b:c:de:fhil:o:p:s:t:vwCD";
 #else
-		char *optstring = "c:de:fhil:o:p:s:t:vwD";
+		char *optstring = "c:de:fhil:o:p:s:t:vwCD";
 #endif
 
 		static struct option long_options[] =
@@ -173,6 +172,7 @@ int main(int argc, char **argv)
 			{"stimeout", 1, 0, 0},
 			{"version", 0, 0, 0},
 			{"logwtmp", 0, 0, 0},
+			{"connections", 1, 0, 0},
 			{"delegate", 0, 0, 0},
 			{0, 0, 0, 0}
 		};
@@ -183,9 +183,9 @@ int main(int argc, char **argv)
 		/* convert long options to short form */
 		if (c == 0)
 #ifdef BCRELAY
-			c = "bcdefhilopstvwD"[option_index];
+			c = "bcdefhilopstvwCD"[option_index];
 #else
-			c = "cdefhilopstvwD"[option_index];
+			c = "cdefhilopstvwCD"[option_index];
 #endif
 		switch (c) {
 #ifdef BCRELAY
@@ -232,6 +232,10 @@ int main(int argc, char **argv)
 
 		case 'w': /* --logwtmp */
 		        pptp_logwtmp = TRUE;
+			break;
+
+		case 'C': /* --connections */
+		        pptp_connections = atoi(optarg);
 			break;
 
 		case 'D': /* --delegate */
@@ -283,6 +287,14 @@ int main(int argc, char **argv)
 
 	if (!configFile)
 		configFile = strdup(PPTPD_CONFIG_FILE_DEFAULT);
+
+	if (read_config_file(configFile, CONNECTIONS_KEYWORD, tmp) > 0) {
+		pptp_connections = atoi(tmp);
+		if (pptp_connections <= 0)
+			pptp_connections = CONNECTIONS_DEFAULT;
+	}
+
+	slot_init(pptp_connections);
 
 	if (!pptp_debug && read_config_file(configFile, DEBUG_KEYWORD, tmp) > 0)
 		pptp_debug = TRUE;
@@ -432,8 +444,8 @@ int main(int argc, char **argv)
 	}
 #endif
 
-        return 1;
-
+	slot_free();
+	return 0;
 }
 
 static void log_pid(char *pid_file) {
@@ -614,17 +626,17 @@ static void processIPStr(int type, char *ipstr)
 				syslog(LOG_ERR, "MGR: Bad IP address (%s) in config file!", tmpstr2);
 				exit(1);
 			}
-			if (num == MAX_CONNECTIONS) {
-				syslog(LOG_WARNING, "MGR: Max connections reached, extra IP addresses ignored");
+			if (num == pptp_connections) {
+				syslog(LOG_WARNING, "MGR: connections limit (%d) reached, extra IP addresses ignored", pptp_connections);
 				return;
 			}
 #if DEBUG_IP_PARSER
 			syslog(LOG_DEBUG, "MGR: Setting IP %d = %s", num, tmpstr7);
 #endif
 			if (type == LOCAL)
-				strlcpy(localIP[num], tmpstr7, 16);
+				slot_set_local(num, tmpstr7);
 			else
-				strlcpy(remoteIP[num], tmpstr7, 16);
+				slot_set_remote(num, tmpstr7);
 			num++;
 		} else {
 			/* Got a range;
@@ -730,29 +742,29 @@ static void processIPStr(int type, char *ipstr)
 					syslog(LOG_ERR, "MGR: Bad IP address (%s) in config file!", tmpstr5);
 					exit(1);
 				}
-				if (num == MAX_CONNECTIONS) {
-					syslog(LOG_WARNING, "MGR: Max connections reached, extra IP addresses ignored");
+				if (num == pptp_connections) {
+					syslog(LOG_WARNING, "MGR: connections limit (%d) reached, extra IP addresses ignored", pptp_connections);
 					return;
 				}
 #if DEBUG_IP_PARSER
 				syslog(LOG_DEBUG, "MGR: Setting IP %d = %s", num, tmpstr7);
 #endif
 				if (type == LOCAL)
-					strlcpy(localIP[num], tmpstr7, sizeof(localIP[num]));
+					slot_set_local(num, tmpstr7);
 				else
-					strlcpy(remoteIP[num], tmpstr7, sizeof(remoteIP[num]));
+					slot_set_remote(num, tmpstr7);
 				num++;
 			}
 		}
 	}
-	if (num == 1 && type == LOCAL && maxConnections > 1) {
+	if (num == 1 && type == LOCAL && pptp_connections > 1) {
 #if DEBUG_IP_PARSER
-		syslog(LOG_DEBUG, "MGR: Setting all %d local IPs to %s", maxConnections, localIP[0]);
+		syslog(LOG_DEBUG, "MGR: Setting all %d local IPs to %s", pptp_connections, slot_get_local(0));
 #endif
-		for (n = 1; n < maxConnections; n++)
-			strcpy(localIP[n], localIP[0]);
-	} else if (maxConnections > num)
-		maxConnections = num;
+		for (n = 1; n < pptp_connections; n++)
+			slot_set_local(n, slot_get_local(0));
+	} else if (pptp_connections > num)
+		pptp_connections = num;
 }
 
 #ifdef BCRELAY
@@ -761,7 +773,7 @@ static void processIPStr(int type, char *ipstr)
  * retn: 0 on success, -1 on failure.
  */
 static void launch_bcrelay() {
-  char *bcrelay_argv[6];
+  char *bcrelay_argv[8];
   int an = 0;
 
       if (bcrelay) {

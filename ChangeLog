@@ -1,3 +1,13 @@
+Thu Dec 29 17:39:15 2005  James Cameron  <quozl@us.netrek.org>
+
+	* pptpd.c, pptpmanager.c, pptpmanager.h, defaults.h: make
+	connections limit a run-time option.
+
+Thu Dec 29 15:45:51 2005  James Cameron  <quozl@us.netrek.org>
+
+	* pptpd.c (launch_bcrelay): insufficient space was allocated in
+	the argv array for the number of elements used.
+
 Thu Dec 29 12:11:23 2005  James Cameron  <quozl@us.netrek.org>
 
 	* pptpd: remove PPPD_IP_ALLOC in favour of a configuration option.

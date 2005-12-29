@@ -1,4 +1,4 @@
-.TH PPTPD.CONF 5 "24 May 2004"
+.TH PPTPD.CONF 5 "29 December 2005"
 .SH NAME
 .B pptpd.conf
 - PPTP VPN daemon configuration
@@ -48,6 +48,15 @@ internal interface to the clients.
 Equivalent to the command line 
 .B --bcrelay
 option.
+
+.TP
+.BI "connections " n
+limits the number of client connections that may be accepted.
+If pptpd is allocating IP addresses (e.g. 
+.BR delegate
+is not used) then the number of connections is also limited by the
+.BR remoteip
+option.  The default is 100.
 
 .TP
 .BI "delegate"
