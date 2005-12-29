@@ -3,7 +3,7 @@
  *
  * Manages the PoPToP sessions.
  *
- * $Id: pptpmanager.c,v 1.12 2005/12/29 01:21:09 quozl Exp $
+ * $Id: pptpmanager.c,v 1.13 2005/12/29 05:51:39 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -115,7 +115,7 @@ static void sigchld_responder(int sig)
 
 int pptp_manager(int argc, char **argv)
 {
-	int i, firstOpen = -1;
+	int i, firstOpen;
 	int ctrl_pid;
 	socklen_t addrsize;
 
@@ -159,6 +159,7 @@ int pptp_manager(int argc, char **argv)
 		if (pptp_delegate) {
 			FD_SET(hostSocket, &connSet);
 		} else {
+			firstOpen = -1;
 			for (i = 0; i < maxConnections; i++)
 				if (clientArray[i].pid == 0) {
 					firstOpen = i;
