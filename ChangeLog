@@ -1,3 +1,8 @@
+Thu Dec 29 11:04:13 2005  James Cameron  <quozl@us.netrek.org>
+
+	* pptpgre.c (pptp_gre_init): prevent initial unwanted GRE ACK.
+	From: Jonathan Barker <jabarker@itstrategic.ca>
+
 Mon Nov 21 10:53:09 2005  James Cameron  <quozl@us.netrek.org>
 
 	* bcrelay.c (mainloop): ignore ENOBUFS rather than fail.

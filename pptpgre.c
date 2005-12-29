@@ -4,7 +4,7 @@
  * originally by C. S. Ananian
  * Modified for PoPToP
  *
- * $Id: pptpgre.c,v 1.6 2005/08/02 11:33:31 quozl Exp $
+ * $Id: pptpgre.c,v 1.7 2005/12/29 00:10:32 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -93,8 +93,8 @@ int pptp_gre_init(u_int32_t call_id_pair, int pty_fd, struct in_addr *inetaddrs)
 		return -1;
 	}
 
-	gre.ack_sent = gre.ack_recv = gre.seq_sent = 0;
-	gre.seq_recv = 0xFFFFFFFF;
+	gre.seq_sent = 0;
+	gre.ack_sent = gre.ack_recv = gre.seq_recv = 0xFFFFFFFF;
 	/* seq_recv is -1, therefore next packet expected is seq 0,
 	   to comply with RFC 2637: 'The sequence number for each
 	   user session is set to zero at session startup.' */
