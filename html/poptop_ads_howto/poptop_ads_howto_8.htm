@@ -43,10 +43,10 @@ radius_retries 3</pre>
 <p>Apart from the  line dictionary, all the other lines are default. </p>
 <hr>
 <strong><a name="dict"></a>12.2 dictionary.microsoft</strong>
-<p>I must admit, I do not know much, read as I do not know anything, about this file. It does not come with the radiusclient. There is one that freeradius provided but the format is not compatible with pppd. I based on the freeradius one and experimented with it for days. Finally I created one which works. However, I do not know if it is 100% correct.</p>
+<p>I must admit, I do not know much about this file. It does not come with the radiusclient. There is one that freeradius provided but the format is not compatible with pppd. I based on the freeradius one and experimented with it for days. Finally I created one which works. However, I do not know if it is 100% correct.</p>
 <p>First of all, copy the freeradius one, /usr/share/freeradius/dictionary.microsoft, to /etc/radiusclient. Then change the word octets to string in the file. Add the word Microsoft to some of the lines until it eliminates all fatal errors and works. Here is my version: </p>
 <blockquote>
-  <pre>#<br>#       Microsoft's VSA's, from RFC 2548<br>#<br>#       $Id: poptop_ads_howto_8.htm,v 1.1 2005/10/25 03:08:14 wskwok Exp $<br>#
+  <pre>#<br>#       Microsoft's VSA's, from RFC 2548<br>#<br>#       $Id: poptop_ads_howto_8.htm,v 1.2 2006/01/04 23:41:48 wskwok Exp $<br>#
 
 VENDOR          Microsoft       311     Microsoft
 

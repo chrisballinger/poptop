@@ -19,7 +19,9 @@ large domain environments and on high latency networks.<br>
 -- quote --
   </p>
 </blockquote>
-<p>It is highly recommended to upgrade samba to v3.0.20 or above. The latest samba v3.0.20b rpms for FC4 can be found in <a href="http://us5.samba.org/samba/ftp/Binary_Packages/Fedora/RPMS/i386/core/4/">here</a>. Download a copy and then update samba with command &quot;rpm -Uvh samba*.rpm&quot;. </p>
+<p>It is highly recommended to upgrade samba to v3.0.20 or above. The latest samba v3.0.21a rpms for FC4 can be found in <a href="http://us5.samba.org/samba/ftp/Binary_Packages/Fedora/RPMS/i386/core/4/">here</a>. Download a copy and then update samba with command &quot;rpm -Uvh samba*.rpm&quot;. </p>
+<p><strong>Note: </strong>
+Samba v3.0.21 has a bug on the oplock code. Avoid this version. If you cannot use v3.0.21a, please stay with v3.0.20b. </p>
 <hr>
 <strong><a name="smbconf"></a>9.1 Configure Samba</strong>
 <p>No matter you choose to use winbind or freeradius to connect to Active Directory, you will have to configure samba properly. The configuration file of samba is in /etc/samba and is called smb.conf. The file should have at least the following lines. </p>

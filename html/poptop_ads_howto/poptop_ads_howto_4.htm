@@ -13,7 +13,7 @@
 <blockquote>
   <pre>[root@pptp ~]# modprobe ppp-compress-18 &amp;&amp; echo ok</pre>
 </blockquote>
-<p>If it returns an &quot;ok&quot;, you can safety skip this step and move to <a href="#pppd_pptpd">step 7</a>. If you see &quot;FATAL: Module ppp_mppe not found.&quot;, install MPPE support as described in the following procedure. </p>
+<p>If it returns an &quot;ok&quot;, you can safely skip this step and move to <a href="#pppd_pptpd">step 7</a>. If you see &quot;FATAL: Module ppp_mppe not found.&quot;, install MPPE support as described in the following procedure. </p>
 <p>The latest FC4 kernel at the time of writing is 2.6.14. It does not support MPPE, you will have to add this feature to it. Download the MPPE module builder in rpm format from <a href="http://sourceforge.net/project/showfiles.php?group_id=44827">here</a>. The required RPMs are::</p>
 <blockquote>
   <pre>dkms-2.0.6-1.noarch.rpm
