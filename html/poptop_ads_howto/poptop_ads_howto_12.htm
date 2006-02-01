@@ -53,10 +53,17 @@ If you want the statistics from older version of wtmp, use the -f parameter in &
 <strong><a name="disconnect"></a>16.3 Disconnect a User</strong>
 <p>To disconnect an active connection, you will have to kill the pppd process associate with it. Firstly, run the command in section 16.1 to find out the remote ip address of the user. Say you want to disconnect Mary, her ip address in the above example is 1.2.3.4. Then, find the PID of the pppd process.
 </p>
-<pre>[root@pptp /]# ps -ef | grep 1.2.3.4 | grep pppd
-root   8672  8671  0 16:59 ?      00:00:00 /usr/sbin/pppd local file /etc/ppp/options.pptpd 115200 10.0.0.10:10.0.0.124 ipparam 1.2.3.4. plugin /usr/lib/pptpd/pptpd-logwtmp.so pptpd-original-ip 1.2.3.4</pre>
+<blockquote>
+  <pre>[root@pptp /]# ps -ef | grep 1.2.3.4 | grep pppd
+root   8672  8671  0 16:59 ?      00:00:00 /usr/sbin/pppd local file /etc/ppp/options.pptpd 115200 
+                                               10.0.0.10:10.0.0.124 ipparam 1.2.3.4. 
+                                               plugin /usr/lib/pptpd/pptpd-logwtmp.so 
+                                               pptpd-original-ip 1.2.3.4</pre>
+</blockquote>
 <p>The second field of the output, 8672 in our example, is the PID of the pppd process. Kill the process will disconnect the user.</p>
-<pre>[root@pptp /]# kill 8672</pre>
+<blockquote>
+  <pre>[root@pptp /]# kill 8672</pre>
+</blockquote><br>
 <hr>
 <a href="poptop_ads_howto_11.htm">Previous</a>&nbsp;&nbsp;<a href="poptop_ads_howto_1.htm#toc">Content</a>
 </body>

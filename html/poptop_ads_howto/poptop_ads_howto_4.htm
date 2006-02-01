@@ -9,7 +9,7 @@
 <body>
 <p><strong><a name="mppe"></a>6. Install MPPE Kernel Module </strong></p>
 <p>MPPE support is required for MSCHAPv2. Depending on the kernel version, you may or may not require to perform this step.</p>
-<p>If you replace the FC kernel with v2.6.15-rc1 or above, MPPE support is built in the kernel already.  To test if your kernel supports MPPE:</p>
+<p>If you replace the FC kernel with v2.6.15 or above, MPPE support is built in the kernel already.  To test if your kernel supports MPPE:</p>
 <blockquote>
   <pre>[root@pptp ~]# modprobe ppp-compress-18 &amp;&amp; echo ok</pre>
 </blockquote>
@@ -34,6 +34,7 @@ kernel_ppp_mppe-1.0.2-3dkms.noarch.rpm</pre>
 <hr>
 <strong><a name="pppd_pptpd" id="pppd_pptpd"></a>7. pppd and  pptpd</strong>
 <p><a name="pppd"><strong>7.1 Upgrade pppd </strong></a></p>
+<p>Please note that the following procedure works only for kernel v2.6.14 or below. If you are using kernel v2.6.15, the ppp-2.4.3-5 does NOT work because of MPPC. You may find more information from <a href="http://kernel-bugs.osdl.org/show_bug.cgi?id=5827">here</a>.</p>
 <p>FC4 comes with ppp-2.4.2-7. It is required to be upgraded to a patched version which supports MPPE. The patched version can be found in <a href="http://sourceforge.net/project/showfiles.php?group_id=44827">here</a>. Download the rpm for FC4. At the time of writing, the latest version is 2.4.3-5. Get the FC4 rpm: </p>
 <blockquote>
   <pre>ppp-2.4.3-5.fc4.i386.rpm</pre>

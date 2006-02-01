@@ -13,6 +13,11 @@
   email: skwok (at) acnielsen.com.au  </p>
 <p align="left"><strong>Revision History</strong>:</p>
 <dl>
+  <dt>Release 0.7 -- 1 February 2006</dt>
+      <dd>- Section 12.2 has been rewritten.</dd>
+	  <dd>- Update information on Samba version.</dd>
+	  <dd>- Provided a link to information on problem with kernel 2.6.15 and ppp-2.4.3-5</dd>
+      <br>
   <dt>Release 0.6 -- 5 January 2006</dt>
       <dd>- Added a new section on pptp server administration.</dd>
       <dd>- Updated information on Samba version. </dd>
@@ -83,7 +88,7 @@
 
 <hr>
 <strong><a name="introduction"></a>1. Introduction</strong>
-<p>This document descibes how to  build a Linux PPTP server with Poptop and use Microsoft Active Directory to authenticate users. There are some documentations and howtos on this topic, such as the <a href="http://poptop.sourceforge.net/dox/replacing-windows-pptp-with-linux-howto.phtml">Replacing a Windows PPTP Server with Linux Howto</a> maintained by Matt Alexander. Most of them, however, concentrate on Samba and winbind. I followed them and got it working in the test environment. Unfortunately, winbind does not scale very well in a AD setup which has thousands of objects. The AD in my work is a big tree. It spans across all continents and has thousands of users and groups. Winbind simply times out before it can harvest a complete list of users/groups.</p>
+<p>This document descibes how to  build a Linux PPTP server with Poptop and use Microsoft Active Directory to authenticate users. There are a few howtos on this topic, such as the <a href="http://poptop.sourceforge.net/dox/replacing-windows-pptp-with-linux-howto.phtml">Replacing a Windows PPTP Server with Linux Howto</a> maintained by Matt Alexander. Most of them, however, concentrate on Samba and winbind. I followed them and got it working in the test environment. Unfortunately, winbind does not scale very well in a AD setup which has thousands of objects. The AD in my work is a big tree. It spans across all continents and has thousands of users and groups. Winbind simply times out before it can harvest a complete list of users/groups.</p>
 <p align="left">The other way of doing it is with radius. Information on how to setup pptpd with radius against Active Directory is scarce. I can only find bits and pieces information from forums but never find any comprehensive documents. I spent days to try to get it configured properly. After countless frustrations and tears, I eventually got a working setup. I therefore decided to make this howto to document it. Hopefully, you will find it useful.</p>
 <p align="left">To make this howto complete, I include the winbind configuration as well although it may duplicate Matt's work.</p>
 <p align="left"><strong>Note</strong>: this howto is based on Fedora Core 4 and use pre-packaged RPMs whenever possible. If you are using other distributions or like to compile software, you will have to make the necessary adjustments.</p>
