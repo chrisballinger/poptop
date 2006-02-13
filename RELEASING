@@ -1,5 +1,6 @@
 Releasing pptpd
 
+decide on version number
 update version number in the following files
 	pptpd.spec
 	configure.in

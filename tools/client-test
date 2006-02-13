@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-#   $Id: client-test,v 1.1 2005/12/29 04:36:29 quozl Exp $
+#   $Id: client-test,v 1.2 2006/02/13 23:50:44 quozl Exp $
 #
 #   client-test, PPTP lab test script
 #   Copyright (C) 2005  James Cameron (quozl@us.netrek.org)
@@ -26,6 +26,7 @@
 #
 #   1.  on server ... set it to listen on chosen network address
 #       ip addr add 10.9.0.3/16 dev eth0
+#       and edit /etc/hosts.allow to cover range "ALL: 10.9.0.0/16"
 #
 #   2.  on client ... run pptpconfig to define a tunnel named test
 #
@@ -37,10 +38,10 @@
 #
 
 # number of sets of tunnels to create
-MAX_C=1
+MAX_C=10
 
 # number of tunnels in each set
-MAX_D=101
+MAX_D=100
 
 # network address prefix for test network
 PREFIX=10.9
@@ -50,12 +51,14 @@ SERVER=10.9.0.3
 
 # create a virtual interface for the address
 function if_up {
-    ip addr add ${PREFIX}.${2}.${3}/16 dev eth0
+    ip addr add ${PREFIX}.${2}.${3}/16 dev eth0 && echo -n .
 }
 
 # delete the virtual interface
 function if_down {
-    ip addr del ${PREFIX}.${2}.${3}/16 dev eth0
+    ip addr del ${PREFIX}.${2}.${3}/16 dev eth0 2>/dev/null && echo -n .
+# expected error on 2.6.8 ...
+# RTNETLINK answers: Cannot assign requested address
 }
 
 # create a tunnel from the virtual interface to the server
@@ -64,11 +67,31 @@ function tu_up {
         pty "pptp ${SERVER} --nolaunchpppd --localbind=${PREFIX}.${2}.${3}"
 }
 
+# create a tunnel from the virtual interface to the server
+function tu_up_fast {
+    pppd call test linkname test-${1} \
+        pty "pptp ${SERVER} --nolaunchpppd --localbind=${PREFIX}.${2}.${3}"
+    echo -n .
+    sleep 0.1
+}
+
 # delete a tunnel previously created
 function tu_down {
     if test -f /var/run/ppp-test-${1}.pid; then
-	kill `head -1 /var/run/ppp-test-${1}.pid`
+	kill `head -1 /var/run/ppp-test-${1}.pid` && echo -n .
     fi
+}
+
+# start tunnels rapidly and fill up available memory until swap free
+# starts to be scarce
+function filler {
+    if_up $1 $2 $3
+    tu_up_fast $1 $2 $3
+    swapfree=`grep SwapFree /proc/meminfo |awk '{print $2}'`
+    until test ${swapfree} -gt 4096; do
+	echo -n -
+	sleep 1
+    done
 }
 
 # check the state of a tunnel slot
@@ -117,14 +140,24 @@ function iterate {
 # start the test
 function start {
     iterate if_up
+    echo
     iterate tu_up
+    echo
+}
+
+# start slow test
+function fill {
+    iterate filler
+    echo
 }
 
 # stop the test
 function stop {
     iterate tu_down
+    echo
     sleep 10
     iterate if_down
+    echo
 }
 
 # check status of test
@@ -136,6 +169,10 @@ function status {
 case "$1" in
     start)
 	start
+	break
+    ;;
+    fill)
+	fill
 	break
     ;;
     stop)
@@ -152,7 +189,7 @@ case "$1" in
 	break
     ;;
     *)
-	echo "Usage: ${0} start|stop|restart|status" 1>&2
+	echo "Usage: ${0} start|fill|stop|restart|status" 1>&2
 	exit 1
     ;;
 esac
