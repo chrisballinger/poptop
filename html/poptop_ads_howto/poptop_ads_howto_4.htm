@@ -8,13 +8,13 @@
 
 <body>
 <p><strong><a name="mppe"></a>6. Install MPPE Kernel Module </strong></p>
-<p>MPPE support is required for MSCHAPv2. Depending on the kernel version, you may or may not require to perform this step.</p>
-<p>If you replace the FC kernel with v2.6.15 or above, MPPE support is built in the kernel already.  To test if your kernel supports MPPE:</p>
+<p>MPPE support is required for MSCHAPv2. Depending on the kernel version, you may or may not require to perform this step. Kernel version 2.6.15 or above has MPPE built-in. If you are using the latest FC4 2.6.15 kernel, you can go to <a href="#pppd_pptpd">step 7</a> now. If you are using an older kernel  which  does not support MPPE, you will have to add this feature to it. </p>
+<p>To test if your kernel supports MPPE:</p>
 <blockquote>
   <pre>[root@pptp ~]# modprobe ppp-compress-18 &amp;&amp; echo ok</pre>
 </blockquote>
-<p>If it returns an &quot;ok&quot;, you can safely skip this step and move to <a href="#pppd_pptpd">step 7</a>. If you see &quot;FATAL: Module ppp_mppe not found.&quot;, install MPPE support as described in the following procedure. </p>
-<p>The latest FC4 kernel at the time of writing is 2.6.14. It does not support MPPE, you will have to add this feature to it. Download the MPPE module builder in rpm format from <a href="http://sourceforge.net/project/showfiles.php?group_id=44827">here</a>. The required RPMs are::</p>
+<p>If it returns an &quot;ok&quot;, you can safely skip this step and move to <a href="#pppd_pptpd">step 7</a>. If you see &quot;FATAL: Module ppp_mppe not found.&quot;, install MPPE support as described in the following procedure:</p>
+<p>  Download the MPPE module builder in rpm format from <a href="http://sourceforge.net/project/showfiles.php?group_id=44827">here</a>. The required RPMs are::</p>
 <blockquote>
   <pre>dkms-2.0.6-1.noarch.rpm
 kernel_ppp_mppe-1.0.2-3dkms.noarch.rpm</pre>
@@ -45,11 +45,11 @@ kernel_ppp_mppe-1.0.2-3dkms.noarch.rpm</pre>
 <p><strong>Note</strong>: If you are a Gentoo user, and are using kernel v2.6.15, the ppp-2.4.3-5 does NOT work because of MPPC. You may find more information from <a href="http://kernel-bugs.osdl.org/show_bug.cgi?id=5827">here</a>.</p>
 <hr>
 <a name="pptpd"></a><strong>7.2 Install pptpd</strong>
-<p>In the <a href="http://sourceforge.net/project/showfiles.php?group_id=44827">same page</a> download the pptpd rpm, pptpd-1.3.0-0.i386.rpm, and install it.</p>
+<p>In the <a href="http://sourceforge.net/project/showfiles.php?group_id=44827">same page</a> download the pptpd rpm, pptpd-1.3.1-0.i386.rpm, and install it.</p>
 <blockquote>
-  <pre>[root@pptp ~]# rpm -ivh pptpd-1.3.0-0.i386.rpm</pre>
+  <pre>[root@pptp ~]# rpm -ivh pptpd-1.3.1-0.i386.rpm</pre>
 </blockquote>
-<p><strong>Note</strong>: pptpd-1.3 is an experimental version. The stable version is 1.2.3. Both versions work fine for me. It is up to you to choose which one to use. </p>
+<p><strong>Note</strong>: pptpd-1.3.1 is an experimental version. The stable version is 1.3.0. Both versions work fine for me. It is up to you to choose which one to use. </p>
 <hr>
 <a href="poptop_ads_howto_5.htm">Next</a> &nbsp;&nbsp;<a href="poptop_ads_howto_3.htm">Previous</a>&nbsp;&nbsp;<a href="poptop_ads_howto_1.htm#toc">Content</a>
 </body>

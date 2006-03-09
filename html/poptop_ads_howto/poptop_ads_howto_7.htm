@@ -54,7 +54,30 @@ nodefaultroute
 plugin winbind.so
 ntlm_auth-helper &quot;/usr/bin/ntlm_auth --helper-protocol=ntlm-server-1&quot;</pre>
 </blockquote>
-<p>After fixing the two files, we can start pptpd and connect to it from remote client. To start it:</p>
+<p>If you have Windows XP clients, you may want to reduce the MTU size. Add the  line, /sbin/ifconfig $1 mtu 1400, to /etc/ppp/ip-up as shown in the following list.</p>
+<blockquote>
+  <pre>[root@pptp ppp]# cat ip-up
+#!/bin/bash
+# This file should not be modified -- make local changes to
+# /etc/ppp/ip-up.local instead
+
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+export PATH
+
+LOGDEVICE=$6
+REALDEVICE=$1
+
+[ -f /etc/sysconfig/network-scripts/ifcfg-${LOGDEVICE} ] && /etc/sysconfig/network-scripts/ifup-post ifcfg-${LOGDEVICE}
+
+/etc/ppp/ip-up.ipv6to4 ${LOGDEVICE}
+
+[ -x /etc/ppp/ip-up.local ] && /etc/ppp/ip-up.local "$@"
+
+<strong>/sbin/ifconfig $1 mtu 1400</strong>
+exit 0</pre>
+</blockquote>
+<p>The above example reduces the MTU size to 1400. In my environment, I found that XP will connect the VPN and ping all servers without problems, however, it cannot connect to the Microsoft Exchange server properly. Reduce the MTU size to 1400 fixed the problem.</p>
+<p>After fixing the files, we can start pptpd and connect to it from remote client. To start it:</p>
 <blockquote>
   <pre>[root@pptp ~]# chkconfig pptpd on<br><br>[root@pptp ~]# service pptpd start<br>Starting pptpd: [  OK  ]</pre>
 </blockquote><p></p>
