@@ -4,7 +4,7 @@
  * originally by C. S. Ananian
  * Modified for PoPToP
  *
- * $Id: pptpgre.c,v 1.7 2005/12/29 00:10:32 quozl Exp $
+ * $Id: pptpgre.c,v 1.8 2006/03/27 21:39:05 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -37,6 +37,7 @@
 #include "ppphdlc.h"
 #include "pptpgre.h"
 #include "pptpdefs.h"
+#include "pptpctrl.h"
 #include "defaults.h"
 #include "pqueue.h"
 
@@ -317,9 +318,14 @@ static int dequeue_gre (callback_t callback, int cl)
 		/* if it is timed out... */
 		if (head->seq != gre.seq_recv + 1 ) {  /* wrap-around safe */
 			stats.rx_lost += head->seq - gre.seq_recv - 1;
-			syslog(LOG_DEBUG, "GRE: timeout waiting for %d packets", head->seq - gre.seq_recv - 1);        
+			if (pptpctrl_debug)
+				syslog(LOG_DEBUG, 
+				       "GRE: timeout waiting for %d packets", 
+				       head->seq - gre.seq_recv - 1);        
 		}
-		syslog(LOG_DEBUG, "GRE: accepting #%d from queue", head->seq);
+		if (pptpctrl_debug)
+			syslog(LOG_DEBUG, "GRE: accepting #%d from queue", 
+			       head->seq);
 		gre.seq_recv = head->seq;
 		status = callback(cl, head->packet, head->packlen);
 		pqueue_del(head);
@@ -399,16 +405,24 @@ int decaps_gre(int fd, int (*cb) (int cl, void *pack, unsigned len), int cl)
 		}
 		/* check for out-of-order sequence number */
 		if (seq_greater(seq, gre.seq_recv)) {
-			syslog(LOG_DEBUG, "GRE: accepting packet #%d", seq);
+			if (pptpctrl_debug)
+				syslog(LOG_DEBUG, "GRE: accepting packet #%d", 
+				       seq);
 			stats.rx_accepted++;
 			gre.seq_recv = seq;
 			return cb(cl, buffer + ip_len + headersize, payload_len);
 		} else if (seq == gre.seq_recv) {
-			syslog(LOG_DEBUG, "GRE: discarding duplicate or old packet #%d (expecting #%d)", seq, gre.seq_recv + 1);
+			if (pptpctrl_debug)
+				syslog(LOG_DEBUG,
+				       "GRE: discarding duplicate or old packet #%d (expecting #%d)", 
+				       seq, gre.seq_recv + 1);
 			return 0;	/* discard duplicate packets */
 		} else {
 			stats.rx_buffered++;
-			syslog(LOG_DEBUG, "GRE: buffering packet #%d (expecting #%d, lost or reordered)", seq, gre.seq_recv + 1);
+			if (pptpctrl_debug)
+				syslog(LOG_DEBUG,
+				       "GRE: buffering packet #%d (expecting #%d, lost or reordered)",
+				       seq, gre.seq_recv + 1);
 			pqueue_add(seq, buffer + ip_len + headersize, payload_len);
 			return 0;	/* discard out-of-order packets */
 		}

@@ -1,3 +1,5 @@
+- avoid reporting packet loss if debug option not set [Cameron]
+
 1.3.1: released 2005-02-14
 
 - make connections limit configurable at run-time [Cameron]

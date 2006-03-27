@@ -1,3 +1,9 @@
+Mon Mar 27 11:42:36 2006  James Cameron  <quozl@us.netrek.org>
+
+	* pptpgre.c (decaps_gre, dequeue_gre): only report to LOG_DEBUG if
+	the debug option is set.  Reported by: Thomas Stein
+	<thomas.stein@knowledgetools.de>
+
 Tue Feb 14 10:52:13 2006  James Cameron  <quozl@us.netrek.org>
 
 	* pptpd-1.3.1.tar.gz: released.
