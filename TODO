@@ -4,14 +4,6 @@ This is the pptpd project TODO list.
 means Junior Jobs, following the KDE tradition suggested by Adriaan de
 Groot in May 2004.)
 
-20060403-1, 1.3.1, the configure option --without-bcrelay does the
-opposite of what it implies, reported by Paul Howarth on
-pptpclient-devel@lists.sourceforge.net.  We shouldn't be using --with
-and --without anyway, since they are for external programs.  Convert
-this to --enable-bcrelay instead.  Various other --with and --without options
-also behave wrongly, specifically the --with-bsdppp{d} option, reported by
-Nerijus Baliunas.
-
 20050105-1, 1.2.1, denial of service, for ten seconds (or --stimeout)
 the pptpd will not process further connections while it waits for a
 client to send data.  The second select() will prevent any further
@@ -32,9 +24,6 @@ distributions is to use makepackage instead of "make install".
 pptpd.init is also affected, as it has a hardcoded path to pptpd.
 Configure script should detect or accept version of pppd to build
 against.
-
-20040525-0, 1.2.0-b4, "configure: WARNING: `missing' script is too
-old or missing"
 
 20040521-4, 1.2.0-b3, running on Fedora Core 1, kernel ? , when a
 connection arrives a warning is issued by the kernel "application bug:

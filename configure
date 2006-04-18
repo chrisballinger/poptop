@@ -271,7 +271,7 @@ PACKAGE_VERSION=
 PACKAGE_STRING=
 PACKAGE_BUGREPORT=
 
-ac_unique_file="reconf"
+ac_unique_file="pptpmanager.c"
 # Factoring default headers for most tests.
 ac_includes_default="\
 #include <stdio.h>
@@ -848,6 +848,7 @@ Optional Features:
   --disable-dependency-tracking  speeds up one-time build
   --enable-dependency-tracking   do not reject slow dependency extractors
   --enable-facility=name    Use another syslog facility name
+  --enable-bcrelay          Enable broadcast relay function
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -855,8 +856,6 @@ Optional Packages:
   --with-libwrap          Use libwrap (tcp wrappers)
   --with-bsdppp           Use BSD user-space ppp
   --with-slirp            Use SLIRP instead of pppd
-  --with-bcrelay          Enable broadcast relay function
-  --with-pns-mode         Option is NOT FUNCTIONAL YET
 
 Some influential environment variables:
   CC          C compiler command
@@ -1615,7 +1614,7 @@ fi
 
 # Define the identity of the package.
  PACKAGE=pptpd
- VERSION=1.3.1
+ VERSION=1.3.2
 
 
 cat >>confdefs.h <<_ACEOF
@@ -5105,6 +5104,7 @@ fi
 if test "${with_libwrap+set}" = set; then
   withval="$with_libwrap"
 
+ if test "$with_libwrap" = "yes"; then
  XYZZY_LIBS="$LIBS"
  echo "$as_me:$LINENO: checking for libwrap alone" >&5
 echo $ECHO_N "checking for libwrap alone... $ECHO_C" >&6
@@ -5220,6 +5220,7 @@ fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
  LIBS="$XYZZY_LIBS"
+ fi
 
 fi;
 
@@ -5865,7 +5866,7 @@ if test "${with_bsdppp+set}" = set; then
 #define BSDUSER_PPP 1
 _ACEOF
 
-	  BSDUSER_PPP=yes
+	  BSDUSER_PPP=$with_bsdppp
 fi;
 
 
@@ -5876,7 +5877,7 @@ if test "${with_slirp+set}" = set; then
 #define SLIRP 1
 _ACEOF
 
-	  SLIRP=yes
+	  SLIRP=$with_slirp
 fi;
 
 echo "$as_me:$LINENO: checking which syslog facility to use" >&5
@@ -5903,26 +5904,14 @@ _ACEOF
 
 fi;
 
-
-# Check whether --with-bcrelay or --without-bcrelay was given.
-if test "${with_bcrelay+set}" = set; then
-  withval="$with_bcrelay"
+# Check whether --enable-bcrelay or --disable-bcrelay was given.
+if test "${enable_bcrelay+set}" = set; then
+  enableval="$enable_bcrelay"
    cat >>confdefs.h <<\_ACEOF
 #define BCRELAY 1
 _ACEOF
 
-	  BCRELAY=yes
-fi;
-
-
-# Check whether --with-pns-mode or --without-pns-mode was given.
-if test "${with_pns_mode+set}" = set; then
-  withval="$with_pns_mode"
-   cat >>confdefs.h <<\_ACEOF
-#define PNS_MODE 1
-_ACEOF
-
-	  PNS_MODE = yes
+	  BCRELAY=$enableval
 fi;
 
 if test "$BSDUSER_PPP" = "yes"; then
@@ -5984,13 +5973,60 @@ else
   echo 'No.'
 fi
 
-echo -n '   Mode:               '
-if test "$PNS_MODE" = "yes"; then
-  echo 'Incoming call server (PNS - NOT COMPLETE YET).'
-else
-  echo 'IP tunneling server (PAC).'
-fi
+cat >confcache <<\_ACEOF
+# This file is a shell script that caches the results of configure
+# tests run on this system so they can be shared between configure
+# scripts and configure runs, see configure's option --config-cache.
+# It is not useful on other systems.  If it contains results you don't
+# want to keep, you may remove or edit it.
+#
+# config.status only pays attention to the cache file if you give it
+# the --recheck option to rerun configure.
+#
+# `ac_cv_env_foo' variables (set or unset) will be overridden when
+# loading this file, other *unset* `ac_cv_foo' will be assigned the
+# following values.
 
+_ACEOF
+
+# The following way of writing the cache mishandles newlines in values,
+# but we know of no workaround that is simple, portable, and efficient.
+# So, don't put newlines in cache variables' values.
+# Ultrix sh set writes to stderr and can't be redirected directly,
+# and sets the high bit in the cache file unless we assign to the vars.
+{
+  (set) 2>&1 |
+    case `(ac_space=' '; set | grep ac_space) 2>&1` in
+    *ac_space=\ *)
+      # `set' does not quote correctly, so add quotes (double-quote
+      # substitution turns \\\\ into \\, and sed turns \\ into \).
+      sed -n \
+	"s/'/'\\\\''/g;
+	  s/^\\([_$as_cr_alnum]*_cv_[_$as_cr_alnum]*\\)=\\(.*\\)/\\1='\\2'/p"
+      ;;
+    *)
+      # `set' quotes correctly as required by POSIX, so do not add quotes.
+      sed -n \
+	"s/^\\([_$as_cr_alnum]*_cv_[_$as_cr_alnum]*\\)=\\(.*\\)/\\1=\\2/p"
+      ;;
+    esac;
+} |
+  sed '
+     t clear
+     : clear
+     s/^\([^=]*\)=\(.*[{}].*\)$/test "${\1+set}" = set || &/
+     t end
+     /^ac_cv_env/!s/^\([^=]*\)=\(.*\)$/\1=${\1=\2}/
+     : end' >>confcache
+if diff $cache_file confcache >/dev/null 2>&1; then :; else
+  if test -w $cache_file; then
+    test "x$cache_file" != "x/dev/null" && echo "updating cache $cache_file"
+    cat confcache >$cache_file
+  else
+    echo "not updating unwritable cache $cache_file"
+  fi
+fi
+rm -f confcache
           ac_config_files="$ac_config_files Makefile"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure

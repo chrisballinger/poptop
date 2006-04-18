@@ -9,7 +9,7 @@
 
 Summary:        PoPToP Point to Point Tunneling Server
 Name:           pptpd
-Version:        1.3.1
+Version:        1.3.2
 Release:        1
 License:        GPL
 Group:          Applications/Internet

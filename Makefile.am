@@ -100,7 +100,7 @@ pptpd.o: pptpd.c config.h our_syslog.h our_getopt.h configfile.h \
   defaults.h compat.h pptpmanager.h
 
 pptpgre.o: pptpgre.c config.h our_syslog.h ppphdlc.h pptpgre.h pptpdefs.h \
-  defaults.h pqueue.h compat.h
+  pptpctrl.h defaults.h pqueue.h compat.h
 
 pptpmanager.o: pptpmanager.c config.h our_syslog.h configfile.h \
   defaults.h pptpctrl.h pptpdefs.h pptpmanager.h compat.h
