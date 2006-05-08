@@ -13,6 +13,11 @@
   email: skwok (at) acnielsen.com.au  </p>
 <p align="left"><strong>Revision History</strong>:</p>
 <dl>
+  <dt>Release 1.0 - 7 May 2006</dt>
+  <dd>- Updated the Howto to focus on Fedora Core 5</dd>
+  <dd>- Rearranged the order of steps to make the walkthrough more logical</dd>
+  <dd>- Moved Fedora Core 4 specific info to Appendix</dd>
+    <br>
   <dt>Release 0.8 - 5 March 2006</dt>
   <dd>- Updated information on pptpd, samba version</dd>
   <dd>- Updated information on FC4 kernel version</dd>
@@ -51,7 +56,7 @@
 <dl>
    <dt>First Release -- 5 September 2005</dt>
 </dl>
-<p align="left">This document covers how to integrate Poptop with Microsoft Active Directory on Fedora Core 4. Two different implementations are described: a) winbind; and b) freeradius.</p>
+<p align="left">This document covers how to integrate Poptop with Microsoft Active Directory on Fedora Core 5. Two different implementations are described: a) winbind; and b) freeradius.</p>
 <hr>
 <a name="toc"></a>Table of Contents
 <dl><dt>1. <a href="#introduction">Introduction</a></dt>
@@ -62,47 +67,54 @@
     <dd>5.1 <a href="poptop_ads_howto_3.htm#defaultroute">Default Route and Static Routes</a></dd>
 	<dd>5.2 <a href="poptop_ads_howto_3.htm#pforward">Enable Packet Forwarding</a></dd>
     <dt>6. <a href="poptop_ads_howto_4.htm#mppe">Install MPPE Kernel Module</a></dt>
-	<dd>6.1 <a href="poptop_ads_howto_4.htm#autoinstaller">Kernel Upgrade and dkms_autoinstaller</a></dd>
 	<dt>7. <a href="poptop_ads_howto_4.htm#pppd_pptpd">pppd and  pptpd</a></dt>
-    <dd>7.1 <a href="poptop_ads_howto_4.htm#pppd">Upgrade pppd</a></dd>
+    <dd>7.1 <a href="poptop_ads_howto_4.htm#pppd">pppd</a></dd>
     <dd>7.2 <a href="poptop_ads_howto_4.htm#pptpd">Install pptpd</a></dd>
-	<dt>8. <a href="poptop_ads_howto_5.htm">Kerberos</a></dt>
-	<dd>8.1 <a href="poptop_ads_howto_5.htm#krbconf">Configure Kerberos</a></dd>
-	<dd>8.2 <a href="poptop_ads_howto_5.htm#krbtest">Test Kerberos</a></dd>
-  <dt>9. <a href="poptop_ads_howto_6.htm">Samba</a></dt>
-  <dd>9.1 <a href="poptop_ads_howto_6.htm#smbconf">Configure Samba</a></dd>
-  <dd>9.2 <a href="poptop_ads_howto_6.htm#smbjoin">Join the AD Domain</a></dd>
-  <dt>10. <a href="poptop_ads_howto_7.htm">pptpd and winbindd</a></dt>
-  <dd>10.1 <a href="poptop_ads_howto_7.htm#wbtest">Enable and Test winbindd</a></dd>
-  <dd>10.2 <a href="poptop_ads_howto_7.htm#pptpconf">Configure pptpd</a></dd>
-  <dd>10.3 <a href="poptop_ads_howto_7.htm#access">PPTP Access Control</a></dd>
-  <dt>11. <a href="poptop_ads_howto_8.htm">Software for Radius Setup</a></dt>
-  <dt>12. <a href="poptop_ads_howto_8.htm#rclient">Radiusclient</a></dt>
-  <dd>12.1 <a href="poptop_ads_howto_8.htm#rclientconf">radiusclient.conf</a></dd>
-  <dd>12.2 <a href="poptop_ads_howto_8.htm#dict">dictionary.microsoft</a></dd>
-  <dt>13. <a href="poptop_ads_howto_9.htm">Freeradius</a></dt>
-  <dd>13.1 <a href="poptop_ads_howto_9.htm#mschap2">Configure Freeradius for MSCHAPv2</a></dd>
-  <dd>13.2 <a href="poptop_ads_howto_9.htm#access">PPTP Access Control</a></dd>
-  <dt>14 <a href="poptop_ads_howto_10.htm">pptpd and freeradius</a></dt>
-  <dd>14.1 <a href="poptop_ads_howto_10.htm#radiusd">Enable freeradius</a></dd>
-  <dd>14.2 <a href="poptop_ads_howto_10.htm#pptpdradius">Configure pptpd</a></dd>
-  <dt>15. <a href="poptop_ads_howto_11.htm">pptp Client Installation</a></dt>
-  <dd>15.1 <a href="poptop_ads_howto_11.htm#splittunnel">Split Tunneling</a></dd>
-  <dt>16. <a href="poptop_ads_howto_12.htm">pptp Server Administration </a></dt>
-  <dd>16.1 <a href="poptop_ads_howto_12.htm#whoisonline">Who is Online?</a></dd>
-  <dd>16.2 <a href="poptop_ads_howto_12.htm#accounting">Accounting</a></dd>
-  <dd>16.3 <a href="poptop_ads_howto_12.htm#disconnect">Disconnect a User</a></dd>
-</dl>
+	<dt>8. <a href="poptop_ads_howto_5.htm">Samba</a></dt>
+    <dd>8.1 <a href="poptop_ads_howto_5.htm#smbconf">Configure Samba</a></dd>
+	<dt>9. <a href="poptop_ads_howto_6.htm">Kerberos</a></dt>
+	<dd>9.1 <a href="poptop_ads_howto_6.htm#krbconf">Configure Kerberos</a></dd>
+	<dd>9.2 <a href="poptop_ads_howto_6.htm#krbtest">Test Kerberos</a></dd>
+    <dt>10. <a href="poptop_ads_howto_6a.htm#smbjoin">Join the AD Domain</a></dt>
+  <dt>11. <a href="poptop_ads_howto_7.htm">pptpd and winbindd</a></dt>
+  <dd>11.1 <a href="poptop_ads_howto_7.htm#wbtest">Enable and Test winbindd</a></dd>
+  <dd>11.2 <a href="poptop_ads_howto_7.htm#pptpconf">Configure pptpd</a></dd>
+  <dd>11.3 <a href="poptop_ads_howto_7.htm#access">PPTP Access Control</a></dd>
+  <dt>12. <a href="poptop_ads_howto_8.htm">Software for Radius Setup</a></dt>
+  <dt>13. <a href="poptop_ads_howto_8.htm#rclient">Radiusclient</a></dt>
+  <dd>13.1 <a href="poptop_ads_howto_8.htm#rclientconf">radiusclient.conf</a></dd>
+  <dd>13.2 <a href="poptop_ads_howto_8.htm#dict">dictionary.microsoft</a></dd>
+  <dt>14. <a href="poptop_ads_howto_9.htm">Freeradius</a></dt>
+  <dd>14.1 <a href="poptop_ads_howto_9.htm#mschap2">Configure Freeradius for MSCHAPv2</a></dd>
+  <dd>14.2 <a href="poptop_ads_howto_9.htm#access">PPTP Access Control</a></dd>
+  <dt>15<a href="poptop_ads_howto_10.htm">pptpd and freeradius</a></dt>
+  <dd>15.1 <a href="poptop_ads_howto_10.htm#radiusd">Enable freeradius</a></dd>
+  <dd>15.2 <a href="poptop_ads_howto_10.htm#pptpdradius">Configure pptpd</a></dd>
+  <dt>16. <a href="poptop_ads_howto_11.htm">pptp Client Installation</a></dt>
+  <dd>16.1 <a href="poptop_ads_howto_11.htm#splittunnel">Split Tunneling</a></dd>
+  <dt>17. <a href="poptop_ads_howto_12.htm">pptp Server Administration </a></dt>
+  <dd>17.1 <a href="poptop_ads_howto_12.htm#whoisonline">Who is Online?</a></dd>
+  <dd>17.2 <a href="poptop_ads_howto_12.htm#accounting">Accounting</a></dd>
+  <dd>17.3 <a href="poptop_ads_howto_12.htm#disconnect">Disconnect a User</a></dd>
+  <dt>A1. <a href="poptop_ads_howto_a1.htm#mppe">Install MPPE Module on Fedora Core 4</a></dt>
+  <dd>A1.1 <a href="poptop_ads_howto_a1.htm#autoinstaller">Kernel Upgrade and dkms_autoinstaller</a></dd>
+  <dt>A2. <a href="poptop_ads_howto_a1.htm#pppd">Update pppd on Fedora Core 4</a></dt>
+  <dt>A3. <a href="poptop_ads_howto_a2.htm">Samba for Fedora Core 4</a></dt>
+  <dt>A4. <a href="poptop_ads_howto_a2.htm#fc4freeradius">Software for Radius Setup on Fedora Core 4</a></dt
+></dl>
 
 <hr>
 <strong><a name="introduction"></a>1. Introduction</strong>
 <p>This document descibes how to  build a Linux PPTP server with Poptop and use Microsoft Active Directory to authenticate users. There are a few howtos on this topic, such as the <a href="http://poptop.sourceforge.net/dox/replacing-windows-pptp-with-linux-howto.phtml">Replacing a Windows PPTP Server with Linux Howto</a> maintained by Matt Alexander. Most of them, however, concentrate on Samba and winbind. I followed them and got it working in the test environment. Unfortunately, winbind does not scale very well in a AD setup which has thousands of objects. The AD in my work is a big tree. It spans across all continents and has thousands of users and groups. Winbind simply times out before it can harvest a complete list of users/groups.</p>
 <p align="left">The other way of doing it is with radius. Information on how to setup pptpd with radius against Active Directory is scarce. I can only find bits and pieces information from forums but never find any comprehensive documents. I spent days to try to get it configured properly. After countless frustrations and tears, I eventually got a working setup. I therefore decided to make this howto to document it. Hopefully, you will find it useful.</p>
 <p align="left">To make this howto complete, I include the winbind configuration as well although it may duplicate Matt's work.</p>
-<p align="left"><strong>Note</strong>: this howto is based on Fedora Core 4 and use pre-packaged RPMs whenever possible. If you are using other distributions or like to compile software, you will have to make the necessary adjustments.</p>
+<dt align="left"><strong>Note</strong>:</dt> 
+<dd>- this howto is based on Fedora Core 5 and use pre-packaged RPMs whenever possible. If you are using other distributions or like to compile software, you will have to make the necessary adjustments.</dt>
+<dd>- Information for Fedora Core 4 has been moved to Appendix and will not be updated anymore. </dd>
+<br>
 <hr>
 <strong><a name="disclaimer"></a>2. Disclaimer</strong>
-<p>This document is provided as is. I have tried my best to make it as accurate as I can but it may contain wrong information. Use it at your own risk. </p>
+<p>This document is provided as is. I have tried my best to make it as accurate as I can but it may contain wrong information. Use it at your own risk. </dd>
 <p>I will greatly appreciate any comments on this document. </p>
 <hr>
 <a name="acknowledgement"></a><strong>3. Acknowledgements

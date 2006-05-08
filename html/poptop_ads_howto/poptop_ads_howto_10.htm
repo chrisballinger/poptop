@@ -7,10 +7,10 @@
 </head>
 
 <body>
-<p><strong>14. pptpd and freeradius </strong></p>
+<p><strong>15. pptpd and freeradius </strong></p>
 <p>The section covers the configuration of pptpd + freeradius + AD. If you are looking at the integration via winbind. Go to <a href="poptop_ads_howto_7.htm">this section</a>.</p>
 <hr>
-<a name="radiusd"></a><strong>14.1 Enable freeradius</strong>
+<a name="radiusd"></a><strong>15.1 Enable freeradius</strong>
 <p>To enable radiusd on bootup, use the chkconfig command.</p>
 <blockquote>
   <pre>[root@pptp ~]# chkconfig radiusd on </pre>
@@ -23,7 +23,7 @@ Starting RADIUS server: Sun Sep  4 11:26:24 2005 : Info: Starting - reading conf
 </blockquote>
 <p></p>
 <hr>
-<a name="pptpdradius"></a><strong>14.2 Configure pptpd </strong>
+<a name="pptpdradius"></a><strong>15.2 Configure pptpd </strong>
 <p>There are two configuration files for pptpd. The first one is /etc/pptpd.conf. You can very much keep it as it is except the ip address range for the ppp connections. Edit the file and add two lines at the bottom to specify the local ip address and the ip address pool for the remote connections. </p>
 <blockquote>
   <pre>localip 10.0.0.10<br>remoteip 10.0.0.101-200 </pre>
