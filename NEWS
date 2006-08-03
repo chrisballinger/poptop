@@ -1,3 +1,4 @@
+- support mixed architecture build on x86_64 [Gorlov]
 - fix configure --with and --without option processing again [Cameron]
 - include libutil in logwtmp build [Gorlov]
 - fix spec file [Howarth]

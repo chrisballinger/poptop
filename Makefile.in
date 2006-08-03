@@ -683,6 +683,8 @@ uninstall-man: uninstall-man5 uninstall-man8
 
 @SET_MAKE@
 
+export LIBDIR=$(libdir)/pptpd
+
 all-local:
 	for d in $(subdirs); do $(MAKE) $(MFLAGS) -C $$d all; done
 

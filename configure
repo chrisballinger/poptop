@@ -1265,7 +1265,7 @@ if test -n "$ac_init_help"; then
 Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
-  --enable-facility=name    Use another syslog facility name, default LOG_DAEMON
+  --enable-facility=name    Use another syslog facility, default LOG_DAEMON
   --enable-bcrelay          Enable broadcast relay function
   --disable-dependency-tracking  speeds up one-time build
   --enable-dependency-tracking   do not reject slow dependency extractors

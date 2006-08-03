@@ -1,3 +1,8 @@
+Thu Aug  3 12:02:02 2006  James Cameron  <quozl@us.netrek.org>
+
+	* plugins/Makefile (LIBDIR), Makefile.am (LIBDIR): support build
+	of x86_64 mixed architecture.  From: Anton Gorlov.
+
 Thu Aug  3 11:14:59 2006  James Cameron  <quozl@us.netrek.org>
 
 	* configure.in: rewrite use of AC_ARG_WITH and AC_ARG_ENABLE to

@@ -3,7 +3,7 @@ AUTOMAKE_OPTIONS = no-dependencies foreign
 
 @SET_MAKE@
 
-##LIBFILES = -lxxx
+export LIBDIR=$(libdir)/pptpd
 INCLUDES = -I.
 ## Change this if you don't have gcc
 ## -pedantic removed for now (OpenBSD header files).
