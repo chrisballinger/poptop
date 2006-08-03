@@ -1,3 +1,9 @@
+Thu Aug  3 11:14:59 2006  James Cameron  <quozl@us.netrek.org>
+
+	* configure.in: rewrite use of AC_ARG_WITH and AC_ARG_ENABLE to
+	more properly support the negative case.  Reported by: Phil
+	Oester.
+
 Thu Aug  3 09:55:25 2006  James Cameron  <quozl@us.netrek.org>
 
 	* plugins/Makefile: include libutil.  From: Anton Gorlov.
