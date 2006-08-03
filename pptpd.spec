@@ -1,3 +1,5 @@
+%{!?__id_u: %define __id_u %([ -x /bin/id ]&&echo /bin/id||([ -x /usr/bin/id ]&&echo /usr/bin/id|| echo /bin/true)) -u}
+
 # Available rpmbuild options:
 #
 # --without libwrap
@@ -9,17 +11,18 @@
 
 Summary:        PoPToP Point to Point Tunneling Server
 Name:           pptpd
-Version:        1.3.2
+Version:        1.3.3
 Release:        1
 License:        GPL
 Group:          Applications/Internet
 URL:            http://poptop.sourceforge.net/
 Source0:        http://dl.sf.net/poptop/pptpd-%{version}.tar.gz
-Patch0:         pptpd-1.3.0-initscript.patch
 Buildroot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Requires:       ppp >= 2.4.3
 
-%{!?_without_libwrap:BuildRequires: tcp_wrappers}
+%if %{?_without_libwrap:0}%{!?_without_libwrap:1}
+BuildRequires: tcp_wrappers
+%endif
 
 Requires(post):  /sbin/chkconfig
 Requires(preun): /sbin/chkconfig, /sbin/service
@@ -31,9 +34,6 @@ connect to an internal firewalled network using their dialup.
 
 %prep
 %setup -q
-
-# Fix initscript
-%patch0 -p1
 
 # Fix permissions for debuginfo package
 %{__chmod} 644 *.[ch]

@@ -1,3 +1,14 @@
+Thu Aug  3 09:55:25 2006  James Cameron  <quozl@us.netrek.org>
+
+	* plugins/Makefile: include libutil.  From: Anton Gorlov.
+
+Thu Apr 20 16:18:26 2006  James Cameron  <quozl@us.netrek.org>
+
+	* pptpd.init: ensures the service is not enabled by default when
+	installed, and adds a "condrestart" target that will restart the
+	daemon if and only if it's already running.  Reported by: Paul
+	Howarth.
+
 Tue Apr 18 14:47:29 2006  James Cameron  <quozl@us.netrek.org>
 
 	* pptpd-1.3.2.tar.gz: released.
