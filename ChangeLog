@@ -1,3 +1,10 @@
+Tue Sep  5 09:25:25 2006  James Cameron  <quozl@us.netrek.org>
+
+	* defaults.h: remove MAX_CONNECTIONS reference.
+
+	* samples/pptpd.conf: add connections clause, remove reference to
+	MAX_CONNECTIONS.
+
 Tue Sep  5 09:10:55 2006  James Cameron  <quozl@us.netrek.org>
 
 	* pptpd.c (processIPStr): add new informational message to
