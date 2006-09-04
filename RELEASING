@@ -10,7 +10,7 @@ run ./reconf
 update NEWS, ChangeLog
 commit changes
 tag, see README.cvs, for example:
-	cvs tag -F pptpd-1_3_2
+	cvs tag -F pptpd-1_3_3
 make dist
 md5sum
 gpg --detach-sign --armor
@@ -30,9 +30,9 @@ f) "make uninstall"
 
 Packaging
 
-fakeroot rpmbuild -ta pptpd-1.3.2.tar.gz
-mv /usr/src/rpm/SRPMS/pptpd-1.3.2-0.src.rpm .
-mv /usr/src/rpm/RPMS/i386/pptpd-1.3.2-0.i386.rpm .
+fakeroot rpmbuild -ta pptpd-1.3.3.tar.gz
+mv /usr/src/rpm/SRPMS/pptpd-1.3.3-0.src.rpm .
+mv /usr/src/rpm/RPMS/i386/pptpd-1.3.3-0.i386.rpm .
 
 SourceForge
 
@@ -41,9 +41,9 @@ user anonymous qz@hp.com
 cd incoming
 hash
 passive
-put pptpd-1.3.2.tar.gz
-put pptpd-1.3.2-0.src.rpm
-put pptpd-1.3.2-0.i386.rpm
+put pptpd-1.3.3.tar.gz
+put pptpd-1.3.3-0.src.rpm
+put pptpd-1.3.3-0.i386.rpm
 quit
 EOF
 http://sourceforge.net/
@@ -51,16 +51,16 @@ Login
 Poptop
 Admin
 File Releases
-Add Release "pptpd-1.3.2 (experimental)" to package "pptpd"
+Add Release "pptpd-1.3.3 (experimental)" to package "pptpd"
 
 Announcement
 
 To: poptop-server@lists.sourceforge.net
-Subject: pptpd-1.3.2 released
+Subject: pptpd-1.3.3 released
 
 G'day,
 
-pptpd 1.3.2 has been released.  This version is a minor fix to remove
+pptpd 1.3.3 has been released.  This version is a minor fix to remove
 verbose logging and correct configure option processing.
 
 Please reply to the mailing list with your test results.
@@ -70,13 +70,18 @@ See:
         https://sourceforge.net/project/showfiles.php?group_id=44827
 
 Checksums:
-	4e4eb2fd2d96cb86b88d18318b3108dc  pptpd-1.3.2.tar.gz
-	pptpd-1.3.2-0.i386.rpm
-	pptpd-1.3.2-0.src.rpm
+	pptpd-1.3.3.tar.gz
+	pptpd-1.3.3-0.i386.rpm
+	pptpd-1.3.3-0.src.rpm
 
-Changes to pptpd since 1.3.1 are:
-- fix configure --with and --without option processing [Cameron]
-- avoid reporting packet loss if debug option not set [Cameron]
+Changes to pptpd since 1.3.2 are:
+- add missing connections option in sample pptpd.conf [Cameron]
+- add message to indicate when constrained by IP range [Cameron]
+- fix segfault on -C option, Closes Gentoo Bug #132898 [Nastac]
+- support mixed architecture build on x86_64 [Gorlov]
+- fix configure --with and --without option processing again [Cameron]
+- include libutil in logwtmp build [Gorlov]
+- fix spec file [Howarth]
 
 See the detailed ChangeLog
 

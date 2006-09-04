@@ -1,3 +1,7 @@
+Tue Sep  5 09:42:46 2006  James Cameron  <quozl@us.netrek.org>
+
+	* pptpd-1.3.3.tar.gz: released.
+
 Tue Sep  5 09:25:25 2006  James Cameron  <quozl@us.netrek.org>
 
 	* defaults.h: remove MAX_CONNECTIONS reference.
