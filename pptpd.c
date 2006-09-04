@@ -4,7 +4,7 @@
  * Grabs any command line argument and processes any further options in
  * the pptpd config file, before throwing over to pptpmanager.c.
  *
- * $Id: pptpd.c,v 1.17 2005/12/29 09:59:49 quozl Exp $
+ * $Id: pptpd.c,v 1.18 2006/09/04 23:17:25 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -149,9 +149,9 @@ int main(int argc, char **argv)
 	while (1) {
 		int option_index = 0;
 #ifdef BCRELAY
-		char *optstring = "b:c:de:fhil:o:p:s:t:vwCD";
+		char *optstring = "b:c:de:fhil:o:p:s:t:vwC:D";
 #else
-		char *optstring = "c:de:fhil:o:p:s:t:vwCD";
+		char *optstring = "c:de:fhil:o:p:s:t:vwC:D";
 #endif
 
 		static struct option long_options[] =
@@ -763,8 +763,11 @@ static void processIPStr(int type, char *ipstr)
 #endif
 		for (n = 1; n < pptp_connections; n++)
 			slot_set_local(n, slot_get_local(0));
-	} else if (pptp_connections > num)
+	} else if (pptp_connections > num) {
+		syslog(LOG_INFO, "MGR: Maximum of %d connections reduced to %d, not enough IP addresses given", 
+		       pptp_connections, num);
 		pptp_connections = num;
+	}
 }
 
 #ifdef BCRELAY

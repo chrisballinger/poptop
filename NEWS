@@ -1,3 +1,5 @@
+- add message to indicate when constrained by IP range [Cameron]
+- fix segfault on -C option, Closes Gentoo Bug #132898 [Nastac]
 - support mixed architecture build on x86_64 [Gorlov]
 - fix configure --with and --without option processing again [Cameron]
 - include libutil in logwtmp build [Gorlov]

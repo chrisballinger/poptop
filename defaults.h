@@ -2,9 +2,9 @@
  * defaults.h
  *
  * This file contains some tuneable parameters, most of which can be overriden
- * at run-time (note, MAX_CONNECTIONS can't!).
+ * at run-time.
  *
- * $Id: defaults.h,v 1.8 2005/12/29 09:59:49 quozl Exp $
+ * $Id: defaults.h,v 1.9 2006/09/04 23:17:25 quozl Exp $
  */
 
 #ifndef _PPTPD_DEFAULTS_H
