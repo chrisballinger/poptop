@@ -31,6 +31,7 @@ f) "make uninstall"
 Packaging
 
 fakeroot rpmbuild -ta pptpd-1.3.3.tar.gz
+# fails
 mv /usr/src/rpm/SRPMS/pptpd-1.3.3-0.src.rpm .
 mv /usr/src/rpm/RPMS/i386/pptpd-1.3.3-0.i386.rpm .
 
@@ -60,8 +61,7 @@ Subject: pptpd-1.3.3 released
 
 G'day,
 
-pptpd 1.3.3 has been released.  This version is a minor fix to remove
-verbose logging and correct configure option processing.
+pptpd 1.3.3 has been released.
 
 Please reply to the mailing list with your test results.
 
@@ -70,9 +70,7 @@ See:
         https://sourceforge.net/project/showfiles.php?group_id=44827
 
 Checksums:
-	pptpd-1.3.3.tar.gz
-	pptpd-1.3.3-0.i386.rpm
-	pptpd-1.3.3-0.src.rpm
+	281cbe4b18f0524a283fdb9618cc73ec  pptpd-1.3.3.tar.gz
 
 Changes to pptpd since 1.3.2 are:
 - add missing connections option in sample pptpd.conf [Cameron]
