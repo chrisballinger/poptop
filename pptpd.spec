@@ -12,7 +12,7 @@
 Summary:        PoPToP Point to Point Tunneling Server
 Name:           pptpd
 Version:        1.3.3
-Release:        1
+Release:        1%{?dist}
 License:        GPL
 Group:          Applications/Internet
 URL:            http://poptop.sourceforge.net/
@@ -24,8 +24,9 @@ Requires:       ppp >= 2.4.3
 BuildRequires: tcp_wrappers
 %endif
 
-Requires(post):  /sbin/chkconfig
-Requires(preun): /sbin/chkconfig, /sbin/service
+Requires(post):   /sbin/chkconfig
+Requires(preun):  /sbin/chkconfig, /sbin/service
+Requires(postun): /sbin/service
 
 %description
 This implements a Virtual Private Networking Server (VPN) that is
@@ -38,7 +39,7 @@ connect to an internal firewalled network using their dialup.
 # Fix permissions for debuginfo package
 %{__chmod} 644 *.[ch]
 
-# Fix multilib
+# Fix for distros with %{_libdir} = /usr/lib64
 %{__perl} -pi -e 's,/usr/lib/pptpd,%{_libdir}/pptpd,;' pptpctrl.c
 
 %build
@@ -115,6 +116,11 @@ fi
 %config(noreplace) /etc/ppp/options.pptpd
 
 %changelog
+* Tue Sep  5 2006 Paul Howarth <paul@city-fan.org> - 1.3.3-1
+- Update to 1.3.3
+- Add dist tag
+- Add %%postun scriptlet dependency for /sbin/service
+
 * Fri Mar 31 2006 Paul Howarth <paul@city-fan.org> - 1.3.1-1
 - Update to 1.3.1
 
