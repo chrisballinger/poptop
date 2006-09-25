@@ -29,6 +29,7 @@ Starting RADIUS server: Sun Sep  4 11:26:24 2005 : Info: Starting - reading conf
   <pre>localip 10.0.0.10<br>remoteip 10.0.0.101-200 </pre>
 </blockquote>
 <p>10.0.0.10 is the ip address of the internal network card eth0. The remoteip is the address pool for the remote connections. </p>
+<p>Please note that pptpd by default has a 100 connections limit. You can override it by the "connection" parameter in the pptp.conf file. Read the remarks in the file.</p>
 <p>The second configuration file is /etc/ppp/options.pptpd. I stripped off all remarks from my options.pptpd and it is like this:</p>
 <blockquote>
   <pre>name pptpd
