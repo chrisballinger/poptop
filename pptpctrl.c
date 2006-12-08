@@ -3,7 +3,7 @@
  *
  * PPTP control connection between PAC-PNS pair
  *
- * $Id: pptpctrl.c,v 1.19 2005/10/30 22:40:41 quozl Exp $
+ * $Id: pptpctrl.c,v 1.20 2006/12/08 00:01:40 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -34,6 +34,7 @@
 #ifdef HAVE_OPENPTY
 #ifdef HAVE_PTY_H
 #include <pty.h>
+#include <termios.h>
 #endif
 #ifdef HAVE_LIBUTIL_H
 #include <libutil.h>
@@ -390,27 +391,6 @@ static void pptp_handle_ctrl_connection(char **pppaddrs, struct in_addr *inetadd
 				syslog(LOG_INFO, "CTRL: Starting call (launching pppd, opening GRE)");
 				pty_fd = startCall(pppaddrs, inetaddrs);
 				if (pty_fd > maxfd) maxfd = pty_fd;
-				/* wait for first packet from ppp before proceeding, thus
-				   delaying outgoing call reply, and avoiding traffic 
-				   injection into the pty before echo has been turned off
-				   by pppd */
-				if (PPP_WAIT) {
-					fd_set pty_fds;
-					FD_ZERO(&pty_fds);
-					FD_SET(pty_fd, &pty_fds);
-					idleTime.tv_sec = PPP_WAIT;
-					idleTime.tv_usec = 0;
-					switch (select(maxfd + 1, &pty_fds, NULL, NULL, &idleTime)) {
-					case -1:
-						syslog(LOG_ERR, 
-						       "CTRL: pty select() failed, ignoring");
-						break;
-					case 0:
-						syslog(LOG_ERR, 
-						       "CTRL: timeout waiting for first packet from our pppd");
-						break;
-					}
-				}
 				if ((gre_fd = pptp_gre_init(call_id_pair, pty_fd, inetaddrs)) > maxfd)
 					maxfd = gre_fd;
 				break;
@@ -592,6 +572,23 @@ static int startCall(char **pppaddrs, struct in_addr *inetaddrs)
 		syslog(LOG_ERR, "CTRL: openpty() error");
 		syslog_perror("openpty");
 		exit(1);
+	} else {
+		struct termios tios;
+
+		/* Turn off echo in the slave - to prevent loopback.
+		   pppd will do this, but might not do it before we
+		   try to send data. */
+		if (tcgetattr(tty_fd, &tios) < 0) {
+			syslog(LOG_ERR, "CTRL: tcgetattr() error");
+			syslog_perror("tcgetattr");
+			exit(1);
+		}
+		tios.c_lflag &= ~(ECHO | ECHONL);
+		if (tcsetattr(tty_fd, TCSAFLUSH, &tios) < 0) {
+			syslog(LOG_ERR, "CTRL: tcsetattr() error");
+			syslog_perror("tcsetattr");
+			exit(1);
+		}
 	}
 #endif
 	if (pptpctrl_debug) {

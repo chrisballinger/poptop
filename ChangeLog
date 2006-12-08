@@ -1,3 +1,9 @@
+Fri Dec  8 10:49:27 2006  Charlie Brady  <charlieb-poptop-server@e-smith.com>
+
+	* pptpctrl.c (startCall): turn off echo on the slave pty, so that
+	any packets that arrive before pppd is ready will not be echoed
+	back to the client.  Deprecate PPP_WAIT.
+
 Tue Sep  5 09:42:46 2006  James Cameron  <quozl@us.netrek.org>
 
 	* pptpd-1.3.3.tar.gz: released.
