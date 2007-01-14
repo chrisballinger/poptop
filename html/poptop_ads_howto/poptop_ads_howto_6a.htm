@@ -8,10 +8,17 @@
 
 <body>
 <p>  <a name="smbjoin"></a><strong>10. Join the AD Domain</strong></p>
-<p>Once the Kerberos and Samba are configured, it's time to add the pptpd server to the AD domain.</p>
+<p>Once the Kerberos and Samba are configured, it's time to add the pptpd server to the AD domain. For Samba version below 3.0.23:</p>
 <blockquote>
-  <pre>[root@pptp ~]# net ads join -U skwok@EXAMPLENET.ORG &quot;Asiapac/Australia/Sydney/Servers&quot;<br>skwok@EXAMPLENET.ORG's password: <br>Using short domain name -- EXAMPLE<br>Joined 'PPTPDSVR' to realm 'EXAMPLENET.ORG'
+  <pre>[root@pptp ~]# net ads join -U skwok@EXAMPLENET.ORG &quot;Asiapac/Australia/Sydney/Servers&quot;<br>skwok@EXAMPLENET.ORG's password: <br>Using short domain name --  EXAMPLE<br>Joined 'PPTPDSVR' to realm 'EXAMPLENET.ORG'
 </pre>
+</blockquote>
+<p>For Samba version 3.0.23 or above:</p>
+<blockquote>
+  <pre>[root@pptp ~]# net ads join -U skwok@EXAMPLENET.ORG createcomputer=&quot;Asiapac/Australia/Sydney/Servers&quot;
+skwok@EXAMPLENET.ORG's password: 
+Using short domain name -- EXAMPLEE
+Joined 'PPTPDSVR' to realm 'EXAMPLENET.ORG'</pre>
 </blockquote>
 <p>The above<em> net ads join</em> command creates the server in the container</p>
 <p>"OU=Servers,OU=Sydney,OU=Australia,OU=Asiapac,DC=EXAMPLENET,DC=ORG&quot;</p>

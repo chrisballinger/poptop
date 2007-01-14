@@ -8,11 +8,11 @@
 
 <body>
 <p><strong>12. Software for R</strong><strong>adius Setup</strong></p>
-<p>FC5 has  freeradius-1.0.5-1.2 bundled. Get it from <em>yum</em> if it is not installed. It has quite a few dependences and <em>yum</em> will resolve all required dependences automagically.</p>
+<p>FC5 and FC6 have  freeradius bundled. FC5 has freeradius-1.0.5-1.2 and FC6 has freeradius-1.1.3-1.1. Get it from <em>yum</em> if it is not installed. It has quite a few dependences and <em>yum</em> will resolve all required dependences automagically.</p>
 <blockquote>
   <pre>[root@pptp ~]# yum install freeradius </pre>
 </blockquote>
-<p>The second software you will need is radiusclient. Get the FC5 rpm,  radiusclient-0.3.2-0.2.fc5.rf.i386.rpm, from <a href="http://dries.ulyssis.org/rpm/packages/radiusclient/info.html">here</a>. Install it with &quot;rpm -ivh&quot;.</p>
+<p>The second software you will need is radiusclient. Get the rpm,  radiusclient-0.3.2-0.2.fc5.rf.i386.rpm or radiusclient-0.3.2-0.2.fc6.rf.i386.rpm, from <a href="http://dries.ulyssis.org/rpm/packages/radiusclient/info.html">here</a>. Install it with &quot;rpm -ivh&quot;.</p>
 <p><strong>Note:</strong> information for FC4 is in <a href="poptop_ads_howto_a2.htm#fc4freeradius">Appendix A4</a>.</p>
 <hr>
 <p><strong><a name="rclient"></a>13. Radiusclient</strong></p>
@@ -20,7 +20,7 @@
 <blockquote>
   <pre>#Server Name or Client/Server pair              Key<br>#----------------                               ---------------<br>localhost                                       testing123	 </pre>
 </blockquote>
-<p>The key is the secret of the radius server which is specified in /etc/raddb/clients.conf. The default is testing123. Of course, it is a bad idea to use the default.</p>
+<p>The key is the secret of the radius server which is specified in /etc/raddb/clients.conf. Older version of freeradius has the default key &quot;testing123&quot;. Of course, it is a bad idea to use the default.</p>
 <hr>
 <a name="rclientconf"></a><strong>13.1 radiusclient.conf</strong>
 <p>The main configuration file for radiusclient is /etc/radiusclient/radiusclient.conf. Here is how it should be when all remarks are stripped off:</p>
@@ -51,7 +51,7 @@ radius_retries 3</pre>
 <p>The file, dictionary.microsoft, is not included in the radiusclient. We can modify the one from  freeradius so that it can be used by pppd.</p>
 <p>First of all, copy the freeradius one, /usr/share/freeradius/dictionary.microsoft, to /etc/radiusclient. Then change the word &quot;octets&quot; to &quot;string&quot; in the file. Add the word Microsoft to all attributes. Here is my version: </p>
 <blockquote>
-  <pre>#<br>#       Microsoft's VSA's, from RFC 2548<br>#<br>#       $Id: poptop_ads_howto_8.htm,v 1.4 2006/05/08 07:29:48 wskwok Exp $<br>#
+  <pre>#<br>#       Microsoft's VSA's, from RFC 2548<br>#<br>#       $Id: poptop_ads_howto_8.htm,v 1.5 2007/01/14 23:46:52 wskwok Exp $<br>#
 
 VENDOR          Microsoft       311     Microsoft
 

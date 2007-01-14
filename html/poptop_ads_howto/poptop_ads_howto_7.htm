@@ -12,9 +12,10 @@
 <p>Most of the hard work has been done in the previous sections. You are very close to the final stage.</p>
 <hr>
 <strong><a name="wbtest"></a>11.1 Enable and Test winbindd</strong>
-<p>pptpd requires only winbindd but not smbd. If you are not using the pptpd server as a samba file server, you will not need to run smbd. Start winbindd with the &quot;service&quot; command.</p>
+<p>Start samba and winbindd with the &quot;service&quot; command.</p>
 <blockquote>
-  <pre>[root@pptp ~]# service winbind start<br>Starting Winbind services: [  OK  ] </pre>
+  <pre>[root@pptp ~]# service smb start<br>Starting SMB services: [  OK  ]<br>Starting NMB services: [  OK  ]
+[root@pptp ~]# service winbind start<br>Starting Winbind services: [  OK  ] </pre>
 </blockquote>
 <p>Winbind starts and spawns two threads. </p>
 <blockquote>
@@ -26,9 +27,10 @@
 <br>[root@acna-pptp etc]# wbinfo -u<br>EXAMPLE+Administrator<br>EXAMPLE+Guest<br>EXAMPLE+SUPPORT_388945a0<br>EXAMPLE+DC1$<br>EXAMPLE+krbtgt<br>EXAMPLE+skwok<br>EXAMPLE+ldapuser<br>EXAMPLE+pptpdsvr$ 
 </pre>
 </blockquote>
-<p>To enable winbind on bootup, use the chkconfig command.</p>
+<p>To enable samba and winbind on bootup, use the chkconfig command.</p>
 <blockquote>
-  <pre>[root@pptp ~]# chkconfig winbind on </pre>
+  <pre>[root@pptp ~]# chkconfig winbind on
+[root@pptp ~]# chkconfig smb on </pre>
 </blockquote><p></p>
 <hr>
 <strong><a name="pptpconf"></a>11.2 Configure pptpd </strong>
@@ -36,8 +38,8 @@
 <blockquote>
   <pre>localip 10.0.0.10<br>remoteip 10.0.0.101-200 </pre>
 </blockquote>
-<p>10.0.0.10 is the ip address of the internal network card eth0. The remoteip is the address pool for the remote connections. </p>
-<p>Please note that pptpd by default has a 100 connections limit. You can override it by the &quot;connection&quot; parameter in the pptp.conf file. Read the remarks in the file. </p>
+<p>10.0.0.10 is the ip address of the internal network card eth0. The remoteip is the address pool for the remote connections. If you are running FC6, please refer to <a href="poptop_ads_howto_4.htm#pptpd">Section 7.2</a> for details on the logwtmp option. </p>
+<p>Please note that pptpd by default has a 100 connections limit. You can override it by the &quot;connections&quot; parameter in the pptp.conf file. Read the remarks in the file. </p>
 <p>The second configuration file is /etc/ppp/options.pptpd. I stripped off all remarks from my options.pptpd and it is like this:</p>
 <blockquote>
   <pre>name pptpd
