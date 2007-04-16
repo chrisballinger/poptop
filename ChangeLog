@@ -1,3 +1,20 @@
+Mon Apr 16 09:38:13 2007  Phil Oester  <kernel@linuxace.com>
+
+	* pptpgre.c: fixes two packet reordering bugs, (1) the check for
+	out-of-order sequence numbers only validates that the sequence
+	received is greater than the previous sequence received.  But this
+	is invalid if for instance packet 20 is received after packet 10.
+	It should instead verify packet received is equal previous packet
+	plus one.  (2) the packet dequeue function was using the wrong
+	pointer, which led to corruption of all packets placed on the
+	queue when they were dequeued.  Thanks to James Cameron for the
+	testing tools which made discovery of these bugs possible.
+
+Thu Feb  8 09:59:00 2007  James Cameron  <quozl@us.netrek.org>
+
+	* plugins/pptpd-logwtmp.c (ip_up): accept either two forward or
+	two reverse slashes as the delimiter.
+
 Fri Dec  8 10:49:27 2006  Charlie Brady  <charlieb-poptop-server@e-smith.com>
 
 	* pptpctrl.c (startCall): turn off echo on the slave pty, so that

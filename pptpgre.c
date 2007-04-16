@@ -4,7 +4,7 @@
  * originally by C. S. Ananian
  * Modified for PoPToP
  *
- * $Id: pptpgre.c,v 1.8 2006/03/27 21:39:05 quozl Exp $
+ * $Id: pptpgre.c,v 1.9 2007/04/16 00:21:02 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -342,7 +342,7 @@ int decaps_gre(int fd, int (*cb) (int cl, void *pack, unsigned len), int cl)
 	struct pptp_gre_header *header;
 	int status, ip_len = 0;
 
-	dequeue_gre(cb, fd);
+	dequeue_gre(cb, cl);
 	if ((status = read(fd, buffer, sizeof(buffer))) <= 0) {
 		syslog(LOG_ERR, "GRE: read(fd=%d,buffer=%lx,len=%d) from network failed: status = %d error = %s",
 		       fd, (unsigned long) buffer, sizeof(buffer), status, status ? strerror(errno) : "No error");
@@ -404,7 +404,7 @@ int decaps_gre(int fd, int (*cb) (int cl, void *pack, unsigned len), int cl)
 			return 0;
 		}
 		/* check for out-of-order sequence number */
-		if (seq_greater(seq, gre.seq_recv)) {
+		if (seq == gre.seq_recv + 1) {
 			if (pptpctrl_debug)
 				syslog(LOG_DEBUG, "GRE: accepting packet #%d", 
 				       seq);
