@@ -1,3 +1,5 @@
+1.3.4: released 2007-04-16
+
 - fix two release critical packet reordering bugs [Oester]
 - accept both types of domain delimiter [Cameron]
 - deprecate PPP_WAIT workaround in favour of turning off pty echo [Brady]

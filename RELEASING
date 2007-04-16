@@ -10,7 +10,7 @@ run ./reconf
 update NEWS, ChangeLog
 commit changes
 tag, see README.cvs, for example:
-	cvs tag -F pptpd-1_3_3
+	cvs tag -F pptpd-1_3_4
 make dist
 md5sum
 gpg --detach-sign --armor
