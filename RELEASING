@@ -30,10 +30,10 @@ f) "make uninstall"
 
 Packaging
 
-fakeroot rpmbuild -ta pptpd-1.3.3.tar.gz
+fakeroot rpmbuild -ta pptpd-1.3.4.tar.gz
 # fails
-mv /usr/src/rpm/SRPMS/pptpd-1.3.3-0.src.rpm .
-mv /usr/src/rpm/RPMS/i386/pptpd-1.3.3-0.i386.rpm .
+mv /usr/src/rpm/SRPMS/pptpd-1.3.4-0.src.rpm .
+mv /usr/src/rpm/RPMS/i386/pptpd-1.3.4-0.i386.rpm .
 
 SourceForge
 
@@ -42,9 +42,9 @@ user anonymous qz@hp.com
 cd incoming
 hash
 passive
-put pptpd-1.3.3.tar.gz
-put pptpd-1.3.3-0.src.rpm
-put pptpd-1.3.3-0.i386.rpm
+put pptpd-1.3.4.tar.gz
+put pptpd-1.3.4-0.src.rpm
+put pptpd-1.3.4-0.i386.rpm
 quit
 EOF
 http://sourceforge.net/
@@ -52,34 +52,30 @@ Login
 Poptop
 Admin
 File Releases
-Add Release "pptpd-1.3.3 (experimental)" to package "pptpd"
+Add Release "pptpd-1.3.4 (experimental)" to package "pptpd"
 
 Announcement
 
 To: poptop-server@lists.sourceforge.net
-Subject: pptpd-1.3.3 released
+Subject: pptpd-1.3.4 released
 
 G'day,
 
-pptpd 1.3.3 has been released.
+pptpd 1.3.4 has been released.
 
 Please reply to the mailing list with your test results.
 
 See:
         http://sourceforge.net/projects/poptop (click on Files)
-        https://sourceforge.net/project/showfiles.php?group_id=44827
+        http://sourceforge.net/project/showfiles.php?group_id=44827
 
 Checksums:
-	281cbe4b18f0524a283fdb9618cc73ec  pptpd-1.3.3.tar.gz
+	b38df9c431041922c997c1148bedf591  pptpd-1.3.4.tar.gz
 
-Changes to pptpd since 1.3.2 are:
-- add missing connections option in sample pptpd.conf [Cameron]
-- add message to indicate when constrained by IP range [Cameron]
-- fix segfault on -C option, Closes Gentoo Bug #132898 [Nastac]
-- support mixed architecture build on x86_64 [Gorlov]
-- fix configure --with and --without option processing again [Cameron]
-- include libutil in logwtmp build [Gorlov]
-- fix spec file [Howarth]
+Changes to pptpd since 1.3.3 are:
+- fix two release critical packet reordering bugs [Oester]
+- accept both types of domain delimiter [Cameron]
+- deprecate PPP_WAIT workaround in favour of turning off pty echo [Brady]
 
 See the detailed ChangeLog
 
