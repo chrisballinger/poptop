@@ -1,3 +1,17 @@
+Tue Apr 24 13:11:28 2007  Phil Oester  <kernel@linuxace.com>
+
+	* pptpgre.c (decaps_gre): further testing has revealed a couple
+	more problems with the packet reordering/buffering code:
+
+	1) Some clients (notably the PPTP client) start their sequence
+	   numbers at 1 instead of 0 as the RFC mandates.  My previous fix
+	   caused problems with these clients.
+
+	2) Duplicate packets were causing corruption when they were placed
+	   on the queue but never used -or- when they were placed on the
+	   queue but already existed on the queue (i.e. they previously
+	   arrived out of order).
+
 Mon Apr 16 10:32:40 2007  James Cameron  <quozl@us.netrek.org>
 
 	* pptpd-1.3.4.tar.gz: released.

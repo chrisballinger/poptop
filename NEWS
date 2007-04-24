@@ -1,3 +1,5 @@
+- fix reordering some more [Oester]
+
 1.3.4: released 2007-04-16
 
 - fix two release critical packet reordering bugs [Oester]
