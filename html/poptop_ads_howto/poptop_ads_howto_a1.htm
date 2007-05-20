@@ -11,12 +11,12 @@
 <p><strong>APPENDIX</strong></p>
 <p><strong><a name="mppe"></a>A1. Install MPPE Kernel Module on Fedora Core 4</strong><br> 
   (last update: 6 March 2006) </p>
-<p>MPPE support is required for MSCHAPv2. Depending on the kernel version, you may or may not require to perform this step. Kernel version 2.6.15 or above has MPPE built-in. If you are using the latest FC4 2.6.15 kernel, you can go to <a href="poptop_ads_howto_4.htm#pppd_pptpd">Step 7</a> now. If you are using an older kernel  which  does not support MPPE, you will have to add this feature to it. </p>
+<p>MPPE support is required for MSCHAPv2. Depending on the kernel version, you may or may not require to perform this step. Kernel version 2.6.15 or above has MPPE built-in. If you are using the latest FC4 2.6.15 kernel, you can go to <a href="poptop_ads_howto_4.htm#pppd_pptpd">Step 8 </a> now. If you are using an older kernel  which  does not support MPPE, you will have to add this feature to it. </p>
 <p>To test if your kernel supports MPPE:</p>
 <blockquote>
   <pre>[root@pptp ~]# modprobe ppp-compress-18 &amp;&amp; echo ok</pre>
 </blockquote>
-<p>If it returns an &quot;ok&quot;, you can safely skip this step and move to <a href="poptop_ads_howto_4.htm#pppd_pptpd">Step 7</a>. If you see &quot;FATAL: Module ppp_mppe not found.&quot;, install MPPE support as described in the following procedure:</p>
+<p>If it returns an &quot;ok&quot;, you can safely skip this step and move to <a href="poptop_ads_howto_4.htm#pppd_pptpd">Step 8 </a>. If you see &quot;FATAL: Module ppp_mppe not found.&quot;, install MPPE support as described in the following procedure:</p>
 <p>  Download the MPPE module builder in rpm format from <a href="http://sourceforge.net/project/showfiles.php?group_id=44827">here</a>. The required RPMs are::</p>
 <blockquote>
   <pre>dkms-2.0.6-1.noarch.rpm

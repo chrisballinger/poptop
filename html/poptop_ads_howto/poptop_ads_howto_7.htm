@@ -7,11 +7,11 @@
 </head>
 
 <body>
-<p><strong>11. pptpd and winbindd </strong></p>
+<p><strong>12. pptpd and winbindd </strong></p>
 <p>The section covers how to configure pptpd + winbindd + AD. If you are working on the freeradius configuration, you may skip this section and go to the <a href="poptop_ads_howto_8.htm">next one</a>. </p>
 <p>Most of the hard work has been done in the previous sections. You are very close to the final stage.</p>
 <hr>
-<strong><a name="wbtest"></a>11.1 Enable and Test winbindd</strong>
+<strong><a name="wbtest"></a>12.1 Enable and Test winbindd</strong>
 <p>Start samba and winbindd with the &quot;service&quot; command.</p>
 <blockquote>
   <pre>[root@pptp ~]# service smb start<br>Starting SMB services: [  OK  ]<br>Starting NMB services: [  OK  ]
@@ -33,12 +33,12 @@
 [root@pptp ~]# chkconfig smb on </pre>
 </blockquote><p></p>
 <hr>
-<strong><a name="pptpconf"></a>11.2 Configure pptpd </strong>
+<strong><a name="pptpconf"></a>12.2 Configure pptpd </strong>
 <p>There are two configuration files for pptpd. The first one is /etc/pptpd.conf. You can very much keep it as it is except the ip address range for the ppp connections. Edit the file and add two lines at the bottom to specify the local ip address and the ip address pool for the remote connections. </p>
 <blockquote>
   <pre>localip 10.0.0.10<br>remoteip 10.0.0.101-200 </pre>
 </blockquote>
-<p>10.0.0.10 is the ip address of the internal network card eth0. The remoteip is the address pool for the remote connections. If you are running FC6, please refer to <a href="poptop_ads_howto_4.htm#pptpd">Section 7.2</a> for details on the logwtmp option. </p>
+<p>10.0.0.10 is the ip address of the internal network card eth0. The remoteip is the address pool for the remote connections. If you are running FC6, please refer to <a href="poptop_ads_howto_4.htm#pptpd">Section 8.2</a> for details on the logwtmp option. </p>
 <p>Please note that pptpd by default has a 100 connections limit. You can override it by the &quot;connections&quot; parameter in the pptp.conf file. Read the remarks in the file. </p>
 <p>The second configuration file is /etc/ppp/options.pptpd. I stripped off all remarks from my options.pptpd and it is like this:</p>
 <blockquote>

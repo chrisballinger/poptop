@@ -7,14 +7,14 @@
 </head>
 
 <body>
-<p><strong>17. pptp Server Administration </strong></p>
+<p><strong>18. pptp Server Administration </strong></p>
 <p>This section covers a few tricks on pptp server management. It is far from a complete guide. Any suggestions are welcome.</p>
 <p>The packages <strong>psacct</strong> and <strong>SysVinit</strong> are required for the utilities used in here. They should be installed by default. If they are  not, please install them through yum.</p>
 <blockquote>
   <pre>[root@pptp ~]# yum install psacct SysVinit </pre>
 </blockquote><p></p>
 <hr>
-<strong><a name="whoisonline"></a>17.1 Who is Online?</strong>
+<strong><a name="whoisonline"></a>18.1 Who is Online?</strong>
 <p>To check who is online, the &quot;last&quot; command is used:</p>
 <blockquote>
   <pre>[root@pptp ~]# last | grep ppp | grep still
@@ -23,7 +23,7 @@ James    ppp3         202.xx.xxx.xxx   Sat Nov 19 17:38   still logged in   <br>
 <p><strong><em>last</em></strong> is from SysVinit. It reads the information from /var/log/wtmp. </p>
 <p><strong>Note:</strong> for <em><strong>last</strong></em> to work properly, the logwtmp option in the /etc/pptpd.conf must be enabled. If you are sure there are pptp connections but see no output from the above mentioned command, check the logwtmp option in the pptpd.conf file is enabled. </p>
 <hr>
-<strong><a name="accounting"></a>17.2 Accounting </strong>
+<strong><a name="accounting"></a>18.2 Accounting </strong>
 <p>The &quot;ac&quot; utility from package psacct will provide a report on the connection time.</p>
 <blockquote>
   <pre>[root@pptp ~]# ac -d -p
@@ -50,7 +50,7 @@ If you want the statistics from older version of wtmp, use the -f parameter in &
 2. If users use shell to log in the server as well, the ac will return the connection time of both pptp and shell connections.
 </p>
 <hr> 
-<strong><a name="disconnect"></a>17.3 Disconnect a User</strong>
+<strong><a name="disconnect"></a>18.3 Disconnect a User</strong>
 <p>To disconnect an active connection, you will have to kill the pppd process associate with it. Firstly, run the command in section 16.1 to find out the remote ip address of the user. Say you want to disconnect Mary, her ip address in the above example is 1.2.3.4. Then, find the PID of the pppd process.
 </p>
 <blockquote>

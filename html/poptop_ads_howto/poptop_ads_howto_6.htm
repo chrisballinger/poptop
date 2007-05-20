@@ -7,11 +7,11 @@
 </head>
 
 <body>
-<p><strong>9. Kerberos</strong></p>
+<p><strong>10. Kerberos</strong></p>
 <p>There are two different versions of the Kerberos client, version 4 from KTH and 5 from MIT. As Microsoft uses version 5, you should use the MIT version. Fedora includes the MIT one so you will be ok to use the stock standard one.</p>
 <p>Packages krb5-lib and krb5-workstation are required. They are installed by default. If they are not, please get the latest version from <em>yum</em>.</p>
 <hr>
-<a name="krbconf"></a><strong>9.1 Configure Kerberos</strong>
+<a name="krbconf"></a><strong>10.1 Configure Kerberos</strong>
 <p>The configuration file of Kerberos is /etc/krb5.conf. To connect to AD, the settings must match the domain configuration.</p>
 <blockquote>
   <pre>[logging]<br> default = FILE:/var/log/krb5libs.log<br> kdc = FILE:/var/log/krb5kdc.log<br> admin_server = FILE:/var/log/kadmind.log</pre>
@@ -43,7 +43,7 @@
 </blockquote>
 <p>Lines shown in bold are the ones you should pay attention to. Use uppercase as shown. </p>
 <hr>
-<a name="krbtest"></a><strong>9.2 Test Kerberos</strong>
+<a name="krbtest"></a><strong>10.2 Test Kerberos</strong>
 <p>Before trying to connect to AD, the AD DNS should have a A record for the pptp server. To add the A record, on your Windows DNS server, click Start -&gt; Administrative Tools -&gt; DNS. The dnsmgmt window pops up. Click on the &quot;+&quot; of &quot;Forward Lookup Zones&quot;. Right click on AD Domain name, in our test environment is EXAMPLENET.ORG, and choose &quot;New Host (A)...&quot;. Put in the server Netbios name which is defined in smb.conf and the ip address. Then press the &quot;Add Host&quot; button.</p>
 <p>When the DNS is ready, it is time to test Kerberos. Please note that the domain name must be in capital. </p>
 <blockquote>
