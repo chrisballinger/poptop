@@ -1,3 +1,7 @@
+Thu May 24 10:43:45 2007  James Cameron  <quozl@us.netrek.org>
+
+	* pptpd.conf.5: add missing logwtmp option.
+
 Tue Apr 24 13:11:28 2007  Phil Oester  <kernel@linuxace.com>
 
 	* pptpgre.c (decaps_gre): further testing has revealed a couple
