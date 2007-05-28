@@ -3,7 +3,7 @@
  *
  * PPTP Control Message packet reading, formatting and writing.
  *
- * $Id: ctrlpacket.c,v 1.6 2005/08/03 09:10:59 quozl Exp $
+ * $Id: ctrlpacket.c,v 1.7 2007/05/28 02:15:42 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -541,9 +541,16 @@ void deal_set_link_info(unsigned char *packet)
 	struct pptp_set_link_info *set_link_info;
 
 	set_link_info = (struct pptp_set_link_info *) packet;
-	if(set_link_info->send_accm != 0xffffffff || set_link_info->recv_accm != 0xffffffff)
-		syslog(LOG_ERR, "CTRL: Ignored a SET LINK INFO packet with real ACCMs!");
-	else if(pptpctrl_debug)
+	if (set_link_info->send_accm != 0xffffffff || set_link_info->recv_accm != 0xffffffff)
+		/* Async-Control-Character-Map (ACCM) are bits that
+		   show which control characters should be escaped by the
+		   PPP implementation ... pptpd leaves pppd to negotiate
+		   that via LCP and does not process SET LINK INFO
+		   packets ... this is not complaint with the RFC but
+		   still works. */
+		if (pptpctrl_debug)
+			syslog(LOG_DEBUG, "CTRL: Ignored a SET LINK INFO packet with real ACCMs! (intentional non-compliance with section 2.15 of RFC 2637, ACCM is negotiated by PPP LCP asyncmap)");
+	else if (pptpctrl_debug)
 		syslog(LOG_DEBUG, "CTRL: Got a SET LINK INFO packet with standard ACCMs");
 }
 

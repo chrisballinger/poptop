@@ -1,3 +1,9 @@
+Mon May 28 12:17:06 2007  James Cameron  <quozl@us.netrek.org>
+
+	* ctrlpacket.c (deal_set_link_info): change the "Ignored a SET
+	LINK INFO" message to be LOG_DEBUG, only emit when debug mode is
+	enabled, and explain further what it is.
+
 Thu May 24 10:43:45 2007  James Cameron  <quozl@us.netrek.org>
 
 	* pptpd.conf.5: add missing logwtmp option.
