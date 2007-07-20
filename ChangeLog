@@ -1,3 +1,9 @@
+Fri Jul 20 10:27:37 2007  Eivind Naess  <Eivind.Naess@gmail.com>
+
+	* pptpdefs.h: add packed attribute to pptp_gre_header, to ensure
+	compiler alignment efforts do not conflict with processing the
+	header.
+
 Mon May 28 12:17:06 2007  James Cameron  <quozl@us.netrek.org>
 
 	* ctrlpacket.c (deal_set_link_info): change the "Ignored a SET

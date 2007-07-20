@@ -3,7 +3,7 @@
  *
  * PPTP structs and defines
  *
- * $Id: pptpdefs.h,v 1.4 2006/12/08 00:01:40 quozl Exp $
+ * $Id: pptpdefs.h,v 1.5 2007/07/20 00:34:09 quozl Exp $
  */
 
 #ifndef _PPTPD_PPTPDEFS_H
@@ -309,7 +309,7 @@ struct pptp_gre_header {
 	u_int32_t seq;		/* sequence number.  Present if S==1 */
 	u_int32_t ack;		/* seq number of highest packet recieved by */
 	/* sender in this session */
-};
+} __attribute__((packed));
 
 /* For our call ID pairs */
 #define PNS_VALUE 0

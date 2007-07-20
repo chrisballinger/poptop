@@ -1,3 +1,4 @@
+- compiler fix for pptp_gre_header [Naess]
 - suppress "ignored a SET LINK INFO packet with real ACCMs" [Cameron]
 - add missing logwtmp option on pptpd.conf manyal page [Cameron]
 - fix reordering some more [Oester]
