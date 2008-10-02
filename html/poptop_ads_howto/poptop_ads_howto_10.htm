@@ -48,10 +48,6 @@ plugin radius.so
 plugin radattr.so</pre>
 </blockquote>
 <p>There are two plugins we used in here. The first one radius.so is required while the second one radattr.so is optional. Radattr.so basically records the parameters passed from radius to pppd in a file. Check the man page of pppd-radattr for details. </p>
-<p>Then, we need to fix the permission of a winbind directory.</p>
-<blockquote>
-  <pre>[root@pptp ~]# chgrp radiusd /var/cache/samba/winbindd_privileged/</pre>
-</blockquote>
 <p>If you have Windows XP clients, you may want to reduce the MTU size. Add the  line, /sbin/ifconfig $1 mtu 1400, to /etc/ppp/ip-up as shown in the following list.</p>
 <blockquote>
   <pre>[root@pptp ppp]# cat ip-up

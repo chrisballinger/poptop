@@ -13,6 +13,10 @@
   email: wskwok61 (at) gmail.com</p>
 <p align="left"><strong>Revision History</strong>:</p>
 <dl>
+  <dt>Release 1.4 - 30 September 2008</dt>
+  <dd>- Updated information of the Howto to focus on Fedora 8</dd>
+  <dd>- Moved FC5/FC6 specific information to Appendix</dd>
+  <br>
   <dt>Release 1.3 - 19 May 2007</dt>
   <dd>- Added info on potential problem of  selinux on pptpd </dd>
   <dd>- Added info to build rpm from pptpd tar ball</dd>
@@ -70,7 +74,7 @@
 <dl>
    <dt>First Release -- 5 September 2005</dt>
 </dl>
-<p align="left">This document covers how to integrate Poptop with Microsoft Active Directory on Fedora Core 5/6. Two different implementations are described: a) winbind; and b) freeradius.</p>
+<p align="left">This document covers how to integrate Poptop with Microsoft Active Directory on Fedora 8. Two different implementations are described: a) winbind; and b) freeradius.</p>
 <hr>
 <a name="toc"></a>Table of Contents
 <dl><dt>1. <a href="#introduction">Introduction</a></dt>
@@ -111,21 +115,33 @@
   <dd>18.1 <a href="poptop_ads_howto_12.htm#whoisonline">Who is Online?</a></dd>
   <dd>18.2 <a href="poptop_ads_howto_12.htm#accounting">Accounting</a></dd>
   <dd>18.3 <a href="poptop_ads_howto_12.htm#disconnect">Disconnect a User</a></dd>
-  <dt>A1. <a href="poptop_ads_howto_a1.htm#mppe">Install MPPE Module on Fedora Core 4</a></dt>
-  <dd>A1.1 <a href="poptop_ads_howto_a1.htm#autoinstaller">Kernel Upgrade and dkms_autoinstaller</a></dd>
-  <dt>A2. <a href="poptop_ads_howto_a1.htm#pppd">Update pppd on Fedora Core 4</a></dt>
-  <dt>A3. <a href="poptop_ads_howto_a2.htm">Samba for Fedora Core 4</a></dt>
-  <dt>A4. <a href="poptop_ads_howto_a2.htm#fc4freeradius">Software for Radius Setup on Fedora Core 4</a></dt
-></dl>
+  <dt>A1. <a href="poptop_ads_howto_a1.htm#mppe">Install MPPE Module on Fedora Core 4 / 5 / 6 </a></dt>
+  <dd>A1.1 <a href="poptop_ads_howto_a1.htm#a11_fc56">Fedora Core 5 / 6</a></dd>
+  <dd>A1.2 <a href="poptop_ads_howto_a1.htm#a12_fc4">Fedora Core 4</a></dd>
+  <dd>A1.3 <a href="poptop_ads_howto_a1.htm#autoinstaller">Kernel Upgrade and dkms_autoinstaller</a></dd>
+  <dt>A2. <a href="poptop_ads_howto_a2.htm#pppd">Update pppd on Fedora Core 4 / 5 / 6 </a></dt>
+  <dd>A2.1 <a href="poptop_ads_howto_a2.htm#fc56_pppd">Fedora Core 5 / 6</a></dd>
+  <dd>A2.2 <a href="ppptop_ads_howto_a2.htm#f4_pppd">Fedora Core 4</a></dd>
+  <dt>A3. <a href="poptop_ads_howto_a3.htm#samba">Samba for Fedora Core 4 / 5 / 6</a></dt>
+  <dd>A3.1 <a href="poptop_ads_howto_a3.htm#fc56_samba">Fedora Core 5 / 6</a></dd>
+  <dd>A3.2 <a href="poptop_ads_howto_a3.htm#fc4_samba">Fedora Core 4</a></dd>
+  <dt>A4. <a href="poptop_ads_howto_a4.htm#a4freeradius">Software for Radius Setup on Fedora Core 4 / 5 / 6</a></dt>
+  <dd>A4.1 <a href="poptop_ads_howto_a4.htm#fc56_freeradius">Fedora Core 5 / 6</a></dd>
+  <dd>A4.2 <a href="poptop_ads_howto_a4.htm#fc4_freeradius">Fedora Core 4</a></dd>
+  <dt>A5. <a href="poptop_ads_howto_a5.htm">Radiusclient Configuration for Fedora 4 / 5 / 6</a></dt>
+  <dd>A5.1 <a href="poptop_ads_howto_a5.htm#rclientconf">radiusclient.conf</a></dd>
+  <dd>A5.2 <a href="poptop_ads_howto_a5.htm#dict">dicitonary.microsoft</a></dd>
+  <dt>A6. <a href="poptop_ads_howto_a6.htm">Configure Freeradius for MSCHAP2 on Fedora 4 / 5 / 6</a></dt>
+</dl>
 
 <hr>
 <strong><a name="introduction"></a>1. Introduction</strong>
-<p>This document descibes how to  build a Linux PPTP server with Poptop and use Microsoft Active Directory to authenticate users. There are a few howtos on this topic, such as the <a href="http://poptop.sourceforge.net/dox/replacing-windows-pptp-with-linux-howto.phtml">Replacing a Windows PPTP Server with Linux Howto</a> maintained by Matt Alexander. Most of them, however, concentrate on Samba and winbind. I followed them and got it working in the test environment. Unfortunately, winbind does not scale very well in a AD setup which has thousands of objects. The AD in my work is a big tree. It spans across all continents and has thousands of users and groups. Winbind simply times out before it can harvest a complete list of users/groups.</p>
+<p>This document descibes how to  build a Linux PPTP server with Poptop and use Microsoft Active Directory to authenticate users. There are a few howtos on this topic, such as the <a href="http://poptop.sourceforge.net/dox/replacing-windows-pptp-with-linux-howto.phtml">Replacing a Windows PPTP Server with Linux Howto</a> created by Matt Alexander and maintained by James Cameron. Most of them, however, concentrate on Samba and winbind. I followed them and got it working in the test environment. Unfortunately, winbind does not scale very well in a AD setup which has thousands of objects. The AD in my work is a big tree. It spans across all continents and has thousands of users and groups. Winbind simply times out before it can harvest a complete list of users/groups.</p>
 <p align="left">The other way of doing it is with radius. Information on how to setup pptpd with radius against Active Directory is scarce. I can only find bits and pieces information from forums but never find any comprehensive documents. I spent days to try to get it configured properly. After countless frustrations and tears, I eventually got a working setup. I therefore decided to make this howto to document it. Hopefully, you will find it useful.</p>
 <p align="left">To make this howto complete, I include the winbind configuration as well although it may duplicate Matt's work.</p>
 <dt align="left"><strong>Note</strong>:</dt> 
-<dd>- this howto is based on Fedora Core 5/6 and use pre-packaged RPMs whenever possible. If you are using other distributions or like to compile software, you will have to make the necessary adjustments.</dt>
-<dd>- Information for Fedora Core 4 has been moved to Appendix and will not be updated anymore. </dd>
+<dd>- this howto is based on Fedora 8 and use pre-packaged RPMs whenever possible. If you are using other distributions or like to compile software, you will have to make the necessary adjustments.</dt>
+<dd>- Information for Fedora Core 4/5/6 has been moved to Appendix and will not be updated anymore. </dd>
 <br>
 <hr>
 <strong><a name="disclaimer"></a>2. Disclaimer</strong>

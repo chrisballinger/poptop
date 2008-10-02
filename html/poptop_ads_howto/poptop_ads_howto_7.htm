@@ -12,7 +12,13 @@
 <p>Most of the hard work has been done in the previous sections. You are very close to the final stage.</p>
 <hr>
 <strong><a name="wbtest"></a>12.1 Enable and Test winbindd</strong>
-<p>Start samba and winbindd with the &quot;service&quot; command.</p>
+<p>For Fedora 8, start samba and winbindd with the <em>&quot;service&quot;</em> command.</p>
+<blockquote>
+  <pre>[root@pptp ~]# service smb start<br>Starting SMB services: [  OK  ]
+[root@pptp ~]# service nmb start<br>Starting NMB services: [  OK  ]
+[root@pptp ~]# service winbind start<br>Starting Winbind services: [  OK  ] </pre>
+</blockquote>
+<p>For older version of Fedora, the <em>&quot;service smb start</em>&quot; will start both smb and nmb.</p>
 <blockquote>
   <pre>[root@pptp ~]# service smb start<br>Starting SMB services: [  OK  ]<br>Starting NMB services: [  OK  ]
 [root@pptp ~]# service winbind start<br>Starting Winbind services: [  OK  ] </pre>
@@ -27,18 +33,20 @@
 <br>[root@acna-pptp etc]# wbinfo -u<br>EXAMPLE+Administrator<br>EXAMPLE+Guest<br>EXAMPLE+SUPPORT_388945a0<br>EXAMPLE+DC1$<br>EXAMPLE+krbtgt<br>EXAMPLE+skwok<br>EXAMPLE+ldapuser<br>EXAMPLE+pptpdsvr$ 
 </pre>
 </blockquote>
-<p>To enable samba and winbind on bootup, use the chkconfig command.</p>
+<p>To enable samba, nmb and winbind on bootup, use the chkconfig command.</p>
 <blockquote>
   <pre>[root@pptp ~]# chkconfig winbind on
+[root@pptp ~]# chkconfig nmb on
 [root@pptp ~]# chkconfig smb on </pre>
-</blockquote><p></p>
+</blockquote>
+<p>Please note that for older version of Fedora, smb will spawn nmb automatically. But for F8, they are separated.</p>
 <hr>
 <strong><a name="pptpconf"></a>12.2 Configure pptpd </strong>
 <p>There are two configuration files for pptpd. The first one is /etc/pptpd.conf. You can very much keep it as it is except the ip address range for the ppp connections. Edit the file and add two lines at the bottom to specify the local ip address and the ip address pool for the remote connections. </p>
 <blockquote>
   <pre>localip 10.0.0.10<br>remoteip 10.0.0.101-200 </pre>
 </blockquote>
-<p>10.0.0.10 is the ip address of the internal network card eth0. The remoteip is the address pool for the remote connections. If you are running FC6, please refer to <a href="poptop_ads_howto_4.htm#pptpd">Section 8.2</a> for details on the logwtmp option. </p>
+<p>10.0.0.10 is the ip address of the internal network card eth0. The remoteip is the address pool for the remote connections. If you are running FC6 or above, please refer to <a href="poptop_ads_howto_4.htm#pptpd">Section 8.2</a> for details on the logwtmp option. </p>
 <p>Please note that pptpd by default has a 100 connections limit. You can override it by the &quot;connections&quot; parameter in the pptp.conf file. Read the remarks in the file. </p>
 <p>The second configuration file is /etc/ppp/options.pptpd. I stripped off all remarks from my options.pptpd and it is like this:</p>
 <blockquote>
