@@ -1,3 +1,8 @@
+Wed Oct  8 09:47:33 2008  James Cameron  <quozl@us.netrek.org>
+
+	* pptpctrl.c (launch_pppd): exclude ipparam and plugin from SLIRP
+	and BSD PPP configurations.  Reported by Richard P. Koett.
+
 Fri Jul 20 10:27:37 2007  Eivind Naess  <Eivind.Naess@gmail.com>
 
 	* pptpdefs.h: add packed attribute to pptp_gre_header, to ensure

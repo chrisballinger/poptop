@@ -3,7 +3,7 @@
  *
  * PPTP control connection between PAC-PNS pair
  *
- * $Id: pptpctrl.c,v 1.20 2006/12/08 00:01:40 quozl Exp $
+ * $Id: pptpctrl.c,v 1.21 2008/10/07 23:17:38 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -764,7 +764,6 @@ static void launch_pppd(char **pppaddrs, struct in_addr *inetaddrs)
 		sprintf(pppInterfaceIPs, "%s:%s", pppaddrs[0], pppaddrs[1]);
 		pppd_argv[an++] = pppInterfaceIPs;
 	}
-#endif
 
         if (!noipparam) {
                  pppd_argv[an++] = "ipparam";
@@ -777,6 +776,7 @@ static void launch_pppd(char **pppaddrs, struct in_addr *inetaddrs)
                  pppd_argv[an++] = "pptpd-original-ip";
                  pppd_argv[an++] = inet_ntoa(inetaddrs[1]);
         }
+#endif
 
 	/* argv arrays must always be NULL terminated */
 	pppd_argv[an++] = NULL;
