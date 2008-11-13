@@ -1,3 +1,10 @@
+Fri Nov 14 10:28:27 2008  Karl Hiramoto  <karl@hiramoto.org>
+
+	* ctrlpacket.c (deal_start_ctrl_conn): fix compilation with uclibc
+	with legacy support disabled.  From "man bzero": This function is
+	deprecated (marked as LEGACY in POSIX.1-2001): use memset(3) in
+	new programs.  POSIX.1-2008 removes the specification of bzero().
+
 Wed Oct  8 09:47:33 2008  James Cameron  <quozl@us.netrek.org>
 
 	* pptpctrl.c (launch_pppd): exclude ipparam and plugin from SLIRP
