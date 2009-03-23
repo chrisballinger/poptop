@@ -65,6 +65,41 @@ root   8672  8671  0 16:59 ?      00:00:00 /usr/sbin/pppd local file /etc/ppp/op
   <pre>[root@pptp /]# kill 8672</pre>
 </blockquote><br>
 <hr>
+<strong><a name="oneconnection"></a>18.4 Allow Only One Connection per User</strong>
+<p>By default, a user can make multiple connections to the pptpd server. To restrict one connection per user, create two script files in the /etc/ppp directory. When the same user logs in twice, the first connection will be disconnected. This is actually done on the ppp level, not with the pptpd. </p>
+<p>The first file is /etc/ppp/auth-up</p>
+<blockquote>
+  <pre>
+  #!/bin/sh
+  # get the username/ppp line number from the parameters
+  PPPLINE=$1
+  USER=$2
+  # create the directory to keep pid files per user
+  mkdir -p /var/run/pptpd-users
+  # if there is a session already for this user, terminate the old one
+  if [ -f /var/run/pptpd-users/$USER ]; then
+    kill -HUP `cat /var/run/pptpd-users/$USER`
+    rm /var/run/pptpd-users/$USER
+  fi
+  # write down the username in the ppp line file
+  echo $USER &gt; /var/run/pptpd-users/$PPPLINE.new
+</pre>
+</blockquote>
+<p>The second file is /etc/ppp/ip-up.local</p>
+<blockquote>
+  <pre>
+  #!/bin/sh
+  REALDEVICE=$1
+  # Get the username from the ppp line record file
+  USER=`cat /var/run/pptpd-users/$REALDEVICE.new`
+  # Copy the ppp line pid
+  cp &quot;/var/run/$REALDEVICE.pid&quot; /var/run/pptpd-users/$USER
+  # remove the ppp line record file
+  rm &quot;/var/run/pptpd-users/$REALDEVICE.new&quot;
+</pre>
+</blockquote>
+<p>The method presented here may not be the best one, but it works for me. (If you have a better way, please let me know.)</p>
+<hr>
 <a href="poptop_ads_howto_a1.htm">Next</a> &nbsp;&nbsp;<a href="poptop_ads_howto_11.htm">Previous</a>&nbsp;&nbsp;<a href="poptop_ads_howto_1.htm#toc">Content</a>
 </body>
 </html>
