@@ -1,3 +1,27 @@
+Mon Jun 15 12:53:58 2009  Michael Douglass  <mikedoug@mikedoug.net>
+
+	* pptpctrl.c (pptp_handle_ctrl_connection): fix IDLE_WAIT
+	implementation.
+
+	pptpd processes were not terminating when the remote pptp client
+	went off the network unexpectedly.  An strace of pptpd showed the
+	select() loop in pptctrl.c was never timing out because the
+	/dev/ptmx descriptor was sending data to pptpd every 10 seconds.
+	Since the select() loop was never timing out, the IDLE_WAIT
+	mechanism never triggered.
+
+	The patch below makes the following changes:
+
+	- select() returning 0 is no longer a direct trigger case for
+	sending an ECHO REQ
+
+	- track the last time we heard anything from our TCP socket in
+	last_time (initialized to now on startup)
+
+	- any time we go through the loop and we don't hear from our TCP
+	socket, we check to see if our last_time is older than IDLE_WAIT,
+	if so, send an ECHO REQ
+
 Fri Nov 14 10:28:27 2008  Karl Hiramoto  <karl@hiramoto.org>
 
 	* ctrlpacket.c (deal_start_ctrl_conn): fix compilation with uclibc

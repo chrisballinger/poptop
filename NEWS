@@ -1,3 +1,4 @@
+- fix implementation of IDLE_WAIT [Douglass]
 - fix compilation with uclibc with legacy support disabled [Hiramoto]
 - avoid ipparam and logwtmp on BSD [Cameron]
 - compiler fix for pptp_gre_header [Naess]

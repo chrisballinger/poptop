@@ -3,7 +3,7 @@
  *
  * PPTP control connection between PAC-PNS pair
  *
- * $Id: pptpctrl.c,v 1.21 2008/10/07 23:17:38 quozl Exp $
+ * $Id: pptpctrl.c,v 1.22 2009/06/15 03:01:09 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -226,6 +226,7 @@ static void pptp_handle_ctrl_connection(char **pppaddrs, struct in_addr *inetadd
 	int echo_wait = FALSE;		/* Waiting for echo? */
 	u_int32_t echo_count = 0;	/* Sequence # of echo */
 	time_t echo_time = 0;		/* Time last echo req sent */
+	time_t last_time = time(NULL);	/* Time last received data */
 	struct timeval idleTime;	/* How long to select() */
 
 	/* General local variables */
@@ -281,16 +282,6 @@ static void pptp_handle_ctrl_connection(char **pppaddrs, struct in_addr *inetadd
 			} else if (encaps_gre(-1, NULL, 0))
 				/* Pending ack and nothing else to do */
 				encaps_gre(gre_fd, NULL, 0);	/* send ack with no payload */
-			else if (echo_wait != TRUE) {
-				/* Timeout. Start idle link detection. */
-				echo_count++;
-				if (pptpctrl_debug)
-					syslog(LOG_DEBUG, "CTRL: Sending ECHO REQ id %d", echo_count);
-				time(&echo_time);
-				make_echo_req_packet(rply_packet, &rply_size, echo_count);
-				echo_wait = TRUE;
-				send_packet = TRUE;
-			}
 			break;
 
 		default:
@@ -328,6 +319,7 @@ static void pptp_handle_ctrl_connection(char **pppaddrs, struct in_addr *inetadd
 		/* handle control messages */
 
 		if (FD_ISSET(clientSocket, &fds)) {
+			time(&last_time);
 			send_packet = TRUE;
 			switch (read_pptp_packet(clientSocket, packet, rply_packet, &rply_size)) {
 			case 0:
@@ -420,6 +412,15 @@ static void pptp_handle_ctrl_connection(char **pppaddrs, struct in_addr *inetadd
 
 			/* Otherwise, the already-formed reply will do fine, so send it */
 			}
+		/* send echo request packet if we have not heard from the TCP socket in IDLE_TIME */
+		} else if (echo_wait != TRUE && (time(NULL) - last_time) > IDLE_WAIT) {
+			echo_count++;
+			if (pptpctrl_debug)
+				syslog(LOG_DEBUG, "CTRL: Sending ECHO REQ id %d", echo_count);
+			time(&echo_time);
+			make_echo_req_packet(rply_packet, &rply_size, echo_count);
+			echo_wait = TRUE;
+			send_packet = TRUE;
 		}
 
 		/* send reply packet - this may block, but it should be very rare */
