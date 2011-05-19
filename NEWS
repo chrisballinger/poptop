@@ -1,3 +1,4 @@
+- add support for VRFs through libvrf [Lamparter]
 - fix implementation of IDLE_WAIT [Douglass]
 - fix compilation with uclibc with legacy support disabled [Hiramoto]
 - avoid ipparam and logwtmp on BSD [Cameron]

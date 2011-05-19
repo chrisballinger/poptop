@@ -4,7 +4,7 @@
  * Grabs any command line argument and processes any further options in
  * the pptpd config file, before throwing over to pptpmanager.c.
  *
- * $Id: pptpd.c,v 1.18 2006/09/04 23:17:25 quozl Exp $
+ * $Id: pptpd.c,v 1.19 2011/05/19 00:02:50 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -54,6 +54,9 @@ char *ppp_binary = NULL;
 char *pppdoptstr = NULL;
 char *speedstr = NULL;
 char *bindaddr = NULL;
+#ifdef VRF
+char *vrf = NULL;
+#endif
 #ifdef BCRELAY
 char *bcrelay = NULL;
 #endif
@@ -86,8 +89,11 @@ static void showusage(char *prog)
 	printf("\npptpd v%s\n", VERSION);
 	printf("Usage: pptpd [options], where options are:\n\n");
 #ifdef BCRELAY
+#define OPT_BCRELAY "b"
 	printf(" [-b] [--bcrelay if]       Use broadcast relay for broadcasts comming from.\n");
 	printf("                           the specified interface (default is eth1).\n");
+#else
+#define OPT_BCRELAY ""
 #endif
 	printf(" [-c] [--conf file]        Specifies the config file to read default\n");
 	printf("                           settings from (default is %s).\n", PPTPD_CONFIG_FILE_DEFAULT);
@@ -98,6 +104,14 @@ static void showusage(char *prog)
 	printf(" [-i] [--noipparam]        Suppress the passing of the client's IP address\n");
 	printf("                           to PPP, which is done by default otherwise.\n");
 	printf(" [-l] [--listen x.x.x.x]   Specifies IP of local interface to listen to.\n");
+#ifdef VRF
+#define OPT_VRFA "V:"
+#define OPT_VRF "V"
+	printf(" [-V] [--vrf name]         Use given VRF for GRE/TCP sockets.\n");
+#else
+#define OPT_VRFA ""
+#define OPT_VRF ""
+#endif
 #if !defined(BSDUSER_PPP)
 	printf(" [-o] [--option file]      Specifies the PPP options file to use\n");
 	printf("                           (default is /etc/ppp/options).\n");
@@ -148,11 +162,7 @@ int main(int argc, char **argv)
 	/* process command line options */
 	while (1) {
 		int option_index = 0;
-#ifdef BCRELAY
-		char *optstring = "b:c:de:fhil:o:p:s:t:vwC:D";
-#else
-		char *optstring = "c:de:fhil:o:p:s:t:vwC:D";
-#endif
+		char *optstring = OPT_BCRELAY ":c:de:fhil:o:p:s:t:vwC:D" OPT_VRFA;
 
 		static struct option long_options[] =
 		{
@@ -174,6 +184,9 @@ int main(int argc, char **argv)
 			{"logwtmp", 0, 0, 0},
 			{"connections", 1, 0, 0},
 			{"delegate", 0, 0, 0},
+#ifdef VRF
+			{"vrf", 1, 0, 0},
+#endif
 			{0, 0, 0, 0}
 		};
 
@@ -182,11 +195,8 @@ int main(int argc, char **argv)
 			break;
 		/* convert long options to short form */
 		if (c == 0)
-#ifdef BCRELAY
-			c = "bcdefhilopstvwCD"[option_index];
-#else
-			c = "cdefhilopstvwCD"[option_index];
-#endif
+			c = OPT_BCRELAY "cdefhilopstvwCD" OPT_VRF [option_index];
+
 		switch (c) {
 #ifdef BCRELAY
 		case 'b': /* --bcrelay */
@@ -204,6 +214,13 @@ int main(int argc, char **argv)
 			if (bindaddr) free(bindaddr);
 			bindaddr = strdup(tmpstr);
 			break;
+
+#ifdef VRF
+		case 'V': /* --vrf */
+			if (vrf) free(vrf);
+			vrf = strdup(optarg);
+			break;
+#endif
 
 		case 'h': /* --help */
 			showusage(argv[0]);
@@ -322,6 +339,12 @@ int main(int argc, char **argv)
 		}
 		bindaddr = strdup(tmpstr);
 	}
+
+#ifdef VRF
+	if (!vrf && read_config_file(configFile, VRF_KEYWORD, tmp) > 0) {
+		vrf = strdup(tmp);
+	}
+#endif
 
 	if (!speedstr && read_config_file(configFile, SPEED_KEYWORD, tmp) > 0)
 		speedstr = strdup(tmp);

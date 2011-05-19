@@ -3,7 +3,7 @@
  *
  * Manages the PoPToP sessions.
  *
- * $Id: pptpmanager.c,v 1.14 2005/12/29 09:59:49 quozl Exp $
+ * $Id: pptpmanager.c,v 1.15 2011/05/19 00:02:50 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -32,6 +32,9 @@
 #include <time.h>
 #include <sys/time.h>
 #include <fcntl.h>
+#ifdef VRF
+#include <vrf.h>
+#endif
 
 #if HAVE_LIBWRAP
 /* re-include, just in case HAVE_SYSLOG_H wasn't defined */
@@ -413,7 +416,7 @@ static int createHostSocket(int *hostSocket)
 #endif
 
 	/* create the master socket and check it worked */
-	if ((*hostSocket = socket(AF_INET, SOCK_STREAM, 0)) == 0)
+	if ((*hostSocket = vrf_socket(vrf, AF_INET, SOCK_STREAM, 0)) == 0)
 		return -1;
 
 	/* set master socket to allow daemon to be restarted with connections active  */
@@ -491,6 +494,10 @@ static void connectCall(int clientSocket, int clientNumber)
 	NUM2ARRAY(ctrl_noipparam, pptp_noipparam ? 1 : 0);
 	ctrl_noipparam[1] = '\0';
 	ctrl_argv[pptpctrl_argc++] = ctrl_noipparam;
+
+#ifdef VRF
+	ctrl_argv[pptpctrl_argc++] = vrf ? vrf : "";
+#endif
 
 	/* optionfile = TRUE or FALSE; so the CTRL manager knows whether to load a non-standard options file */
 	NUM2ARRAY(pppdoptfile_argv, pppdoptstr ? 1 : 0);

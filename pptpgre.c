@@ -4,7 +4,7 @@
  * originally by C. S. Ananian
  * Modified for PoPToP
  *
- * $Id: pptpgre.c,v 1.10 2007/04/24 03:13:17 quozl Exp $
+ * $Id: pptpgre.c,v 1.11 2011/05/19 00:02:50 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -32,6 +32,9 @@
 #include <fcntl.h>
 #ifdef HAVE_SYS_UIO_H
 #include <sys/uio.h>
+#endif
+#ifdef VRF
+#include <vrf.h>
 #endif
 
 #include "ppphdlc.h"
@@ -70,7 +73,7 @@ int pptp_gre_init(u_int32_t call_id_pair, int pty_fd, struct in_addr *inetaddrs)
 	int gre_fd;
 
 	/* Open IP protocol socket */
-	gre_fd = socket(AF_INET, SOCK_RAW, PPTP_PROTO);
+	gre_fd = vrf_socket(vrf, AF_INET, SOCK_RAW, PPTP_PROTO);
 	if (gre_fd < 0) {
 		syslog(LOG_ERR, "GRE: socket() failed");
 		return -1;

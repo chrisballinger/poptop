@@ -3,7 +3,7 @@
  *
  * PPTP control connection between PAC-PNS pair
  *
- * $Id: pptpctrl.c,v 1.22 2009/06/15 03:01:09 quozl Exp $
+ * $Id: pptpctrl.c,v 1.23 2011/05/19 00:02:50 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -54,6 +54,9 @@
 // placing net/if.h here fixes build on Solaris
 #include <net/if.h>
 
+#ifdef VRF
+char *vrf = NULL;
+#endif
 static char *ppp_binary = PPP_BINARY;
 static int pptp_logwtmp;
 static int noipparam;			/* if true, don't send ipparam to ppp */
@@ -135,6 +138,9 @@ int main(int argc, char **argv)
 	/* note: update pptpctrl.8 if the argument list format is changed */
 	GETARG_INT(pptpctrl_debug);
 	GETARG_INT(noipparam);
+#ifdef VRF
+	GETARG_STRING(vrf);
+#endif
 	GETARG_VALUE(pppdxfig);
 	GETARG_VALUE(speed);
 	GETARG_VALUE(pppLocal);
@@ -142,8 +148,17 @@ int main(int argc, char **argv)
 	if (arg < argc) GETARG_INT(unique_call_id);
 	if (arg < argc) GETARG_STRING(ppp_binary);
 	if (arg < argc) GETARG_INT(pptp_logwtmp);
-	
+
+#ifdef VRF
+	if (!*vrf) {
+		free(vrf);
+		vrf = NULL;
+	}
+#endif
 	if (pptpctrl_debug) {
+#ifdef VRF
+		syslog(LOG_DEBUG, "CTRL: VRF used = %s", vrf ? vrf : "NONE");
+#endif
 		if (*pppLocal)
 			syslog(LOG_DEBUG, "CTRL: local address = %s", pppLocal);
 		if (*pppRemote)

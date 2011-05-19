@@ -4,7 +4,7 @@
  * This file contains some tuneable parameters, most of which can be overriden
  * at run-time.
  *
- * $Id: defaults.h,v 1.9 2006/09/04 23:17:25 quozl Exp $
+ * $Id: defaults.h,v 1.10 2011/05/19 00:02:50 quozl Exp $
  */
 
 #ifndef _PPTPD_DEFAULTS_H
@@ -67,6 +67,7 @@
 #define LOCALIP_KEYWORD			"localip"
 #define REMOTEIP_KEYWORD		"remoteip"
 #define LISTEN_KEYWORD			"listen"
+#define VRF_KEYWORD			"vrf"
 #define PIDFILE_KEYWORD			"pidfile"
 #define STIMEOUT_KEYWORD		"stimeout"
 #define NOIPPARAM_KEYWORD		"noipparam"

@@ -1,3 +1,17 @@
+Wed May 18 14:42:28 2011  David Lamparter  <david.lamparter@adyton.net>
+
+	* pptpctrl.c, pptpd.c, pptpgre.c, pptpmanager.c: introduce VRFs
+
+	this adds support for VRFs (Virtual Routing and Forwarding
+	instances) through libvrf from vrf-tools. pptpd gains the ability
+	to have its TCP and GRE sockets in a VRF different from the one
+	the process is running in.
+
+	As pppd is started from pptpd and does not have VRF support, the
+	pppX devices will be in the initial VRF. The PPTP traffic will
+	however be flowing in the given VRF. This allows full separation
+	of encapsulated and encapsulating networks.
+
 Mon Jun 15 12:53:58 2009  Michael Douglass  <mikedoug@mikedoug.net>
 
 	* pptpctrl.c (pptp_handle_ctrl_connection): fix IDLE_WAIT
