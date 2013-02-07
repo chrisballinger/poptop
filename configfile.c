@@ -4,7 +4,7 @@
  * Methods for accessing the PPTPD config file and searching for
  * PPTPD keywords.
  *
- * $Id: configfile.c,v 1.2 2004/04/22 10:48:16 quozl Exp $
+ * $Id: configfile.c,v 1.3 2013/02/07 00:23:27 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -57,14 +57,18 @@ int read_config_file(char *filename, char *keyword, char *value)
 	while ((fgets(buffer, MAX_CONFIG_STRING_SIZE - 1, in)) != NULL) {
 		/* ignore long lines */
 		if (buffer[(len = strlen(buffer)) - 1] != '\n') {
-			syslog(LOG_ERR, "Long config file line ignored.");
-			do
-				fgets(buffer, MAX_CONFIG_STRING_SIZE - 1, in);
-			while (buffer[strlen(buffer) - 1] != '\n');
-			continue;
+			if (len >= MAX_CONFIG_STRING_SIZE - 2) {
+				syslog(LOG_ERR, "Long config file line ignored.");
+				char *p;
+				do
+					p = fgets(buffer, MAX_CONFIG_STRING_SIZE - 1, in);
+				while (p && buffer[strlen(buffer) - 1] != '\n');
+				continue;
+			}
+		} else {
+			len--;			/* For the NL at the end */
 		}
 
-		len--;			/* For the NL at the end */
 		while (--len >= 0)
 			if (buffer[len] != ' ' && buffer[len] != '\t')
 				break;
