@@ -4,7 +4,7 @@
  * Grabs any command line argument and processes any further options in
  * the pptpd config file, before throwing over to pptpmanager.c.
  *
- * $Id: pptpd.c,v 1.19 2011/05/19 00:02:50 quozl Exp $
+ * $Id: pptpd.c,v 1.20 2013/02/07 00:12:09 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -756,6 +756,13 @@ static void processIPStr(int type, char *ipstr)
 			} else {
 				syslog(LOG_ERR, "MGR: Confused in IP parse routines (lost hyphen)");
 				continue;
+			}
+
+			if (upper < lower) {
+				syslog(LOG_ERR, "MGR: Bad %s IP range: %s",
+				       (type == LOCAL) ? "local" : "remote",
+				       ipstr);
+				exit(1);
 			}
 
 			for (n = lower; n <= upper; n++) {
