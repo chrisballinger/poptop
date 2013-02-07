@@ -3,7 +3,7 @@
  *
  * PPTP control connection between PAC-PNS pair
  *
- * $Id: pptpctrl.c,v 1.23 2011/05/19 00:02:50 quozl Exp $
+ * $Id: pptpctrl.c,v 1.24 2013/02/07 00:25:44 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -673,7 +673,7 @@ static int startCall(char **pppaddrs, struct in_addr *inetaddrs)
  */
 static void launch_pppd(char **pppaddrs, struct in_addr *inetaddrs)
 {
-	char *pppd_argv[14];
+	char *pppd_argv[16];
 	int an = 0;
 	sigset_t sigs;
 
@@ -793,6 +793,9 @@ static void launch_pppd(char **pppaddrs, struct in_addr *inetaddrs)
                  pppd_argv[an++] = inet_ntoa(inetaddrs[1]);
         }
 #endif
+
+	pppd_argv[an++] = "remotenumber";
+	pppd_argv[an++] = inet_ntoa(inetaddrs[1]);
 
 	/* argv arrays must always be NULL terminated */
 	pppd_argv[an++] = NULL;
