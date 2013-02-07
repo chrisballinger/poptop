@@ -4,7 +4,7 @@
  * originally by C. S. Ananian
  * Modified for PoPToP
  *
- * $Id: pptpgre.c,v 1.11 2011/05/19 00:02:50 quozl Exp $
+ * $Id: pptpgre.c,v 1.12 2013/02/07 00:31:15 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -446,6 +446,7 @@ int encaps_gre(int fd, void *pack, unsigned len)
 		unsigned char buffer[PACKET_MAX + sizeof(struct pptp_gre_header)];
 	} u;
 	unsigned header_len;
+	ssize_t status;
 #ifdef HAVE_WRITEV
 	struct iovec iovec[2];
 #endif
@@ -496,12 +497,18 @@ int encaps_gre(int fd, void *pack, unsigned len)
 	iovec[0].iov_len = header_len;
 	iovec[1].iov_base = pack;
 	iovec[1].iov_len = len;
-	return writev(fd, iovec, 2);
+	status = writev(fd, iovec, 2);
 #else
 	/* copy payload into buffer */
 	memcpy(u.buffer + header_len, pack, len);
 	/* record and increment sequence numbers */
 	/* write this baby out to the net */
-	return write(fd, u.buffer, header_len + len);
+	status = write(fd, u.buffer, header_len + len);
 #endif
+	/* if ENOBUFS, do not close the connection */
+	if ((status < 0) && (errno == ENOBUFS)) {
+		gre.seq_sent--;
+		status = 0;
+	}
+	return status;
 }
