@@ -15,7 +15,7 @@ CFLAGS = -O2 -fno-builtin -Wall -DSBINDIR='"$(sbindir)"'
 #CFLAGS = -O2 -fno-builtin -Wall -ansi -DSBINDIR='"$(sbindir)"'
 #CFLAGS = -O2 -fno-builtin -Wall -ansi -pedantic -Wmissing-prototypes -Werror -DSBINDIR='"$(sbindir)"'
 
-man_MANS = pptpctrl.8 pptpd.8 pptpd.conf.5
+man_MANS = pptpctrl.8 pptpd.8 pptpd.conf.5 bcrelay.8
 
 EXTRA_DIST = \
 html README* ChangeLog NEWS TODO $(man_MANS) \
