@@ -1,3 +1,53 @@
+Thu Feb  7 11:51:46 2013  James Cameron  <quozl@laptop.org>
+
+	* plugins/pptpd-logwtmp.c: use pppd.h provided by ppp package
+	instead of our own, fix for debian #369714.
+
+	Author: Stu Teasdale <stu@drogna.org.uk>
+	Author: Christoph Biedl <debian.axhn@manchmal.in-ulm.de>
+
+Thu Feb  7 11:50:03 2013  James Cameron  <quozl@laptop.org>
+
+	* pptpctrl.c: fix binary trash when launching ppp, fix for debian
+	#693196.
+
+	Author: tevaum@gmail.com
+
+Thu Feb  7 11:48:32 2013  James Cameron  <quozl@laptop.org>
+
+	* pptpgre.c: avoid dropping connection when kernel returns
+	ENOBUFS, fix for debian #629129.
+
+	Author: Maximiliano Curia <maxy@debian.org>
+	Author: James Cameron <quozl@laptop.org>
+
+Thu Feb  7 11:47:33 2013  James Cameron  <quozl@laptop.org>
+
+	* pptpctrl.c: add remotenumber support, fix for debian #610375,
+	#625459, and ubuntu #704245.
+
+	Author: Igor A Tarasov <develop@dicr.org>
+	Author: Michael Poetters <michael@poetters.net>
+
+Thu Feb  7 11:46:18 2013  James Cameron  <quozl@laptop.org>
+
+	* configfile.c: catch missing EOL at EOF, fix for sf.net poptop
+	ticket #35, debian #567480.
+
+	Author: Christoph Biedl <debian.axhn@manchmal.in-ulm.de>
+
+Thu Feb  7 11:45:45 2013  James Cameron  <quozl@laptop.org>
+
+	* bcrelay.8: add manual page, fix for debian #426553.
+
+	Author: Khang Nguyen Trong <trongkhang17@gmail.com>
+
+Thu Feb  7 11:44:59 2013  James Cameron  <quozl@laptop.org>
+
+	* pptpd.c: fix a segmentation fault on invalid IP range entry.
+
+	Author: Sergey Naumov
+
 Wed May 18 14:42:28 2011  David Lamparter  <david.lamparter@adyton.net>
 
 	* pptpctrl.c, pptpd.c, pptpgre.c, pptpmanager.c: introduce VRFs
