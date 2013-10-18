@@ -69,7 +69,7 @@ static int make_out_call_rqst(unsigned char *rply_packet, ssize_t * rply_size);
 int read_pptp_packet(int clientFd, unsigned char *packet, unsigned char *rply_packet, ssize_t * rply_size)
 {
 
-	size_t bytes_read;
+	ssize_t bytes_read;
 	int pptp_ctrl_type = 0;	/* Control Message Type */
 
 	/* read a packet and parse header */
@@ -133,10 +133,10 @@ int read_pptp_packet(int clientFd, unsigned char *packet, unsigned char *rply_pa
  * retn:        Number of bytes written on success.
  *              -1 on write failure.
  */
-size_t send_pptp_packet(int clientFd, unsigned char *packet, size_t packet_size)
+ssize_t send_pptp_packet(int clientFd, unsigned char *packet, size_t packet_size)
 {
 
-	size_t bytes_written;
+	ssize_t bytes_written;
 
 	if ((bytes_written = write(clientFd, packet, packet_size)) == -1) {
 		/* write failed */
