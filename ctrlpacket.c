@@ -146,7 +146,7 @@ ssize_t send_pptp_packet(int clientFd, unsigned char *packet, size_t packet_size
 	} else {
 		/* debugging */
 		if (pptpctrl_debug) {
-			syslog(LOG_DEBUG, "CTRL: I wrote %d bytes to the client.", packet_size);
+			syslog(LOG_DEBUG, "CTRL: I wrote %lu bytes to the client.", (unsigned long) packet_size);
 			syslog(LOG_DEBUG, "CTRL: Sent packet to client");
 		}
 		return bytes_written;
@@ -237,7 +237,7 @@ ssize_t read_pptp_header(int clientFd, unsigned char *packet, int *pptp_ctrl_typ
 						return(0);
 					memcpy(buffer, packet, bytes_ttl);
 				}
-				syslog(LOG_ERR, "CTRL: Error reading ctrl packet length (bytes_ttl=%d): %s", bytes_ttl, strerror(errno));
+				syslog(LOG_ERR, "CTRL: Error reading ctrl packet length (bytes_ttl=%lu): %s", (unsigned long) bytes_ttl, strerror(errno));
 				return -1;
 			}
 			/* FALLTHRU */
@@ -291,7 +291,7 @@ ssize_t read_pptp_header(int clientFd, unsigned char *packet, int *pptp_ctrl_typ
 					return(0);
 				memcpy(buffer, packet, bytes_ttl);
 			}
-			syslog(LOG_ERR, "CTRL: Error reading ctrl packet (bytes_ttl=%d,length=%d): %s", bytes_ttl, length, strerror(errno));
+			syslog(LOG_ERR, "CTRL: Error reading ctrl packet (bytes_ttl=%lu,length=%d): %s", (unsigned long) bytes_ttl, length, strerror(errno));
 			return -1;
 		}
 		/* FALLTHRU */
@@ -541,7 +541,7 @@ void deal_set_link_info(unsigned char *packet)
 	struct pptp_set_link_info *set_link_info;
 
 	set_link_info = (struct pptp_set_link_info *) packet;
-	if (set_link_info->send_accm != 0xffffffff || set_link_info->recv_accm != 0xffffffff)
+	if (set_link_info->send_accm != 0xffffffff || set_link_info->recv_accm != 0xffffffff) {
 		/* Async-Control-Character-Map (ACCM) are bits that
 		   show which control characters should be escaped by the
 		   PPP implementation ... pptpd leaves pppd to negotiate
@@ -550,7 +550,7 @@ void deal_set_link_info(unsigned char *packet)
 		   still works. */
 		if (pptpctrl_debug)
 			syslog(LOG_DEBUG, "CTRL: Ignored a SET LINK INFO packet with real ACCMs! (intentional non-compliance with section 2.15 of RFC 2637, ACCM is negotiated by PPP LCP asyncmap)");
-	else if (pptpctrl_debug)
+	} else if (pptpctrl_debug)
 		syslog(LOG_DEBUG, "CTRL: Got a SET LINK INFO packet with standard ACCMs");
 }
 

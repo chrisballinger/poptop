@@ -140,8 +140,9 @@ int decaps_hdlc(int fd, int (*cb) (int cl, void *pack, unsigned len), int cl)
 		 */
 		if ((status = read(fd, buffer, sizeof(buffer))) <= 0) {
 			syslog(LOG_ERR, "GRE: read(fd=%d,buffer=%lx,len=%d) from PTY failed: status = %d error = %s%s",
-			       fd, (unsigned long) buffer, sizeof(buffer), 
-			       status, status ? strerror(errno) : "No error", 
+			       fd, (unsigned long) buffer,
+			       (int) sizeof(buffer),
+			       status, status ? strerror(errno) : "No error",
 			       errno != EIO ? "" : ", usually caused by unexpected termination of pppd, check option syntax and pppd logs");
 			/* FAQ: mistakes in pppd option spelling in
 			 * /etc/ppp/options.pptpd often cause EIO,
@@ -348,7 +349,8 @@ int decaps_gre(int fd, int (*cb) (int cl, void *pack, unsigned len), int cl)
 	dequeue_gre(cb, cl);
 	if ((status = read(fd, buffer, sizeof(buffer))) <= 0) {
 		syslog(LOG_ERR, "GRE: read(fd=%d,buffer=%lx,len=%d) from network failed: status = %d error = %s",
-		       fd, (unsigned long) buffer, sizeof(buffer), status, status ? strerror(errno) : "No error");
+		       fd, (unsigned long) buffer, (int) sizeof(buffer),
+		       status, status ? strerror(errno) : "No error");
 		stats.rx_errors++;
 		return -1;
 	}
