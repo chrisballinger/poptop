@@ -212,10 +212,11 @@ static int vdaemon = 0;
 #define NVBCR_PRINTF( args ) \
  if ((vdaemon == 0) && (do_org_info_printfs == 1)) printf args
 
+static char empty[1] = "";
 static char interfaces[32];
 static char log_interfaces[MAX_IFLOGTOSTR*MAXIF];
 static char log_relayed[(MAX_IFLOGTOSTR-1)*MAXIF+81];
-static char *ipsec = "";
+static char *ipsec = empty;
 
 static void showusage(char *prog)
 {
@@ -310,8 +311,8 @@ int main(int argc, char **argv) {
   regex_t preg;
   /* command line options */
   int c;
-  char *ifout = "";
-  char *ifin = "";
+  char *ifout = empty;
+  char *ifin = empty;
 
 #ifndef BCRELAY
   fprintf(stderr,
@@ -381,12 +382,12 @@ int main(int argc, char **argv) {
                         return 1;
                 }
   }
-  if (ifin == "") {
+  if (ifin == empty) {
        syslog(LOG_INFO,"Incoming interface required!");
        showusage(argv[0]);
        _exit(1);
   }
-  if (ifout == "" && ipsec == "") {
+  if (ifout == empty && ipsec == empty) {
        syslog(LOG_INFO,"Listen-mode or outgoing or IPsec interface required!");
        showusage(argv[0]);
        _exit(1);
@@ -431,7 +432,7 @@ static void mainloop(int argc, char **argv)
   static struct ifsnr old_ifsnr[MAXIF+1]; // Old iflist to socket fd's mapping list
   static struct ifsnr cur_ifsnr[MAXIF+1]; // Current iflist to socket fd's mapping list
   unsigned char buf[1518];
-  char *logstr = "";
+  char *logstr = empty;
 
   no_discifs_cntr = MAX_NODISCOVER_IFS;
   ifs_change = 0;
