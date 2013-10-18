@@ -871,7 +871,7 @@ discoverActiveInterfaces(int s) {
     // IPSEC tunnels are a fun one.  We must change the destination address
     // so that it will be routed to the correct tunnel end point.
     // We can define several tunnel end points for the same ipsec interface.
-    } else if (ipsec != "" && strncmp(ifs.ifc_req[i].ifr_name, "ipsec", 5) == 0) {
+    } else if (ipsec != empty && strncmp(ifs.ifc_req[i].ifr_name, "ipsec", 5) == 0) {
       if (strncmp(ifs.ifc_req[i].ifr_name, ipsec, 6) == 0) {
         struct hostent *hp = gethostbyname(ipsec+7);
         ioctl(s, SIOCGIFINDEX, &ifs.ifc_req[i]);
