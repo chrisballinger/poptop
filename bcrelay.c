@@ -774,7 +774,7 @@ struct iflist *
 discoverActiveInterfaces(int s) {
   static struct iflist iflist[MAXIF+1];         // Allow for MAXIF interfaces
   static struct ifconf ifs;
-  int i, j, cntr = 0;
+  int i, cntr = 0;
   regex_t preg;
   struct ifreq ifrflags, ifr;
   struct sockaddr_in *sin;
@@ -817,9 +817,9 @@ discoverActiveInterfaces(int s) {
         /*
          * Get interface name
          */
-        for (j=0; (j<sizeof(iflist[cntr].ifname) && j<strlen(ifs.ifc_req[i].ifr_ifrn.ifrn_name)); ++j)
-                iflist[cntr].ifname[j] = ifs.ifc_req[i].ifr_ifrn.ifrn_name[j];
-        iflist[cntr].ifname[j+1] = '\0';
+        strncpy(iflist[cntr].ifname, ifs.ifc_req[i].ifr_ifrn.ifrn_name,
+                sizeof(iflist[cntr].ifname));
+        iflist[cntr].ifname[sizeof(iflist[cntr].ifname)-1] = 0;
 
         /*
          * Get local IP address 
