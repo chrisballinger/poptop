@@ -37,11 +37,11 @@
 
 /* Local function prototypes */
 static ssize_t read_pptp_header(int clientFd, unsigned char *packet, int *ctrl_message_type);
-static void deal_start_ctrl_conn(unsigned char *packet, unsigned char *rply_packet, ssize_t * rply_size);
-static void deal_stop_ctrl_conn(unsigned char *packet, unsigned char *rply_packet, ssize_t * rply_size);
-static void deal_out_call(unsigned char *packet, unsigned char *rply_packet, ssize_t * rply_size);
-static void deal_echo(unsigned char *packet, unsigned char *rply_packet, ssize_t * rply_size);
-static void deal_call_clr(unsigned char *packet, unsigned char *rply_packet, ssize_t * rply_size);
+static void deal_start_ctrl_conn(void *packet, struct pptp_out_call_rply *rply_packet, ssize_t * rply_size);
+static void deal_stop_ctrl_conn(void *packet, struct pptp_out_call_rply *rply_packet, ssize_t * rply_size);
+static void deal_out_call(unsigned char *packet, struct pptp_out_call_rply *rply_packet, ssize_t * rply_size);
+static void deal_echo(unsigned char *packet, struct pptp_out_call_rply *rply_packet, ssize_t * rply_size);
+static void deal_call_clr(unsigned char *packet, struct pptp_out_call_rply *rply_packet, ssize_t * rply_size);
 static void deal_set_link_info(unsigned char *packet);
 static u_int16_t getcall();
 static u_int16_t freecall();
@@ -66,7 +66,7 @@ static int make_out_call_rqst(unsigned char *rply_packet, ssize_t * rply_size);
  *              -1 on retryable error.
  *              0 on error to abort on.
  */
-int read_pptp_packet(int clientFd, unsigned char *packet, unsigned char *rply_packet, ssize_t * rply_size)
+int read_pptp_packet(int clientFd, void *packet, struct pptp_out_call_rply *rply_packet, ssize_t * rply_size)
 {
 
 	ssize_t bytes_read;
@@ -133,7 +133,7 @@ int read_pptp_packet(int clientFd, unsigned char *packet, unsigned char *rply_pa
  * retn:        Number of bytes written on success.
  *              -1 on write failure.
  */
-ssize_t send_pptp_packet(int clientFd, unsigned char *packet, size_t packet_size)
+ssize_t send_pptp_packet(int clientFd, void *packet, size_t packet_size)
 {
 
 	ssize_t bytes_written;
@@ -362,7 +362,7 @@ ssize_t read_pptp_header(int clientFd, unsigned char *packet, int *pptp_ctrl_typ
  *       rply_packet (OUT) - suitable reply to the 'packet' we got.
  *       rply_size (OUT) - size of the reply packet
  */
-void deal_start_ctrl_conn(unsigned char *packet, unsigned char *rply_packet, ssize_t * rply_size)
+void deal_start_ctrl_conn(void *packet, struct pptp_out_call_rply *rply_packet, ssize_t * rply_size)
 {
 	struct pptp_start_ctrl_conn_rqst *start_ctrl_conn_rqst;
 	struct pptp_start_ctrl_conn_rply start_ctrl_conn_rply;
@@ -391,7 +391,7 @@ void deal_start_ctrl_conn(unsigned char *packet, unsigned char *rply_packet, ssi
  * This method response to a STOP-CONTROL-CONNECTION-REQUEST with a
  * STOP-CONTROL-CONNECTION-REPLY.
  */
-void deal_stop_ctrl_conn(unsigned char *packet, unsigned char *rply_packet, ssize_t * rply_size)
+void deal_stop_ctrl_conn(void *packet, struct pptp_out_call_rply *rply_packet, ssize_t * rply_size)
 {
 	struct pptp_stop_ctrl_conn_rply stop_ctrl_conn_rply;
 
@@ -416,7 +416,7 @@ void deal_stop_ctrl_conn(unsigned char *packet, unsigned char *rply_packet, ssiz
  *       rply_size (OUT) - size of the reply packet
  *
  */
-void deal_out_call(unsigned char *packet, unsigned char *rply_packet, ssize_t * rply_size)
+void deal_out_call(unsigned char *packet, struct pptp_out_call_rply *rply_packet, ssize_t * rply_size)
 {
 	u_int16_t pac_call_id;
 	struct pptp_out_call_rqst *out_call_rqst;
@@ -468,7 +468,7 @@ void deal_out_call(unsigned char *packet, unsigned char *rply_packet, ssize_t * 
  *       rply_size (OUT) - size of the reply packet
  *
  */
-void deal_echo(unsigned char *packet, unsigned char *rply_packet, ssize_t * rply_size)
+void deal_echo(unsigned char *packet, struct pptp_out_call_rply *rply_packet, ssize_t * rply_size)
 {
 	struct pptp_echo_rqst *echo_rqst;
 	struct pptp_echo_rply echo_rply;
@@ -497,7 +497,7 @@ void deal_echo(unsigned char *packet, unsigned char *rply_packet, ssize_t * rply
  *       rply_size (OUT) - size of the reply packet
  *
  */
-void deal_call_clr(unsigned char *packet, unsigned char *rply_packet, ssize_t *rply_size)
+void deal_call_clr(unsigned char *packet, struct pptp_out_call_rply *rply_packet, ssize_t *rply_size)
 {
 	struct pptp_call_disconn_ntfy call_disconn_ntfy;
 	u_int16_t pac_call_id;
@@ -554,7 +554,7 @@ void deal_set_link_info(unsigned char *packet)
 		syslog(LOG_DEBUG, "CTRL: Got a SET LINK INFO packet with standard ACCMs");
 }
 
-void make_echo_req_packet(unsigned char *rply_packet, ssize_t * rply_size, u_int32_t echo_id)
+void make_echo_req_packet(struct pptp_out_call_rply *rply_packet, ssize_t * rply_size, u_int32_t echo_id)
 {
 	struct pptp_echo_rqst echo_packet;
 
@@ -564,7 +564,7 @@ void make_echo_req_packet(unsigned char *rply_packet, ssize_t * rply_size, u_int
 	DEBUG_PACKET("ECHO REQ");
 }
 
-void make_stop_ctrl_req(unsigned char *rply_packet, ssize_t * rply_size)
+void make_stop_ctrl_req(struct pptp_out_call_rply *rply_packet, ssize_t * rply_size)
 {
 	struct pptp_stop_ctrl_conn_rqst stop_ctrl;
 
@@ -576,7 +576,7 @@ void make_stop_ctrl_req(unsigned char *rply_packet, ssize_t * rply_size)
 	DEBUG_PACKET("STOP CTRL REQ");
 }
 
-void make_call_admin_shutdown(unsigned char *rply_packet, ssize_t * rply_size)
+void make_call_admin_shutdown(struct pptp_out_call_rply *rply_packet, ssize_t * rply_size)
 {
 	struct pptp_call_disconn_ntfy call_disconn_ntfy;
 	u_int16_t pac_call_id;

@@ -259,8 +259,8 @@ static void pptp_handle_ctrl_connection(char **pppaddrs, struct in_addr *inetadd
 	int gre_fd = -1;		/* Network file descriptor */
 	int sig_fd = sigpipe_fd();	/* Signal pipe descriptor	*/
 
-	unsigned char packet[PPTP_MAX_CTRL_PCKT_SIZE];
-	unsigned char rply_packet[PPTP_MAX_CTRL_PCKT_SIZE];
+        struct pptp_echo_rply *packet = alloca(PPTP_MAX_CTRL_PCKT_SIZE);
+        struct pptp_out_call_rply *rply_packet = alloca(PPTP_MAX_CTRL_PCKT_SIZE);
 
 	for (;;) {
 
@@ -336,7 +336,7 @@ static void pptp_handle_ctrl_connection(char **pppaddrs, struct in_addr *inetadd
 		if (FD_ISSET(clientSocket, &fds)) {
 			time(&last_time);
 			send_packet = TRUE;
-			switch (read_pptp_packet(clientSocket, packet, rply_packet, &rply_size)) {
+			switch (read_pptp_packet(clientSocket, (unsigned char *) packet, rply_packet, &rply_size)) {
 			case 0:
 				syslog(LOG_ERR, "CTRL: CTRL read failed");
 				goto leave_drop_call;
@@ -373,8 +373,8 @@ static void pptp_handle_ctrl_connection(char **pppaddrs, struct in_addr *inetadd
 
 			case OUT_CALL_RQST:
 				/* for killing off the link later (ugly) */
-				NOTE_VALUE(PAC, call_id_pair, ((struct pptp_out_call_rply *) (rply_packet))->call_id);
-				NOTE_VALUE(PNS, call_id_pair, ((struct pptp_out_call_rply *) (rply_packet))->call_id_peer);
+				NOTE_VALUE(PAC, call_id_pair, rply_packet->call_id);
+				NOTE_VALUE(PNS, call_id_pair, rply_packet->call_id_peer);
 				if (gre_fd != -1 || pty_fd != -1) {
 					syslog(LOG_WARNING, "CTRL: Request to open call when call is already open, closing");
 					if (gre_fd != -1) {
@@ -392,8 +392,8 @@ static void pptp_handle_ctrl_connection(char **pppaddrs, struct in_addr *inetadd
                                 my_setproctitle(gargc, gargv,
                                       "pptpd [%s:%04X - %04X]",
                                       inet_ntoa(inetaddrs[1]),
-                                      ntohs(((struct pptp_out_call_rply *) (rply_packet))->call_id_peer),
-                                      ntohs(((struct pptp_out_call_rply *) (rply_packet))->call_id));
+                                      ntohs(rply_packet->call_id_peer),
+                                      ntohs(rply_packet->call_id));
 				/* start the call, by launching pppd */
 				syslog(LOG_INFO, "CTRL: Starting call (launching pppd, opening GRE)");
 				pty_fd = startCall(pppaddrs, inetaddrs);
@@ -403,7 +403,7 @@ static void pptp_handle_ctrl_connection(char **pppaddrs, struct in_addr *inetadd
 				break;
 
 			case ECHO_RPLY:
-				if (echo_wait == TRUE && ((struct pptp_echo_rply *) (packet))->identifier == echo_count)
+				if (echo_wait == TRUE && packet->identifier == echo_count)
 					echo_wait = FALSE;
 				else
 					syslog(LOG_WARNING, "CTRL: Unexpected ECHO REPLY packet");
@@ -489,7 +489,7 @@ static void bail(int sigraised)
 		fd_set connSet;		/* fd_set for select() */
 		struct timeval tv;	/* time to wait for reply */
 		unsigned char packet[PPTP_MAX_CTRL_PCKT_SIZE];
-		unsigned char rply_packet[PPTP_MAX_CTRL_PCKT_SIZE];
+                struct pptp_out_call_rply *rply_packet = alloca(PPTP_MAX_CTRL_PCKT_SIZE);
 		ssize_t rply_size;	/* reply packet size */
 		int pkt;
 		int retry = 0;
