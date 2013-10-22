@@ -416,7 +416,7 @@ static int createHostSocket(int *hostSocket)
 #endif
 
 	/* create the master socket and check it worked */
-	if ((*hostSocket = vrf_socket(vrf, AF_INET, SOCK_STREAM, 0)) == 0)
+	if ((*hostSocket = vrf_socket(vrf, AF_INET, SOCK_STREAM, 0)) <= 0)
 		return -1;
 
 	/* set master socket to allow daemon to be restarted with connections active  */

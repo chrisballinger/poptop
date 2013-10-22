@@ -94,6 +94,7 @@ int pptp_gre_init(u_int32_t call_id_pair, int pty_fd, struct in_addr *inetaddrs)
 	addr.sin_port = 0;
 	if (connect(gre_fd, (struct sockaddr *) &addr, sizeof(addr)) < 0) {
 		syslog(LOG_ERR, "GRE: connect() failed: %s", strerror(errno));
+		close(gre_fd);
 		return -1;
 	}
 
