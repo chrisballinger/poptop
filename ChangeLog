@@ -1,44 +1,30 @@
-Mon Oct 21 20:50:07 2013 John Lauro <john.lauro@covenanteyes.com>
-    Don't leak memory from duplicate packet
- 	pqueue.c
+Mon Oct 21 20:50:07 2013  John Lauro  <john.lauro@covenanteyes.com>
 
-    Don't leak handle on connect fail and detect error on socket creation instead later
- 	pptpgre.c
- 	pptpmanager.c
+	* pqueue.c: don't leak memory from duplicate packet.
 
-    Code cleanup - waring fix
- 	bcrelay.c
+	* pptpgre.c, pptpmanager.c: don't leak handle on connect fail and
+	detect error on socket creation instead later.
 
-    Clean up warning dereferecing type-punned pointer from mixing struct and unsigned char
- 	ctrlpacket.c
- 	ctrlpacket.h
- 	pptpctrl.c
+	* bcrelay.c: code cleanup - warning fix.
 
-    Fix several warnings in newer compilers, caused by format and type
-    discrepancies.
-    Author: john.lauro@covenanteyes.com
-    Reviewed-by: James Cameron <quozl@laptop.org>
- 	ctrlpacket.c
- 	pptpgre.c
+	* ctrlpacket.c, ctrlpacket.h, pptpctrl.c: clean up warning
+	dereferecing type-punned pointer from mixing struct and unsigned
+	char.
 
-    Description: Use unsigned types to properly handle negative error codes
-    Author: john.lauro@covenanteyes.com
-    Reviewed-by: James Cameron <quozl@laptop.org>
- 	ctrlpacket.c
- 	ctrlpacket.h
+	* ctrlpacket.c, pptpgre.c: fix several warnings in newer
+	compilers, caused by format and type discrepancies.
 
-    Add missing change from previous patch
- 	bcrelay.c
-    Code cleanup (potential off by one error, bcrelay)
-    Switch a copy function to strncpy, as original had a potential off by
-    one error as the size check didn't account for trailing 0 to be added
-    in next line.
- 	bcrelay.c
+	* ctrlpacket.c, ctrlpacket.h: use unsigned types to properly
+	handle negative error codes.
 
-    Fix several warnings in newer compilers, caused by format and type
-    discrepancies, and comparing with == directly to "", as "" is not
-    guaranteed to always be the same when redefined.
- 	bcrelay.c
+	* bcrelay.c: code cleanup (potential off by one error, bcrelay),
+	switch a copy function to strncpy, as original had a potential off
+	by one error as the size check didn't account for trailing 0 to be
+	added in next line.
+
+	* bcrelay.c: fix several warnings in newer compilers, caused by
+	format and type discrepancies, and comparing with == directly to
+	"", as "" is not guaranteed to always be the same when redefined.
 
 Thu Feb  7 11:51:46 2013  James Cameron  <quozl@laptop.org>
 

@@ -1,5 +1,5 @@
 - don't leak memory on duplicate packet [Lauro]
-- Clean up several compiler warnings [Lauro]
+- clean up several compiler warnings [Lauro]
 - add support for VRFs through libvrf [Lamparter]
 - fix implementation of IDLE_WAIT [Douglass]
 - fix compilation with uclibc with legacy support disabled [Hiramoto]

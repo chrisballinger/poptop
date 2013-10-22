@@ -259,8 +259,8 @@ static void pptp_handle_ctrl_connection(char **pppaddrs, struct in_addr *inetadd
 	int gre_fd = -1;		/* Network file descriptor */
 	int sig_fd = sigpipe_fd();	/* Signal pipe descriptor	*/
 
-        struct pptp_echo_rply *packet = alloca(PPTP_MAX_CTRL_PCKT_SIZE);
-        struct pptp_out_call_rply *rply_packet = alloca(PPTP_MAX_CTRL_PCKT_SIZE);
+	struct pptp_echo_rply *packet = alloca(PPTP_MAX_CTRL_PCKT_SIZE);
+	struct pptp_out_call_rply *rply_packet = alloca(PPTP_MAX_CTRL_PCKT_SIZE);
 
 	for (;;) {
 
@@ -489,7 +489,7 @@ static void bail(int sigraised)
 		fd_set connSet;		/* fd_set for select() */
 		struct timeval tv;	/* time to wait for reply */
 		unsigned char packet[PPTP_MAX_CTRL_PCKT_SIZE];
-                struct pptp_out_call_rply *rply_packet = alloca(PPTP_MAX_CTRL_PCKT_SIZE);
+		struct pptp_out_call_rply *rply_packet = alloca(PPTP_MAX_CTRL_PCKT_SIZE);
 		ssize_t rply_size;	/* reply packet size */
 		int pkt;
 		int retry = 0;
