@@ -136,6 +136,7 @@ int pqueue_add (int seq, unsigned char *packet, int packlen) {
     if (point->seq == seq) {
       // queue already contains this packet
       syslog(LOG_WARNING, "discarding duplicate packet %d", seq);
+      pqueue_del(newent);
       return -1;
     }
     if (point->seq > seq) {
