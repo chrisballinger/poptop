@@ -1,0 +1,9 @@
+*.o
+Makefile
+bcrelay
+pptpctrl
+pptpd
+
+config.status
+config.log
+config.h
