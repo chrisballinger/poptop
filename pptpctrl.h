@@ -17,4 +17,4 @@ extern char *vrf;
 #define vrf_socket(vrf, dom, typ, prot) socket(dom, typ, prot)
 #endif
 
-#endif	/* !_PPTPD_PPTPCTRL_H */
+#endif  /* !_PPTPD_PPTPCTRL_H */

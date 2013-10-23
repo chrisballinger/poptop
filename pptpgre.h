@@ -17,9 +17,9 @@ extern int encaps_gre(int fd, void *pack, unsigned len);
 extern int pptp_gre_init(u_int32_t call_id_pair, int pty_fd, struct in_addr *inetaddrs);
 
 struct gre_state {
-	u_int32_t ack_sent, ack_recv;
-	u_int32_t seq_sent, seq_recv;
-	u_int32_t call_id_pair;
+        u_int32_t ack_sent, ack_recv;
+        u_int32_t seq_sent, seq_recv;
+        u_int32_t call_id_pair;
 };
 
 extern int disable_buffer;
@@ -62,4 +62,4 @@ typedef struct gre_stats {
 
 extern gre_stats_t stats;
 
-#endif	/* !_PPTPD_PPTPGRE_H */
+#endif  /* !_PPTPD_PPTPGRE_H */

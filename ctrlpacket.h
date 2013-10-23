@@ -15,4 +15,4 @@ void make_echo_req_packet(struct pptp_out_call_rply *rply_packet, ssize_t * rply
 void make_call_admin_shutdown(struct pptp_out_call_rply *rply_packet, ssize_t * rply_size);
 void make_stop_ctrl_req(struct pptp_out_call_rply *rply_packet, ssize_t * rply_size);
 
-#endif	/* !_PPTPD_CTRLPACKET_H */
+#endif  /* !_PPTPD_CTRLPACKET_H */

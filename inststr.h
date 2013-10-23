@@ -14,4 +14,4 @@
 void inststr(int argc, char **argv, char *src);
 #endif
 
-#endif	/* !_PPTPD_INSTSTR_H */
+#endif  /* !_PPTPD_INSTSTR_H */

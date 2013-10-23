@@ -41,23 +41,23 @@ static int pqueue_alloc(int seq, unsigned char *packet, int packlen, pqueue_t **
 
       if (newent->capacity >= packlen) {
 
- 	/* unlink from freelist */
-	if (pq_freelist_head == newent) 
-	  pq_freelist_head = newent->next;
+        /* unlink from freelist */
+        if (pq_freelist_head == newent) 
+          pq_freelist_head = newent->next;
 
-	if (newent->prev) 
-	  newent->prev->next = newent->next;
+        if (newent->prev) 
+          newent->prev->next = newent->next;
 
-	if (newent->next) 
-	  newent->next->prev = newent->prev;
+        if (newent->next) 
+          newent->next->prev = newent->prev;
 
-	if (pq_freelist_head) 
-	  pq_freelist_head->prev = NULL;
+        if (pq_freelist_head) 
+          pq_freelist_head->prev = NULL;
 
-	break;
-      }	/* end if capacity >= packlen */
+        break;
+      } /* end if capacity >= packlen */
     } /* end for */
-	
+        
     /* nothing found? Take first and reallocate it */
     if (NULL == newent) {
 
@@ -65,15 +65,15 @@ static int pqueue_alloc(int seq, unsigned char *packet, int packlen, pqueue_t **
       pq_freelist_head = pq_freelist_head->next;
 
       if (pq_freelist_head) 
-	pq_freelist_head->prev = NULL;
+        pq_freelist_head->prev = NULL;
 
       DEBUG_CMD(syslog(LOG_DEBUG, "realloc capacity %d to %d",newent->capacity, packlen););
 
       newent->packet = (unsigned char *)realloc(newent->packet, packlen);
 
       if (!newent->packet) {
-	syslog(LOG_WARNING, "error reallocating packet: %s", strerror(errno));
-	return -1;
+        syslog(LOG_WARNING, "error reallocating packet: %s", strerror(errno));
+        return -1;
       }
       newent->capacity = packlen;
     }
@@ -142,15 +142,15 @@ int pqueue_add (int seq, unsigned char *packet, int packlen) {
     if (point->seq > seq) {
       // gone too far: point->seq > seq and point->prev->seq < seq
       if (point->prev) {
-	// insert between point->prev and point
-	DEBUG_CMD(syslog(LOG_DEBUG, "adding %d between %d and %d", 
-		      seq, point->prev->seq, point->seq););
+        // insert between point->prev and point
+        DEBUG_CMD(syslog(LOG_DEBUG, "adding %d between %d and %d", 
+                      seq, point->prev->seq, point->seq););
 
-	point->prev->next = newent;
+        point->prev->next = newent;
       } else {
-	// insert at head of queue, before point
-	DEBUG_CMD(syslog(LOG_DEBUG, "adding %d before %d", seq, point->seq););
-	pq_head = newent;
+        // insert at head of queue, before point
+        DEBUG_CMD(syslog(LOG_DEBUG, "adding %d before %d", seq, point->seq););
+        pq_head = newent;
       }
       newent->prev = point->prev; // will be NULL, at head of queue
       newent->next = point;

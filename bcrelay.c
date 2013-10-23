@@ -316,8 +316,8 @@ int main(int argc, char **argv) {
 
 #ifndef BCRELAY
   fprintf(stderr,
-	  "bcrelay: pptpd was compiled without support for bcrelay, exiting.\n"
-	  "         run configure --with-bcrelay, make, and install.\n");
+          "bcrelay: pptpd was compiled without support for bcrelay, exiting.\n"
+          "         run configure --with-bcrelay, make, and install.\n");
   exit(1);
 #endif
 
@@ -669,16 +669,16 @@ static void mainloop(int argc, char **argv)
                  */
                 if ((nrsent = sendto(cur_ifsnr[j].sock_nr, ipp_p, rlen, MSG_DONTWAIT|MSG_TRYHARD, (struct sockaddr *)&sa, salen)) < 0)
                 {
-		  if (errno == ENETDOWN) {
-		    syslog(LOG_NOTICE, "ignored ENETDOWN from sendto(), a network interface was going down?");
-		  } else if (errno == ENXIO) {
-		    syslog(LOG_NOTICE, "ignored ENXIO from sendto(), a network interface went down?");
-		  } else if (errno == ENOBUFS) {
-		    syslog(LOG_NOTICE, "ignored ENOBUFS from sendto(), temporary shortage of buffer memory");
-		  } else {
-		    syslog(LOG_ERR, "mainloop: Error, sendto failed! (rv=%d, errno=%d)", nrsent, errno);
-		    exit(1);
-		  }
+                  if (errno == ENETDOWN) {
+                    syslog(LOG_NOTICE, "ignored ENETDOWN from sendto(), a network interface was going down?");
+                  } else if (errno == ENXIO) {
+                    syslog(LOG_NOTICE, "ignored ENXIO from sendto(), a network interface went down?");
+                  } else if (errno == ENOBUFS) {
+                    syslog(LOG_NOTICE, "ignored ENOBUFS from sendto(), temporary shortage of buffer memory");
+                  } else {
+                    syslog(LOG_ERR, "mainloop: Error, sendto failed! (rv=%d, errno=%d)", nrsent, errno);
+                    exit(1);
+                  }
                 }
                 NVBCR_PRINTF(("Successfully relayed %d bytes \n", nrsent));
                 if (vnologging == 0) {

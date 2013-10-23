@@ -21,4 +21,4 @@ char *slot_get_remote(int i);
 
 extern int pptp_manager(int argc, char **argv);
 
-#endif	/* !_PPTPD_PPTPSERVER_H */
+#endif  /* !_PPTPD_PPTPSERVER_H */

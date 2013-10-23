@@ -11,4 +11,4 @@
 
 int read_config_file(char *filename, char *keyword, char *value);
 
-#endif	/* !_PPTPD_CONFIGFILE_H */
+#endif  /* !_PPTPD_CONFIGFILE_H */
