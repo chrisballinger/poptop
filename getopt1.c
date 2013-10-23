@@ -5,8 +5,6 @@
  *
  * NOTE: Changed to make dependencies work better:
  *        * <config.h> changed to "config.h"
- *
- * $Id: getopt1.c,v 1.1 2002/06/21 08:51:58 fenix_nl Exp $
  */
 
 /* getopt_long and getopt_long_only entry points for GNU getopt.

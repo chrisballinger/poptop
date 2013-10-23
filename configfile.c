@@ -3,8 +3,6 @@
  *
  * Methods for accessing the PPTPD config file and searching for
  * PPTPD keywords.
- *
- * $Id: configfile.c,v 1.3 2013/02/07 00:23:27 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H

@@ -2,8 +2,6 @@
  * pptpmanager.h
  *
  * Manager function prototype.
- *
- * $Id: pptpmanager.h,v 1.2 2005/12/29 09:59:49 quozl Exp $
  */
 
 #ifndef _PPTPD_PPTPSERVER_H

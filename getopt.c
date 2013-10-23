@@ -6,8 +6,6 @@
  * NOTE: Changed to make dependencies work better:
  *        * <config.h> changed to "config.h"
  *        * #include "our_getopt.h" near #define ELIDE_CODE
- *
- * $Id: getopt.c,v 1.1 2002/06/21 08:52:00 fenix_nl Exp $
  */
 
 /* Getopt for GNU.

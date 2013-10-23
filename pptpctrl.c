@@ -2,8 +2,6 @@
  * pptpctrl.c
  *
  * PPTP control connection between PAC-PNS pair
- *
- * $Id: pptpctrl.c,v 1.25 2013/02/07 00:32:29 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H

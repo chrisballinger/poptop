@@ -3,8 +3,6 @@
  *
  * Grabs any command line argument and processes any further options in
  * the pptpd config file, before throwing over to pptpmanager.c.
- *
- * $Id: pptpd.c,v 1.20 2013/02/07 00:12:09 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H

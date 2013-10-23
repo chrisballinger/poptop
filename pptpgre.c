@@ -3,8 +3,6 @@
  *
  * originally by C. S. Ananian
  * Modified for PoPToP
- *
- * $Id: pptpgre.c,v 1.12 2013/02/07 00:31:15 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H

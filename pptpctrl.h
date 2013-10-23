@@ -2,8 +2,6 @@
  * pptpctrl.h
  *
  * PPTP control function prototypes.
- *
- * $Id: pptpctrl.h,v 1.2 2011/05/19 00:02:50 quozl Exp $
  */
 
 #ifndef _PPTPD_PPTPCTRL_H

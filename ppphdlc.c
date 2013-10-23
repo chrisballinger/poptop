@@ -3,8 +3,6 @@
  *
  * Copied from C. S. Ananian's linux client ppp_fcs.c
  * This code can also be found in RFC1662
- *
- * $Id: ppphdlc.c,v 1.1 2002/06/21 08:52:00 fenix_nl Exp $
  */
 
 /* Fast Frame Check Sequence (FCS) Implementation, for HDLC-like framing of

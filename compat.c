@@ -2,8 +2,6 @@
  * compat.c
  *
  * Compatibility functions for different OSes
- *
- * $Id: compat.c,v 1.6 2005/08/22 00:48:34 quozl Exp $
  */
 
 #if HAVE_CONFIG_H

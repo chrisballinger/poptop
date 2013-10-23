@@ -2,8 +2,6 @@
  * ppphdlc.h
  *
  * Copied from C. S. Ananians ppp_fcs.h
- *
- * $Id: ppphdlc.h,v 1.1 2002/06/21 08:52:00 fenix_nl Exp $
  */
 
 #ifndef _PPTPD_PPPHDLC_H

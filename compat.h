@@ -2,8 +2,6 @@
  * compat.h
  *
  * Compatibility functions for different OSes (prototypes)
- *
- * $Id: compat.h,v 1.5 2005/01/05 11:01:51 quozl Exp $
  */
 
 #ifndef _PPTPD_COMPAT_H

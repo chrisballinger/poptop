@@ -2,8 +2,6 @@
  * ctrlpacket.c
  *
  * PPTP Control Message packet reading, formatting and writing.
- *
- * $Id: ctrlpacket.c,v 1.8 2008/11/13 23:49:22 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H

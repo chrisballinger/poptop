@@ -2,8 +2,6 @@
  * pptpdefs.h
  *
  * PPTP structs and defines
- *
- * $Id: pptpdefs.h,v 1.5 2007/07/20 00:34:09 quozl Exp $
  */
 
 #ifndef _PPTPD_PPTPDEFS_H

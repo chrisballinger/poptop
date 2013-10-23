@@ -2,8 +2,6 @@
  * our_getopt.h
  *
  * Header file for the getopt_long deprived.
- *
- * $Id: our_getopt.h,v 1.1 2002/06/21 08:52:00 fenix_nl Exp $
  */
 
 /* Declarations for getopt.

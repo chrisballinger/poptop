@@ -4,8 +4,6 @@
  * Little function to change the name of a process
  *
  * Originally from C. S. Ananian's pptpclient
- *
- * $Id: inststr.c,v 1.2 2004/04/22 10:48:16 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H

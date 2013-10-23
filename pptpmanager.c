@@ -2,8 +2,6 @@
  * pptpmanager.c
  *
  * Manages the PoPToP sessions.
- *
- * $Id: pptpmanager.c,v 1.15 2011/05/19 00:02:50 quozl Exp $
  */
 
 #ifdef HAVE_CONFIG_H

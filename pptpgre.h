@@ -2,8 +2,6 @@
  * pptpgre.h
  *
  * Functions to handle the GRE en/decapsulation
- *
- * $Id: pptpgre.h,v 1.3 2005/08/02 11:33:31 quozl Exp $
  */
 
 #ifndef _PPTPD_PPTPGRE_H

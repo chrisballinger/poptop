@@ -2,8 +2,6 @@
  * our_syslog.h
  *
  * Syslog replacement functions
- *
- * $Id: our_syslog.h,v 1.1 2002/06/21 08:52:00 fenix_nl Exp $
  */
 
 #ifndef _PPTPD_SYSLOG_H
