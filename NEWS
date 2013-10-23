@@ -1,5 +1,16 @@
+1.4.0: released 2013-10-23
+
+- change GPL license FSF addresses [Cameron]
+- clean up unused return value warnings [Cameron]
 - don't leak memory on duplicate packet [Lauro]
 - clean up several compiler warnings [Lauro]
+- use pppd.h from ppp-dev [Teasdale]
+- do not drop connection on ENOBUFS [Curia]
+- fix binary trash when launching pppd [tevaum]
+- add remotenumber support [Tarasov / Poetters]
+- catch missing EOL at EOF [Biedl]
+- add bcrelay manual page [Trong]
+- fix segfault on invalid IP range [Naumov]
 - add support for VRFs through libvrf [Lamparter]
 - fix implementation of IDLE_WAIT [Douglass]
 - fix compilation with uclibc with legacy support disabled [Hiramoto]

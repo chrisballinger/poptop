@@ -3,8 +3,6 @@
  * acconfig.h
  *
  * Additional autoconf defines for this program.
- *
- * $Id: config.h.in,v 1.26 2011/05/19 00:02:50 quozl Exp $
  */
 
 /* Use BSD User land PPP? */

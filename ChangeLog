@@ -1,3 +1,7 @@
+Wed Oct 23 16:23:58 2013  James Cameron  <quozl@laptop.org>
+
+	* pptpd-1.4.0.tar.gz: released.
+
 Mon Oct 21 20:50:07 2013  John Lauro  <john.lauro@covenanteyes.com>
 
 	* pqueue.c: don't leak memory from duplicate packet.
