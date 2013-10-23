@@ -399,9 +399,13 @@ int main(int argc, char **argv) {
   if (vdaemon) {
 #if HAVE_DAEMON
     closelog();
-    freopen("/dev/null", "r", stdin);
+    if (freopen("/dev/null", "r", stdin) == NULL) {
+      syslog(LOG_ERR, "failed to reopen stdin");
+    }
     /* set noclose, we want stdout/stderr still attached if we can */
-    daemon(0, 1);
+    if (daemon(0, 1) == -1) {
+      syslog_perror("daemon");
+    }
     /* returns to child only */
     /* pid will have changed */
     openlog("bcrelay", LOG_PID, PPTP_FACILITY);

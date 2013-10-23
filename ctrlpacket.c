@@ -364,10 +364,7 @@ ssize_t read_pptp_header(int clientFd, unsigned char *packet, int *pptp_ctrl_typ
  */
 void deal_start_ctrl_conn(void *packet, struct pptp_out_call_rply *rply_packet, ssize_t * rply_size)
 {
-	struct pptp_start_ctrl_conn_rqst *start_ctrl_conn_rqst;
 	struct pptp_start_ctrl_conn_rply start_ctrl_conn_rply;
-
-	start_ctrl_conn_rqst = (struct pptp_start_ctrl_conn_rqst *) packet;
 
 	MAKE_CTRL_HEADER(start_ctrl_conn_rply, START_CTRL_CONN_RPLY);
 	start_ctrl_conn_rply.version = htons(PPTP_VERSION);

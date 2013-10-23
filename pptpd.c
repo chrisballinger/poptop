@@ -415,8 +415,12 @@ int main(int argc, char **argv)
 	if (!foreground) {
 #if HAVE_DAEMON
 		closelog();
-		freopen("/dev/null", "r", stdin);
-		daemon(0, 0);
+		if (freopen("/dev/null", "r", stdin) == NULL) {
+			syslog_perror("freopen");
+		}
+		if (daemon(0, 0) == -1) {
+			syslog_perror("daemon");
+		}
 		/* returns to child only */
 		/* pid will have changed */
 		openlog("pptpd", LOG_PID, PPTP_FACILITY);
@@ -524,7 +528,9 @@ static void my_daemon(int argc, char **argv)
 		exit(1);
 	} else if (pid)
 		exit(0);
-	freopen("/dev/null", "r", stdin);
+	if (freopen("/dev/null", "r", stdin) == NULL) {
+		syslog_perror("freopen");
+	}
 	SETSIDPGRP();
 	chdir("/");
 	umask(0);

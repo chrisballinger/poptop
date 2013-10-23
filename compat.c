@@ -11,6 +11,7 @@
 #endif
 
 #include "compat.h"
+#include "our_syslog.h"
 
 #ifndef HAVE_STRLCPY
 #include <string.h>
@@ -165,7 +166,9 @@ int sigpipe_create()
 /* generic handler for signals, writes signal number to pipe */
 void sigpipe_handler(int signum)
 {
-  write(sigpipe[1], &signum, sizeof(signum));
+  if (write(sigpipe[1], &signum, sizeof(signum)) == -1) {
+    syslog_perror("sigpipe write");
+  }
   signal(signum, sigpipe_handler);
 }
 
@@ -189,7 +192,10 @@ int sigpipe_fd()
 int sigpipe_read()
 {
   int signum;
-  read(sigpipe[0], &signum, sizeof(signum));
+  if (read(sigpipe[0], &signum, sizeof(signum)) == -1) {
+    syslog_perror("sigpipe read");
+    return 0;
+  }
   return signum;
 }
 
