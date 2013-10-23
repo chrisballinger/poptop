@@ -7,3 +7,5 @@ pptpd
 config.status
 config.log
 config.h
+config.cache
+stamp-h
