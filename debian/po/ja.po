@@ -1,0 +1,223 @@
+#
+#    Translators, if you are not familiar with the PO format, gettext
+#    documentation is worth reading, especially sections dedicated to
+#    this format, e.g. by running:
+#         info -n '(gettext)PO Files'
+#         info -n '(gettext)Header Entry'
+#
+#    Some information specific to po-debconf are available at
+#            /usr/share/doc/po-debconf/README-trans
+#         or http://www.debian.org/intl/l10n/po-debconf/README-trans
+#
+#    Developers do not need to manually edit POT or PO files.
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: pptpd 1.1.4.0b4-1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-03-03 05:24+0900\n"
+"PO-Revision-Date: 2004-03-02 18:02+0900\n"
+"Last-Translator: Hideki Yamane <henrich@samba.gr.jp>\n"
+"Language-Team: Japanese <debian-japanese@lists.debian.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=EUC-JP\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Type: string
+#. Description
+#: ../templates:3
+msgid "Local IP address of the virtual connections"
+msgstr "仮想接続用のローカル IP アドレス"
+
+#. Type: string
+#. Description
+#: ../templates:3
+msgid "Specify the local IP address for the virtual connections."
+msgstr "仮想接続用のローカル IP アドレスを指定してください。"
+
+#. Type: string
+#. Description
+#: ../templates:3
+msgid ""
+"Please note that any address works as long as the local machine takes care "
+"of the routing. But if you want to use MS-Windows networking, you should use "
+"an IP address out of the LAN address space."
+msgstr ""
+"ローカルマシンはルーティングに注意していれば、どんなアドレスでも動作すること"
+"に留意してください。しかしながら、MS-Windows ネットワークを利用したい場合は "
+"LAN で使用しているアドレス空間外の IP アドレスを使用する必要があります。"
+
+#. Type: string
+#. Description
+#: ../templates:3
+msgid ""
+"You can give only one address or you can give multiple addresses if you want "
+"to, although they are really not needed. Multiple addresses can be given as "
+"either \"10.0.0.1,10.0.0.2,10.0.0.3\" or \"10.0.0.1-3\". No spaces should be "
+"used between commas or within addresses."
+msgstr ""
+"1アドレスのみ、または望めば実際は必要ない場合であっても、複数のアドレスも指定"
+"可能です。複数のアドレスの指定は \"10.0.0.1,10.0.0.2,10.0.0.3\" でも "
+"\"10.0.0.1-3\" でも構いません。コンマやアドレスの間にスペースは使用してはいけ"
+"ません。"
+
+#. Type: string
+#. Description
+#: ../templates:17
+msgid "A list of remote IP addresses for the virtual connections."
+msgstr "仮想接続用のリモート IP アドレスリスト"
+
+#. Type: string
+#. Description
+#: ../templates:17
+msgid "Specify the remote IP addresses for the virtual connections."
+msgstr "仮想接続用のリモート IP アドレスを指定してください。"
+
+#. Type: string
+#. Description
+#: ../templates:17
+msgid ""
+"Please note that any addresses work as long as the local machine takes care "
+"of the routing. But if you want to use MS-Windows networking, you should use "
+"IP addresses out of the LAN address space."
+msgstr ""
+"ローカルマシンはルーティングに注意していれば、どんなアドレスでも動作すること"
+"に留意してください。しかしながら、MS-Windows ネットワークを利用したい場合は "
+"LAN で使用しているアドレス空間外の IP アドレスを使用する必要があります。"
+
+#. Type: string
+#. Description
+#: ../templates:17
+msgid ""
+"You have to give one address for every concurrent connection. This will "
+"depend on how many clients you expect to be online at the same time. "
+"Multiple addresses can be given as either \"10.0.0.1,10.0.0.2,10.0.0.3\" or "
+"\"10.0.0.1-3\". No spaces should be used between commas or within addresses."
+msgstr ""
+"複数の接続それぞれにアドレスを一つ割り当てねばなりません。これはどれだけのク"
+"ライアント数が同時に接続するのを想定しているか、に依存することになります。複"
+"数のアドレスは \"10.0.0.1,10.0.0.2,10.0.0.3\" か \"10.0.0.1-3\" と指定できま"
+"す。コンマやアドレスの間にスペースは使用してはいけません。"
+
+#. Type: string
+#. Description
+#: ../templates:31
+msgid "Netmask used for virtual connections."
+msgstr "仮想接続に使用されるネットマスク値"
+
+#. Type: string
+#. Description
+#: ../templates:31
+msgid ""
+"If you use IP addresses from the LAN address space, please use the same "
+"netmask as on your LAN."
+msgstr ""
+"LAN 内のアドレス空間の IP アドレスを利用している場合、LAN と同じネットマスク"
+"値を利用してください。"
+
+#. Type: string
+#. Description
+#: ../templates:37
+msgid "IP address of your WINS server."
+msgstr "WINS サーバの IP アドレス"
+
+#. Type: string
+#. Description
+#: ../templates:37
+msgid ""
+"A WINS server is used for browsing available Computers in MS-Windows "
+"networking. This address is transmitted to the clients,"
+msgstr ""
+"WINS サーバは MS-Windows ネットワークでコンピュータをブラウズする為に使われま"
+"す。このアドレスはクライアントに通知されます。"
+
+#. Type: string
+#. Description
+#: ../templates:43
+msgid "IP address of your DNS server."
+msgstr "DNS サーバの IP アドレス"
+
+#. Type: string
+#. Description
+#: ../templates:43
+msgid "This address is transmitted to the clients."
+msgstr "このアドレスはクライアントに通知されます。"
+
+#. Type: boolean
+#. Description
+#: ../templates:49
+msgid "Do you want to use MPPE data encryption ?"
+msgstr "MPPE データ暗号化を使用しますか?"
+
+#. Type: boolean
+#. Description
+#: ../templates:49
+msgid ""
+"The recommended way is to use the data encryption as it is one of the main "
+"benefits of a VPN. When you want to use MPPE (Microsoft Point-to-Point "
+"Encryption), you also  have to use CHAPMSv2 for authentication. . Note that "
+"you have to install the modified ppp packages if you want to use this data "
+"encryption."
+msgstr ""
+"お勧めのやり方は VPN の主要な利点の一つであるデータ暗号化を使う方法です。"
+"MPPE (Microsoft Point-to-Point Encryption) を利用したい場合は CHAPMSv2 を認証"
+"に利用しなければなりません。データ暗号化を利用したい場合、変更を加えた ppp "
+"パッケージをインストールせねばならないことに留意してください。"
+
+#. Type: note
+#. Description
+#: ../templates:58
+msgid "Warning: data encryption is disabled."
+msgstr "警告: データの暗号化は無効になっています。"
+
+#. Type: note
+#. Description
+#: ../templates:58
+msgid ""
+"All data transferred between the local network and the client will be "
+"transmitted without encryption ! This is a security hole."
+msgstr ""
+"ローカルネットワークとクライアント間の転送データ全ては暗号無しでやり取りされ"
+"ます!これはセキュリティホールです。"
+
+#. Type: note
+#. Description
+#: ../templates:58
+msgid "You have been warned. Now you loose your product warranty :)"
+msgstr "警告しました。もはや製品保証は行われません :)"
+
+#. Type: select
+#. Choices
+#: ../templates:66
+msgid "pap, chap, chapms, chapms-v2"
+msgstr "pap, chap, chapms, chapms-v2"
+
+#. Type: select
+#. Description
+#: ../templates:68
+msgid "Which authentication method do you want to use ?"
+msgstr "どの認証方式を利用しますか?"
+
+#. Type: select
+#. Description
+#: ../templates:68
+msgid ""
+"Possible authentication methods are: - PAP - CHAP - CHAP with Microsoft "
+"extensions - CHAP with Microsoft extensions v2"
+msgstr ""
+"利用可能な認証式は: - PAP - CHAP - CHAP with Microsoft extensions - CHAP "
+"with Microsoft extensions v2 です。"
+
+#. Type: select
+#. Description
+#: ../templates:68
+msgid ""
+"The recommended authentication method is one of the CHAP methods. However, "
+"you have to use a separate database (/etc/ppp/chap-secrets) if you want to "
+"use these. If you use PAP, you can use the standard system passwords when "
+"the ppp-pam package is installed."
+msgstr ""
+"お勧めの認証方式は CHAP 方式のいずれかです。しかし、これを利用するには専用の"
+"データベース (/etc/ppp/chap-secrets) が必要です。PAP を利用する場合、ppp-pam "
+"パッケージがインストールされていればシステム標準のパスワードが利用できます。"

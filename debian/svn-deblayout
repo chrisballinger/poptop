@@ -1,0 +1,8 @@
+buildArea=/home/rene/amw/src/packages/build-area
+origDir=/home/rene/amw/src/packages/tarballs
+origUrl=svn+ssh://svn.gibraltar.at/svn/debian-packages/trunk/debian/tarballs
+tagsUrl=svn+ssh://svn.gibraltar.at/svn/debian-packages/tags/pptpd
+trunkDir=/home/rene/amw/src/packages/pptpd
+trunkUrl=svn+ssh://svn.gibraltar.at/svn/debian-packages/trunk/debian/pptpd
+upsCurrentUrl=svn+ssh://svn.gibraltar.at/svn/debian-packages/branches/source-dist/debian/pptpd
+upsTagUrl=svn+ssh://svn.gibraltar.at/svn/debian-packages/tags/pptpd

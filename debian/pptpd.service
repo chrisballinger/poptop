@@ -1,0 +1,11 @@
+[Unit]
+Description=PoPToP Point to Point Tunneling Server
+After=network.target
+
+[Service]
+EnvironmentFile=-/etc/default/pptpd
+# don't daemonize to simplify stuff
+ExecStart=/usr/sbin/pptpd --fg $DAEMON_OPTS
+
+[Install]
+WantedBy=multi-user.target

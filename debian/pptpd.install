@@ -1,0 +1,13 @@
+
+usr/sbin/pptpctrl
+usr/share/man/man8/pptpctrl.8
+usr/sbin/pptpd
+usr/share/man/man8/pptpd.8
+
+debian/pptpd.conf               etc/
+usr/share/man/man5/pptpd.conf.5
+debian/pptpd-options            etc/ppp/
+
+usr/lib/pptpd/pptpd-logwtmp.so
+
+debian/pptpd.service            lib/systemd/system/
