@@ -317,7 +317,7 @@ int main(int argc, char **argv) {
 #ifndef BCRELAY
   fprintf(stderr,
           "bcrelay: pptpd was compiled without support for bcrelay, exiting.\n"
-          "         run configure --with-bcrelay, make, and install.\n");
+          "         run configure --enable-bcrelay, make, and install.\n");
   exit(1);
 #endif
 
